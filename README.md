@@ -16,9 +16,6 @@
 |**errorText**| Error message text| "Resource is not found" |
 |**videoGravity**| A structure that defines how a layer displays a player’s visual content within the layer’s bounds | .resizeAspect |
 
-## Idea how to use in apps
-[ Youtube example ](https://www.youtube.com/watch?v=jPbIpkARh5k)
-
 ## SwiftUI example for the package
 [ SwiftUI loop video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
