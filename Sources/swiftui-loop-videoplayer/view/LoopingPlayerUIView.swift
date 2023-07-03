@@ -20,8 +20,12 @@ class LoopingPlayerUIView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    init?(_ name: String, width ext: String, gravity: AVLayerVideoGravity) {
+    
+    /// - Parameters:
+    ///   - name: Name of the video to play
+    ///   - ext: Video extension
+    ///   - gravity: A structure that defines how a layer displays a player’s visual content within the layer’s bounds
+    public init?(_ name: String, width ext: String, gravity: AVLayerVideoGravity) {
 
         /// Load the resource
         guard let fileUrl = Bundle.main.url(forResource: name, withExtension: ext) else{
@@ -49,7 +53,8 @@ class LoopingPlayerUIView: UIView {
 
         layer.addSublayer(playerLayer)
     }
-
+    
+    /// override point. called by layoutIfNeeded automatically. As of iOS 6.0, when constraints-based layout is used the base implementation applies the constraints-based layout, otherwise it does nothing.
     override func layoutSubviews() {
         super.layoutSubviews()
         playerLayer.frame = bounds

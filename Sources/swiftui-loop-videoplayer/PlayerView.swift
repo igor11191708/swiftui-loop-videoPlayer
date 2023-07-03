@@ -39,6 +39,7 @@ public struct PlayerView: UIViewRepresentable {
         self.videoGravity = videoGravity
     }
 
+    /// Inherited from UIViewRepresentable
     public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<PlayerView>) {
     }
 
@@ -47,10 +48,10 @@ public struct PlayerView: UIViewRepresentable {
     public func makeUIView(context: Context) -> UIView {
         let name = resourceName
         let ext = extention
-        if let view = LoopingPlayerUIView(name, width: ext, gravity: videoGravity){
-            return view
+        guard let view = LoopingPlayerUIView(name, width: ext, gravity: videoGravity) else{
+            return errorTpl()
     }
-       return errorTpl()
+       return view
     }
         
     /// - Returns: Error view
