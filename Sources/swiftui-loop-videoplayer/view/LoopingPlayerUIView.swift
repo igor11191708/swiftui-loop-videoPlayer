@@ -25,7 +25,7 @@ class LoopingPlayerUIView: UIView {
     ///   - name: Name of the video to play
     ///   - ext: Video extension
     ///   - gravity: A structure that defines how a layer displays a player’s visual content within the layer’s bounds
-    public init?(_ name: String, width ext: String, gravity: AVLayerVideoGravity) {
+    init?(_ name: String, width ext: String, gravity: AVLayerVideoGravity) {
 
         /// Load the resource
         guard let fileUrl = Bundle.main.url(forResource: name, withExtension: ext) else{

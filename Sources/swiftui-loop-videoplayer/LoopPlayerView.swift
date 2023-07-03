@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 import AVKit
 
 /// Player view for running a video in loop
@@ -55,7 +56,7 @@ public struct LoopPlayerView: UIViewRepresentable {
     /// - Returns: View
     public func makeUIView(context: Context) -> UIView {
         let name = resourceName
-        let ext = extention        
+        let ext = extention
         guard let view = LoopingPlayerUIView(name, width: ext, gravity: videoGravity) else{
             return errorTpl()
     }
