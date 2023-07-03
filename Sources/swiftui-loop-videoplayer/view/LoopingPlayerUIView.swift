@@ -8,6 +8,7 @@
 import UIKit
 import AVKit
 
+@available(iOS 14.0, *)
 class LoopingPlayerUIView: UIView {
 
     /// An object that presents the visual contents of a player object

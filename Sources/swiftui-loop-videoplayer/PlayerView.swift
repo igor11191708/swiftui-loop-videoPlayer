@@ -9,6 +9,7 @@ import SwiftUI
 import AVKit
 
 /// Player view for running a video in loop
+@available(iOS 14.0, *)
 public struct PlayerView: UIViewRepresentable {
     
     /// Name of the video to play
