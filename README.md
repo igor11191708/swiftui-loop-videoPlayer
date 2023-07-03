@@ -1,10 +1,10 @@
 # SwiftUI loop video player
 
 ## How to use the package
-### 1. Create PlayerView
+### 1. Create LoopPlayerView
 
 ```swift
-   PlayerView(resourceName: "swipe")
+   LoopPlayerView(resourceName: "swipe")
 ```
 
 ### Params
@@ -15,6 +15,7 @@
 |**extention**| Video extension | "mp4" |
 |**errorText**| Error message text| "Resource is not found" |
 |**videoGravity**| A structure that defines how a layer displays a player’s visual content within the layer’s bounds | .resizeAspect |
+|**errorTextSize**| Size of the error text | 17.0 |
 
 ## SwiftUI example for the package
 [ SwiftUI loop video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)

@@ -10,7 +10,7 @@ import AVKit
 
 /// Player view for running a video in loop
 @available(iOS 14.0, *)
-public struct PlayerView: UIViewRepresentable {
+public struct LoopPlayerView: UIViewRepresentable {
     
     /// Name of the video to play
     public let resourceName: String
@@ -26,14 +26,13 @@ public struct PlayerView: UIViewRepresentable {
         
     /// Size of the error text Default : 17.0
     public let errorTextSize : CGFloat
-
     
     /// - Parameters:
     ///   - resourceName: Name of the video to play
     ///   - extention: Video extension
     ///   - errorText: Error message text
     ///   - videoGravity: A structure that defines how a layer displays a player’s visual content within the layer’s bounds
-    ///   - errorTextSize: Size of the error text Default : 17
+    ///   - errorTextSize: Size of the error text Default : 17.0
     public init(
         resourceName: String,
         extention: String = "mp4",
@@ -49,14 +48,14 @@ public struct PlayerView: UIViewRepresentable {
     }
 
     /// Inherited from UIViewRepresentable
-    public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<PlayerView>) {
+    public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<LoopPlayerView>) {
     }
 
     /// - Parameter context: Contains details about the current state of the system
     /// - Returns: View
     public func makeUIView(context: Context) -> UIView {
         let name = resourceName
-        let ext = extention
+        let ext = extention        
         guard let view = LoopingPlayerUIView(name, width: ext, gravity: videoGravity) else{
             return errorTpl()
     }
