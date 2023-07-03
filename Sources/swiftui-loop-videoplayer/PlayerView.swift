@@ -23,20 +23,29 @@ public struct PlayerView: UIViewRepresentable {
     
     /// A structure that defines how a layer displays a player’s visual content within the layer’s bounds
     public let videoGravity: AVLayerVideoGravity
+        
+    /// Size of the error text Default : 17.0
+    public let errorTextSize : CGFloat
 
+    
     /// - Parameters:
     ///   - resourceName: Name of the video to play
     ///   - extention: Video extension
+    ///   - errorText: Error message text
+    ///   - videoGravity: A structure that defines how a layer displays a player’s visual content within the layer’s bounds
+    ///   - errorTextSize: Size of the error text Default : 17
     public init(
         resourceName: String,
         extention: String = "mp4",
         errorText : String = "Resource is not found",
-        videoGravity: AVLayerVideoGravity = .resizeAspect
+        videoGravity: AVLayerVideoGravity = .resizeAspect,
+        errorTextSize : CGFloat = 17.0
     ) {
         self.resourceName = resourceName
         self.extention = extention
         self.errorText = errorText
         self.videoGravity = videoGravity
+        self.errorTextSize = errorTextSize
     }
 
     /// Inherited from UIViewRepresentable
@@ -53,6 +62,8 @@ public struct PlayerView: UIViewRepresentable {
     }
        return view
     }
+    
+    // MARK: - Private
         
     /// - Returns: Error view
     private func errorTpl() -> ErrorMsgTextView{
@@ -60,9 +71,13 @@ public struct PlayerView: UIViewRepresentable {
         textView.backgroundColor = .clear
         textView.text = errorText
         textView.textAlignment = .center
+        textView.font = UIFont.systemFont(ofSize: errorTextSize)
         return textView
     }
 }
+
+
+// MARK: - Helpers
 
 /// https://stackoverflow.com/questions/12591192/center-text-vertically-in-a-uitextview
 fileprivate class ErrorMsgTextView: UITextView {
