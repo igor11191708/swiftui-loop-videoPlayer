@@ -1,7 +1,5 @@
 # SwiftUI loop video player
 
-  ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/img_01.gif)
-
 ## How to use the package
 ### 1. Create PlayerView
 
@@ -20,7 +18,10 @@
 
 ## SwiftUI example for the package
 
-[CoreML stable diffusion image generation](https://github.com/The-Igor/coreml-stable-diffusion-swift)
+  ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/img_01.gif)
+
+
+[ SwiftUI loop video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
 ## Documentation(API)
 - You need to have Xcode 13 installed in order to have access to Documentation Compiler (DocC)
