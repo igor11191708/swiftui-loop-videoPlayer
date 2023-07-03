@@ -9,12 +9,12 @@
 
 ### Params
 
-| Strategy | Description |
-| --- | --- |
-|**resourceName**| Name of the video to play|
-|**extention**| Video extension |
-|**errorText**| Error message text|
-|**videoGravity**| A structure that defines how a layer displays a player’s visual content within the layer’s bounds |
+| Strategy | Description | Default |
+| --- | --- |  --- | 
+|**resourceName**| Name of the video to play| - |
+|**extention**| Video extension | "mp4" |
+|**errorText**| Error message text| "Resource is not found" |
+|**videoGravity**| A structure that defines how a layer displays a player’s visual content within the layer’s bounds | .resizeAspect |
 
 ## SwiftUI example for the package
 
