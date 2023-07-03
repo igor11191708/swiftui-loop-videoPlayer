@@ -1,4 +1,4 @@
-# Swiftui loop video player
+# SwiftUI loop video player
 
   ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/img_01.gif)
 
