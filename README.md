@@ -1,6 +1,6 @@
 # Swiftui loop video player
 
-  ![The concept](https://github.com/The-Igor/coreml-stable-diffusion-swift-example/blob/main/img/img_01.png)
+  ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/img_01.gif)
 
 ## How to use the package
 ### 1. Create PlayerView
