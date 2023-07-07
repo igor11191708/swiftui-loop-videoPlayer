@@ -13,39 +13,10 @@ import AVKit
 @available(iOS 14.0, *)
 public struct LoopPlayerView: UIViewRepresentable {
     
-    /// Name of the video to play
-    public let resourceName: String
+    public let settings : Settings
     
-    /// Video extension
-    public let extention: String
-        
-    /// Error message text
-    public let errorText : String
-    
-    /// A structure that defines how a layer displays a player’s visual content within the layer’s bounds
-    public let videoGravity: AVLayerVideoGravity
-        
-    /// Size of the error text Default : 17.0
-    public let errorTextSize : CGFloat
-    
-    /// - Parameters:
-    ///   - resourceName: Name of the video to play
-    ///   - extention: Video extension
-    ///   - errorText: Error message text
-    ///   - videoGravity: A structure that defines how a layer displays a player’s visual content within the layer’s bounds
-    ///   - errorTextSize: Size of the error text Default : 17.0
-    public init(
-        resourceName: String,
-        extention: String = "mp4",
-        errorText : String = "Resource is not found",
-        videoGravity: AVLayerVideoGravity = .resizeAspect,
-        errorTextSize : CGFloat = 17.0
-    ) {
-        self.resourceName = resourceName
-        self.extention = extention
-        self.errorText = errorText
-        self.videoGravity = videoGravity
-        self.errorTextSize = errorTextSize
+    public init(_ settings : () -> Settings) {
+        self.settings = settings()
     }
 
     /// Inherited from UIViewRepresentable
@@ -55,9 +26,10 @@ public struct LoopPlayerView: UIViewRepresentable {
     /// - Parameter context: Contains details about the current state of the system
     /// - Returns: View
     public func makeUIView(context: Context) -> UIView {
-        let name = resourceName
-        let ext = extention
-        guard let view = LoopingPlayerUIView(name, width: ext, gravity: videoGravity) else{
+        let name = settings.name
+        let ext = settings.ext
+        let gravity = settings.gravity
+        guard let view = LoopingPlayerUIView(name, width: ext, gravity: gravity) else{
             return errorTpl()
     }
        return view
@@ -69,9 +41,9 @@ public struct LoopPlayerView: UIViewRepresentable {
     private func errorTpl() -> ErrorMsgTextView{
         let textView = ErrorMsgTextView()
         textView.backgroundColor = .clear
-        textView.text = errorText
+        textView.text = settings.errorText
         textView.textAlignment = .center
-        textView.font = UIFont.systemFont(ofSize: errorTextSize)
+        textView.font = UIFont.systemFont(ofSize: settings.errorFontSize)
         return textView
     }
 }
