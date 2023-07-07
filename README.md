@@ -35,7 +35,7 @@
             } 
 ```  
 If you add any setting twice or more the first one only will be applied
-You can group error settings in group **ErrorGroup** or just pass all settings as a linear list of settings
+You can group error settings in group **ErrorGroup** or just pass all settings as a linear list of settings. You don't need to follow some specific order for settings, just pass in arbitrary oder settings you are interested in. The only required setting is **FileName**.
 
 ### Settings
 
