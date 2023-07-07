@@ -12,13 +12,24 @@ import AVKit
 /// Player view for running a video in loop
 @available(iOS 14.0, *)
 public struct LoopPlayerView: UIViewRepresentable {
-    
+        
+    /// Set of settings for video the player
     public let settings : Settings
+    
+    // MARK: - Life circle
+    
+    public init(fileName : String){
+        self.settings = Settings{
+            FileName(fileName)
+        }
+    }
     
     public init(_ settings : () -> Settings) {
         self.settings = settings()
     }
 
+    // MARK: - API
+    
     /// Inherited from UIViewRepresentable
     public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<LoopPlayerView>) {
     }
