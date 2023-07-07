@@ -27,13 +27,12 @@ public enum Setting: Equatable{
     /// Size of the error textкуадусешщт аштв
     case errorFontSize(CGFloat)
     
-    
     /// Case name
     var caseName: String {
         Mirror(reflecting: self).children.first?.label ?? "\(self)"
     }
     
-    /// Associated values
+    /// Associated value
     var associatedValue: Any? {
             
         guard let firstChild = Mirror(reflecting: self).children.first else {
