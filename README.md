@@ -10,7 +10,7 @@
     LoopPlayerView(fileName: "swipe")    
 ```
 
-   or in declarative way
+   or in a declarative way
    
  ```swift
     LoopPlayerView{
@@ -51,7 +51,7 @@ You can group error settings in group **ErrorGroup** or just pass all settings a
 ## SwiftUI example for the package
 [ SwiftUI loop video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
-  ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/img_02.gif)
+  ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui.gif)
 
 ## Documentation(API)
 - You need to have Xcode 13 installed in order to have access to Documentation Compiler (DocC)
