@@ -7,19 +7,45 @@
 ### 1. Create LoopPlayerView
 
 ```swift
-   LoopPlayerView(resourceName: "swipe")
+   LoopPlayerView(fileName: "swipe")    
 ```
 
-### Params
+   or in declarative way
+   
+ ```swift
+        LoopPlayerView{
+                Settings{
+                    FileName("swipe")
+                    Ext("mp4")
+                    Gravity(.resizeAspectFill)
+                    ErrorGroup{
+                        EText("Not found")
+                        EFontSize(27)
+                    }
+                }
+            }   
+            
+           LoopPlayerView{
+                Settings{
+                    FileName("swipe")
+                    Ext("mp4")
+                    Gravity(.resizeAspectFill)
+                    EFontSize(27)                  
+                }
+            } 
+```  
+If you add any setting twice or more the first one only will be applied
+You can group error settings in group **ErrorGroup** or just pass all settings as a linear list of settings
 
-| Strategy | Description | Default |
+### Settings
+
+| Name | Description | Default |
 | --- | --- |  --- | 
-|**resourceName**| Name of the video to play| - |
-|**extention**| Video extension | "mp4" |
-|**errorText**| Error message text| "Resource is not found" |
-|**videoGravity**| A structure that defines how a layer displays a player’s visual content within the layer’s bounds | .resizeAspect |
-|**errorTextSize**| Size of the error text | 17.0 |
-
+|**FileName("swipe")**| Name of the video to play| - |
+|**Ext("mp4")**| Video extension | "mp4" |
+|**Gravity(.resizeAspectFill)**| A structure that defines how a layer displays a player’s visual content within the layer’s bounds | .resizeAspect |
+|**EText("Not found")**| Error message text| "Resource is not found" |
+|**EFontSize(27)**| Size of the error text | 17.0 |
 ## SwiftUI example for the package
 [ SwiftUI loop video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
