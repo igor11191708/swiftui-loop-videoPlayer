@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 @available(iOS 14.0, *)
 public struct EFontSize: SettingsConvertible{

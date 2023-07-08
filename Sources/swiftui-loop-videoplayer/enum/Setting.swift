@@ -67,6 +67,3 @@ extension Array where Element == Setting{
         return value
     }
 }
-
-
-
