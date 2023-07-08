@@ -18,12 +18,33 @@ public struct LoopPlayerView: UIViewRepresentable {
     
     // MARK: - Life circle
     
-    public init(fileName : String){
-        self.settings = Settings{
-            FileName(fileName)
+    /// Player initializer
+    /// - Parameters:
+    ///   - fileName: Name of the video to play
+    ///   - ext: Video extension
+    ///   - gravity: A structure that defines how a layer displays a player’s visual content within the layer’s bounds
+    ///   - eText: Error message text if file is not found
+    ///   - eFontSize: Size of the error text
+    public init(
+            fileName: String,
+            ext: String = "mp4",
+            gravity: AVLayerVideoGravity = .resizeAspect,
+            eText : String = "Resource is not found",
+            eFontSize : CGFloat = 17.0
+        ) {
+            self.settings = Settings{
+                FileName(fileName)
+                Ext(ext)
+                Gravity(gravity)
+                ErrorGroup{
+                    EText(eText)
+                    EFontSize(eFontSize)
+                }
+            }
         }
-    }
     
+    /// Player initializer in a declarative way
+    /// - Parameter settings: Set of settings
     public init(_ settings : () -> Settings) {
         self.settings = settings()
     }
