@@ -24,7 +24,7 @@ public enum Setting: Equatable{
     /// Error text is resource is not found
     case errorText(String)
 
-    /// Size of the error textкуадусешщт аштв
+    /// Size of the error text
     case errorFontSize(CGFloat)
     
     /// Case name
