@@ -49,6 +49,7 @@ You can group error settings in group **ErrorGroup** or just pass all settings a
 |**Gravity(.resizeAspectFill)**| A structure that defines how a layer displays a player’s visual content within the layer’s bounds | .resizeAspect |
 |**EColor(.accentColor)**| Error message text color| .red |
 |**EFontSize(27)**| Size of the error text | 17.0 |
+
 ## SwiftUI example for the package
 [ SwiftUI loop video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
