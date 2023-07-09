@@ -29,19 +29,19 @@ public struct LoopPlayerView: UIViewRepresentable {
             fileName: String,
             ext: String = "mp4",
             gravity: AVLayerVideoGravity = .resizeAspect,
-            eText : String = "Resource is not found",
+            eColor : Color = .accentColor,
             eFontSize : CGFloat = 17.0
-        ) {
-            self.settings = Settings{
-                FileName(fileName)
-                Ext(ext)
-                Gravity(gravity)
-                ErrorGroup{
-                    EText(eText)
-                    EFontSize(eFontSize)
-                }
+    ) {
+        settings = Settings{
+            FileName(fileName)
+            Ext(ext)
+            Gravity(gravity)
+            ErrorGroup{
+                EColor(eColor)
+                EFontSize(eFontSize)
             }
         }
+    }
     
     /// Player initializer in a declarative way
     /// - Parameter settings: Set of settings
@@ -58,25 +58,21 @@ public struct LoopPlayerView: UIViewRepresentable {
     /// - Parameter context: Contains details about the current state of the system
     /// - Returns: View
     public func makeUIView(context: Context) -> UIView {
+        
         let name = settings.name
         let ext = settings.ext
         let gravity = settings.gravity
+        let color = settings.errorColor
+        let fontSize = settings.errorFontSize
+        
+        guard settings.areUnique else{
+            return errorTpl(.settingsNotUnique, color, fontSize)
+        }
+        
         guard let view = LoopingPlayerUIView(name, width: ext, gravity: gravity) else{
-            return errorTpl()
+            return errorTpl(.fileNotFound(name), color, fontSize)
     }
        return view
-    }
-    
-    // MARK: - Private
-        
-    /// - Returns: Error view
-    private func errorTpl() -> ErrorMsgTextView{
-        let textView = ErrorMsgTextView()
-        textView.backgroundColor = .clear
-        textView.text = settings.errorText
-        textView.textAlignment = .center
-        textView.font = UIFont.systemFont(ofSize: settings.errorFontSize)
-        return textView
     }
 }
 
@@ -93,4 +89,15 @@ fileprivate class ErrorMsgTextView: UITextView {
             contentInset = UIEdgeInsets(top: top, left: 0, bottom: 0, right: 0)
         }
     }
+}
+
+/// - Returns: Error view
+fileprivate func errorTpl(_ error : VPErrors,_ color : Color, _ fontSize: CGFloat) -> ErrorMsgTextView{
+    let textView = ErrorMsgTextView()
+    textView.backgroundColor = .clear
+    textView.text = error.description
+    textView.textAlignment = .center
+    textView.font = UIFont.systemFont(ofSize: fontSize)
+    textView.textColor = UIColor(color)
+    return textView
 }

@@ -5,7 +5,7 @@
 //  Created by Igor on 07.07.2023.
 //
 
-import Foundation
+import SwiftUI
 import AVKit
 
 @available(iOS 14.0, *)
@@ -20,17 +20,25 @@ public struct Settings{
     /// A structure that defines how a layer displays a player’s visual content within the layer’s bounds
     public let gravity: AVLayerVideoGravity
     
-    /// Error message text
-    public let errorText : String
+    /// Error message text color
+    public let errorColor : Color
         
     /// Size of the error text Default : 17.0
     public let errorFontSize : CGFloat
+        
+    /// Is settings are unique
+    private let unique : Bool
     
+    public var areUnique : Bool {
+        unique
+    }
 
     // MARK: - Life circle
     
     public init(@SettingsBuilder builder: () -> [Setting]){
         let settings = builder()
+        
+        unique = check(settings)
         
         name = settings.fetch(by : "name", defaulted: "")
         
@@ -38,9 +46,15 @@ public struct Settings{
         
         gravity = settings.fetch(by : "gravity", defaulted: .resizeAspect)
         
-        errorText = settings.fetch(by : "errorText", defaulted: "Resource is not found")
+        errorColor = settings.fetch(by : "errorColor", defaulted: .red)
         
         errorFontSize = settings.fetch(by : "errorFontSize", defaulted: 17)
     }
+}
+
+fileprivate func check(_ settings : [Setting]) -> Bool{
+    let cases : [String] = settings.map{ $0.caseName }
+    let set = Set(cases)
+    return cases.count == set.count    
 }
 

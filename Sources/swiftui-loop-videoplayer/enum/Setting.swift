@@ -7,6 +7,7 @@
 
 import Foundation
 import AVKit
+import SwiftUI
 
 /// Settings for loop video player
 @available(iOS 14.0, *)
@@ -27,6 +28,9 @@ public enum Setting: Equatable{
     /// Size of the error text
     case errorFontSize(CGFloat)
     
+    /// Color of the error text
+    case errorColor(Color)
+    
     /// Case name
     var caseName: String {
         Mirror(reflecting: self).children.first?.label ?? "\(self)"
@@ -40,30 +44,5 @@ public enum Setting: Equatable{
         }
         
         return firstChild.value
-    }
-}
-
-@available(iOS 14.0, *)
-extension Array where Element == Setting{
-    
-    /// Find first setting by case name
-    /// - Parameter name: Case name
-    /// - Returns: Setting
-    private func first(_ name : String) -> Setting?{
-        self.first(where: { $0.caseName == name })
-    }
-    
-    
-    /// Fetch associated value
-    /// - Parameters:
-    ///   - name: Case name
-    ///   - defaulted: Default value
-    /// - Returns: Associated value
-    func fetch<T>(by name : String, defaulted : T) -> T{
-        guard let value = first(name)?.associatedValue as? T else {
-            return defaulted
-        }
-        
-        return value
     }
 }
