@@ -55,6 +55,7 @@ You can group error settings in group **ErrorGroup** or just pass all settings a
 
   ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui.gif)
 
+
 ## Practical idea for the package
 You can introduce in to the app video hints about some functionality, for example how to add positions to favorites. 
 [More in video](https://www.youtube.com/watch?v=jPbIpkARh5k)
