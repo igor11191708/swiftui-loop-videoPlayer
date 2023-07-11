@@ -11,6 +11,8 @@ import AVKit
 @available(iOS 14.0, *)
 public struct Settings{
     
+    // MARK: - Public properties
+    
     /// Name of the video to play
     public let name: String
     
@@ -26,15 +28,19 @@ public struct Settings{
     /// Size of the error text Default : 17.0
     public let errorFontSize : CGFloat
         
-    /// Is settings are unique
-    private let unique : Bool
-    
+    /// Are the params unique
     public var areUnique : Bool {
         unique
     }
+    
+    // MARK: - Private properties
+    
+    /// Is settings are unique
+    private let unique : Bool
 
     // MARK: - Life circle
-    
+        
+    /// - Parameter builder: Block builder
     public init(@SettingsBuilder builder: () -> [Setting]){
         let settings = builder()
         
@@ -52,6 +58,9 @@ public struct Settings{
     }
 }
 
+/// Check if unique
+/// - Parameter settings: Passed array of settings flatted by block builder
+/// - Returns: True - unique False - not
 fileprivate func check(_ settings : [Setting]) -> Bool{
     let cases : [String] = settings.map{ $0.caseName }
     let set = Set(cases)
