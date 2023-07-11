@@ -18,7 +18,7 @@ public struct SettingsBuilder{
     /// Build block
     /// - Parameter values: Input values
     /// - Returns: Array of settings
-    public static func buildBlock(_ values: SettingsConvertible...) -> [Setting]{
+    public static func buildBlock(_ values: any SettingsConvertible...) -> [Setting]{
         values.flatMap{ $0.asSettings() }
     }
 }
