@@ -5,6 +5,9 @@
 
 This package uses declarative approach to declare parameters for the video component based ob building blocks. This implementation might give you some insights how SwiftUI works under the hood. Also you can pass parameters in the common way.
 
+## SwiftUI example for the package
+[ SwiftUI loop video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
+
 ## How to use the package
 ### 1. Create LoopPlayerView
 
@@ -50,8 +53,6 @@ You can group error settings in group **ErrorGroup** or just pass all settings a
 |**EColor(.accentColor)**| Error message text color| .red |
 |**EFontSize(27)**| Size of the error text | 17.0 |
 
-## SwiftUI example for the package
-[ SwiftUI loop video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
   ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui.gif)
 
