@@ -11,7 +11,7 @@ import AVKit
 #if canImport(UIKit) && os(tvOS)
 import UIKit
 
-@available(iOS 14.0, *)
+@available(iOS 14.0, tvOS 14.0, *)
 class LoopingPlayerUIView: UIView {
 
     /// An object that presents the visual contents of a player object
