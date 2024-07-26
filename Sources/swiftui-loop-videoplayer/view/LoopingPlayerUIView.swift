@@ -8,7 +8,7 @@
 import AVKit
 
 
-#if canImport(UIKit) && os(tvOS)
+#if canImport(UIKit) || os(tvOS)
 import UIKit
 
 @available(iOS 14.0, tvOS 14.0, *)
