@@ -103,6 +103,7 @@ fileprivate class ErrorMsgTextViewIOS: UITextView {
     }
 }
 
+@MainActor
 fileprivate func errorTpliOS(_ error: VPErrors, _ color: Color, _ fontSize: CGFloat) -> UIView {
     let textView = ErrorMsgTextViewIOS()
     textView.backgroundColor = .clear
