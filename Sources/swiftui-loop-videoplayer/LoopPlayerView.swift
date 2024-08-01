@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
+#if canImport(AVKit)
 import AVKit
+#endif
 
 /// Player view for running a video in loop
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
