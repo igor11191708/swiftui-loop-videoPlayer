@@ -6,8 +6,11 @@
 //
 
 import Foundation
-import AVKit
 import SwiftUI
+#if canImport(AVKit)
+import AVKit
+#endif
+
 
 /// Settings for loop video player
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)

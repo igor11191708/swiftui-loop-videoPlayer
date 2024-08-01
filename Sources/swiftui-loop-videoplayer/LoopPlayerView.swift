@@ -121,11 +121,16 @@ fileprivate func errorTpliOS(_ error: VPErrors, _ color: Color, _ fontSize: CGFl
 // MARK: - Representable for macOS
 
 #if os(macOS)
+/// A view representable for macOS to display a looping video player.
 @available(macOS 11.0, *)
 struct LoopPlayerViewRepresentableMacOS: NSViewRepresentable {
     
+    /// The settings for the video player.
     let settings: Settings
     
+    /// Creates the NSView instance for the video player.
+    /// - Parameter context: The context in which the view is created.
+    /// - Returns: An NSView that displays the video player, or an error view if there is an issue.
     func makeNSView(context: Context) -> NSView {
         let name = settings.name
         let ext = settings.ext
@@ -133,28 +138,38 @@ struct LoopPlayerViewRepresentableMacOS: NSViewRepresentable {
         let color = settings.errorColor
         let fontSize = settings.errorFontSize
         
+        // Check if the settings are unique
         guard settings.areUnique else {
             return errorTplmacOS(.settingsNotUnique, color, fontSize)
         }
         
+        // Create the looping player view or return an error view if the file is not found
         guard let view = LoopingPlayerNSView(name, width: ext, gravity: gravity) else {
             return errorTplmacOS(.fileNotFound(name), color, fontSize)
         }
         return view
     }
     
+    /// Updates the NSView instance.
+    /// - Parameters:
+    ///   - nsView: The NSView instance to update.
+    ///   - context: The context in which the update occurs.
     func updateNSView(_ nsView: NSView, context: Context) {
+        // Update the view if necessary
     }
 }
 
 // MARK: - Helpers for macOS
 
+/// A custom NSTextView for displaying error messages on macOS.
 fileprivate class ErrorMsgTextViewMacOS: NSTextView {
     
+    /// Overrides the intrinsic content size to allow flexible width and height.
     override var intrinsicContentSize: NSSize {
         return NSSize(width: NSView.noIntrinsicMetric, height: NSView.noIntrinsicMetric)
     }
     
+    /// Called when the view is added to a superview. Sets up the constraints for the view.
     override func viewDidMoveToSuperview() {
         super.viewDidMoveToSuperview()
         guard let superview = superview else { return }
@@ -169,6 +184,7 @@ fileprivate class ErrorMsgTextViewMacOS: NSTextView {
         ])
     }
     
+    /// Adjusts the layout to center the text vertically within the view.
     override func layout() {
         super.layout()
         
@@ -184,6 +200,12 @@ fileprivate class ErrorMsgTextViewMacOS: NSTextView {
     }
 }
 
+/// Creates a custom error view for macOS displaying an error message.
+/// - Parameters:
+///   - error: The error object containing the error description.
+///   - color: The color to be used for the error text.
+///   - fontSize: The font size to be used for the error text.
+/// - Returns: An `NSView` containing the error message text view centered with padding.
 fileprivate func errorTplmacOS(_ error: VPErrors, _ color: Color, _ fontSize: CGFloat) -> NSView {
     let textView = ErrorMsgTextViewMacOS()
     textView.isEditable = false

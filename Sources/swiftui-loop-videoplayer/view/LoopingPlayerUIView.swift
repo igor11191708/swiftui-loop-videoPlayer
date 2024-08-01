@@ -5,10 +5,11 @@
 //  Created by Igor on 10.02.2023.
 //
 
+#if canImport(AVKit)
 import AVKit
+#endif
 
-
-#if canImport(UIKit) || os(tvOS)
+#if canImport(UIKit)
 import UIKit
 
 @available(iOS 14.0, tvOS 14.0, *)
@@ -30,7 +31,7 @@ class LoopingPlayerUIView: UIView {
     ///   - gravity: A structure that defines how a layer displays a player’s visual content within the layer’s bounds
     init?(_ name: String, width ext: String, gravity: AVLayerVideoGravity) {
 
-        /// Load the resource
+        // Load the resource
         guard let fileUrl = Bundle.main.url(forResource: name, withExtension: ext) else{
             return nil
         }
@@ -39,7 +40,7 @@ class LoopingPlayerUIView: UIView {
         
         let item = AVPlayerItem(asset: asset)
 
-        /// Setup the player
+        // Setup the player
         let player = AVQueuePlayer()
         player.isMuted = true
         playerLayer.player = player
@@ -48,10 +49,10 @@ class LoopingPlayerUIView: UIView {
 
         super.init(frame: CGRect.zero)
 
-        /// Create a new player looper with the queue player and template item
+        // Create a new player looper with the queue player and template item
         playerLooper = AVPlayerLooper(player: player, templateItem: item)
 
-        /// Start the movie
+        // Start the movie
         player.play()
 
         layer.addSublayer(playerLayer)
@@ -63,7 +64,6 @@ class LoopingPlayerUIView: UIView {
         playerLayer.frame = bounds
     }
 }
-
 #elseif canImport(Cocoa)
 import Cocoa
 
@@ -86,7 +86,7 @@ class LoopingPlayerNSView: NSView {
     ///   - gravity: A structure that defines how a layer displays a player’s visual content within the layer’s bounds
     init?(_ name: String, width ext: String, gravity: AVLayerVideoGravity) {
 
-        /// Load the resource
+        // Load the resource
         guard let fileUrl = Bundle.main.url(forResource: name, withExtension: ext) else{
             return nil
         }
@@ -95,7 +95,7 @@ class LoopingPlayerNSView: NSView {
         
         let item = AVPlayerItem(asset: asset)
 
-        /// Setup the player
+        // Setup the player
         let player = AVQueuePlayer()
         player.isMuted = true
         playerLayer.player = player
@@ -104,10 +104,10 @@ class LoopingPlayerNSView: NSView {
 
         super.init(frame: .zero)
 
-        /// Create a new player looper with the queue player and template item
+        // Create a new player looper with the queue player and template item
         playerLooper = AVPlayerLooper(player: player, templateItem: item)
 
-        /// Start the movie
+        // Start the movie
         player.play()
 
         layer = CALayer()
@@ -115,7 +115,7 @@ class LoopingPlayerNSView: NSView {
         wantsLayer = true
     }
     
-    /// Called automatically when the view's bounds change
+    // Called automatically when the view's bounds change
     override func layout() {
         super.layout()
         playerLayer.frame = bounds
