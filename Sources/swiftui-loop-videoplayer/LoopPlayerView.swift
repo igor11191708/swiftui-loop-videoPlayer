@@ -17,6 +17,10 @@ public struct LoopPlayerView: View {
     /// Set of settings for video the player
     public let settings: Settings
     
+    private var videoId : String{
+        [settings.name, settings.ext].joined(separator: ".")
+    }
+    
     // MARK: - Life cycle
     
     /// Player initializer
@@ -55,10 +59,12 @@ public struct LoopPlayerView: View {
     public var body: some View {
         #if os(iOS) || os(tvOS)
         LoopPlayerViewRepresentableIOS(settings: settings)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .id(videoId)
         #elseif os(macOS)
         LoopPlayerViewRepresentableMacOS(settings: settings)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .id(videoId)
         #endif
     }
 }
@@ -67,11 +73,40 @@ public struct LoopPlayerView: View {
 
 #if os(iOS) || os(tvOS)
 @available(iOS 14.0, tvOS 14.0, *)
+@MainActor
 struct LoopPlayerViewRepresentableIOS: UIViewRepresentable {
     
     let settings: Settings
     
+    init(settings: Settings) {
+        self.settings = settings
+    }
+    
     func makeUIView(context: Context) -> UIView {
+        createView()
+    }
+    
+    func updateUIView(_ uiView: UIView, context: Context) {
+        // Remove all subviews and add the new one
+        uiView.subviews.forEach { $0.removeFromSuperview() }
+        let newView = createView()
+        uiView.addSubview(newView)
+        
+        // Ensure the new view fits the bounds of the container view
+        newView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            newView.leadingAnchor.constraint(equalTo: uiView.leadingAnchor),
+            newView.trailingAnchor.constraint(equalTo: uiView.trailingAnchor),
+            newView.topAnchor.constraint(equalTo: uiView.topAnchor),
+            newView.bottomAnchor.constraint(equalTo: uiView.bottomAnchor)
+        ])
+        
+        // Force layout update
+        uiView.setNeedsLayout()
+        uiView.layoutIfNeeded()
+    }
+    
+    private func createView() -> UIView {
         let name = settings.name
         let ext = settings.ext
         let gravity = settings.gravity
@@ -86,9 +121,6 @@ struct LoopPlayerViewRepresentableIOS: UIViewRepresentable {
             return errorTpliOS(.fileNotFound(name), color, fontSize)
         }
         return view
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {
     }
 }
 
