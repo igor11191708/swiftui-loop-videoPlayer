@@ -65,6 +65,20 @@ You can group error settings in group **ErrorGroup** or just pass all settings a
 | **EColor** | Error message text color. | .red |
 | **EFontSize** | Size of the error text. | 17.0 |
 
+### Supported Video Types and Formats
+The AVFoundation framework used in the setupPlayerComponents function supports a wide range of video formats and codecs, including both file-based media and streaming protocols. Below is a list of supported video types, codecs, and streaming protocols organized into a grid.
+| Supported File Types     | Supported Codecs | Supported Streaming Protocols      |
+|--------------------------|------------------|-------------------------------------|
+| **3GP**                  | **H.264**        | **HTTP Live Streaming (HLS)**       |
+| `.3gp`, `.3g2`           | **H.265 (HEVC)** | `.m3u8`                             |
+| **MKV** (Limited support)| **MPEG-4 Part 2**|                                     |
+| `.mkv`                   | **AAC** (audio)  |                                     |
+| **MP4**                  | **MP3** (audio)  |                                     |
+| `.mp4`                   |                  |                                     |
+| **MOV**                  |                  |                                     |
+| `.mov`                   |                  |                                     |
+| **M4V**                  |                  |                                     |
+| `.m4v`                   |                  |                                     |
 
 ## New Functionality: Remote Video URLs
 The package now supports using remote video URLs, allowing you to stream videos directly from web resources. This is an extension to the existing functionality that primarily focused on local video files. Here's how to specify a remote URL within the settings:

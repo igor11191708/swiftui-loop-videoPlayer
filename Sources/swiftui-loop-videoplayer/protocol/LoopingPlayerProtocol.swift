@@ -55,28 +55,28 @@ protocol LoopingPlayerProtocol: AnyObject {
 extension LoopingPlayerProtocol {
     
     
-    /// Sets up and initializes the player components based on specified media files and layout properties.
+    /// Sets up the player components using the provided asset and video gravity.
+    ///
+    /// This method initializes an AVPlayerItem with the provided asset,
+    /// configures an AVQueuePlayer for playback, sets up the player for the view,
+    /// and adds necessary observers to monitor playback status and errors.
     ///
     /// - Parameters:
-    ///   - name: The name of the media file to load.
-    ///   - ext: The file extension of the media file.
-    ///   - gravity: The AVLayerVideoGravity to apply to the video, which defines how the video should be scaled or fit within its player layer.
+    ///   - asset: The AVURLAsset to be played.
+    ///   - gravity: The AVLayerVideoGravity to be applied to the video layer.
     func setupPlayerComponents(asset: AVURLAsset, gravity: AVLayerVideoGravity) {
-
-      //  do{
-          //  let asset = try assetForName(name: name, ext: ext)
-            
-            let item = AVPlayerItem(asset: asset)
-            
-            let player = AVQueuePlayer(items: [item])
-            self.player = player
-            
-            configurePlayer(player, gravity: gravity)
-            
-            setupObservers(for: item, player: player)
-//        }catch{
-//            delegate?.didReceiveError(.sourceNotFound(error.localizedDescription))
-//       }
+        // Create an AVPlayerItem with the provided asset
+        let item = AVPlayerItem(asset: asset)
+        
+        // Initialize an AVQueuePlayer with the player item
+        let player = AVQueuePlayer(items: [item])
+        self.player = player
+        
+        // Configure the player with the specified gravity
+        configurePlayer(player, gravity: gravity)
+        
+        // Set up observers to monitor status and errors
+        setupObservers(for: item, player: player)
     }
     
     /// Sets up observers on the player item and the player to track their status and error states.
