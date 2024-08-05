@@ -22,7 +22,7 @@ or in a declarative way
     LoopPlayerView{
             Settings{
                 SourceName("swipe")
-                Ext("mp11") // Set default extension here If not provided then mp4 is default
+                Ext("mp8") // Set default extension here If not provided then mp4 is default
                 Gravity(.resizeAspectFill)
                 ErrorGroup{
                     EColor(.accentColor)
