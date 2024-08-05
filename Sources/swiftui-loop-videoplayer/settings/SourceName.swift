@@ -8,7 +8,7 @@
 import Foundation
 
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
-public struct FileName : SettingsConvertible{
+public struct SourceName : SettingsConvertible{
           
     /// Video file name
     let value : String

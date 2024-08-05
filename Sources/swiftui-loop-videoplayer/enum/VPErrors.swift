@@ -10,9 +10,11 @@ import Foundation
 /// An enumeration of possible errors that can occur in the video player.
 enum VPErrors: Error, CustomStringConvertible {
     
+    case remoteVideoError(Error?)
+    
     /// Error case for when a file is not found.
     /// - Parameter name: The name of the file that was not found.
-    case fileNotFound(String)
+    case sourceNotFound(String)
     
     /// Error case for when settings are not unique.
     case settingsNotUnique
@@ -22,10 +24,13 @@ enum VPErrors: Error, CustomStringConvertible {
         switch self {
             /// Returns a description indicating that the specified file was not found.
             /// - Parameter name: The name of the file that was not found.
-            case .fileNotFound(let name): return "File not found: \(name)"
+            case .sourceNotFound(let name): return "Source not found: \(name)"
             
             /// Returns a description indicating that the settings are not unique.
             case .settingsNotUnique: return "Settings are not unique"
+            //"Unknown error"
+        case .remoteVideoError(let error):
+                      return "Playback error: \(error?.localizedDescription)"
         }
     }
 }
