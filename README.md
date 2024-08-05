@@ -66,7 +66,8 @@ You can group error settings in group **ErrorGroup** or just pass all settings a
 | **EFontSize** | Size of the error text. | 17.0 |
 
 ### Supported Video Types and Formats
-The AVFoundation framework used in the setupPlayerComponents function supports a wide range of video formats and codecs, including both file-based media and streaming protocols. Below is a list of supported video types, codecs, and streaming protocols organized into a grid.
+The AVFoundation framework used in the package supports a wide range of video formats and codecs, including both file-based media and streaming protocols. Below is a list of supported video types, codecs, and streaming protocols organized into a grid according to Apple’s documentation. Sorry, didn’t check all codecs and files. Hope they are all work well.
+
 | Supported File Types     | Supported Codecs | Supported Streaming Protocols      |
 |--------------------------|------------------|-------------------------------------|
 | **3GP**                  | **H.264**        | **HTTP Live Streaming (HLS)**       |
