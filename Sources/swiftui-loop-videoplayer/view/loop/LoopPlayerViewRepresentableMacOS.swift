@@ -53,13 +53,13 @@ struct LoopPlayerViewRepresentableMacOS: NSViewRepresentable {
         if let asset{
             let player = createPlayerView(context: context, asset: asset)
             container.addSubview(player)
-            activateFullScreenConstraints(for: player, in: containerView)
+            activateFullScreenConstraints(for: player, in: container)
         }
         
         if let error = error {
             let errorView = errorTplmacOS(error, settings.errorColor, settings.errorFontSize)
             container.addSubview(errorView)
-            activateFullScreenConstraints(for: errorView, in: containerView)
+            activateFullScreenConstraints(for: errorView, in: container)
         }
         
         return container

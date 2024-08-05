@@ -73,7 +73,7 @@ The package now supports using remote video URLs, allowing you to stream videos 
 ```swift
 LoopPlayerView{
     Settings{
-        SourceName('https://example.com/video.mp4')
+        SourceName('https://example.com/video')
         Gravity(.resizeAspectFill)  // Video content fit
         ErrorGroup{
             EColor(.red)  // Error text color
