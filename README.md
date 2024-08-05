@@ -5,6 +5,10 @@
 
 This package uses a declarative approach to declare parameters for the video component based on building blocks. This implementation might give you some insights into how SwiftUI works under the hood. You can also pass parameters in the common way.
 
+## Disclaimer on Video Sources like YouTube
+Please note that using videos from URLs requires ensuring that you have the right to use and stream these videos. Videos hosted on platforms like YouTube cannot be used directly due to restrictions in their terms of service. Always ensure the video URL is compliant with copyright laws and platform policies.
+
+
 ## [SwiftUI loop video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
   ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui.gif)
@@ -105,10 +109,7 @@ LoopPlayerView{
 | Direct MP4 URLs | Yes | Directly accessible MP4 URLs can be used if they are hosted on servers that permit CORS. |
 | HLS Streams | Yes | HLS streams are supported and can be used for live streaming purposes. |
 
-## Disclaimer on Video Sources like YouTube
-Please note that using videos from URLs requires ensuring that you have the right to use and stream these videos. Videos hosted on platforms like YouTube cannot be used directly due to restrictions in their terms of service. Always ensure the video URL is compliant with copyright laws and platform policies.
-
-  ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/remote_video_player_swiftui.gif)
+![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/remote_video_player_swiftui.gif)
 
 ## Practical idea for the package
 You can introduce video hints about some functionality into the app, for example how to add positions to favorites. Put loop video hint into background or open as popup.
