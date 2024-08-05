@@ -8,7 +8,7 @@
 import Foundation
 
 /// An enumeration of possible errors that can occur in the video player.
-enum VPErrors: Error, CustomStringConvertible {
+enum VPErrors: Error, CustomStringConvertible, Sendable {
     
     case remoteVideoError(Error?)
     
@@ -30,7 +30,7 @@ enum VPErrors: Error, CustomStringConvertible {
             case .settingsNotUnique: return "Settings are not unique"
             //"Unknown error"
         case .remoteVideoError(let error):
-                      return "Playback error: \(error?.localizedDescription)"
+            return "Playback error: \(String(describing: error?.localizedDescription))"
         }
     }
 }

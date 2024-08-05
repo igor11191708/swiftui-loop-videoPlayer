@@ -18,5 +18,6 @@ protocol PlayerErrorDelegate: AnyObject {
     /// display errors accordingly.
     ///
     /// - Parameter error: The specific `VPErrors` instance describing what went wrong.
+    @MainActor
     func didReceiveError(_ error: VPErrors)
 }
