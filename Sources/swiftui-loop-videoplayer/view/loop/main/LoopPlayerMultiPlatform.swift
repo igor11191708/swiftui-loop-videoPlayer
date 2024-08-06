@@ -11,11 +11,11 @@ import SwiftUI
 import AVKit
 #endif
 
-#if os(iOS) || os(tvOS)
+#if canImport(UIKit)
 import UIKit
 #endif
 
-#if os(macOS)
+#if canImport(AppKit)
 import AppKit
 #endif
 
