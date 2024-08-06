@@ -31,7 +31,7 @@ internal class ErrorMsgViewIOS: UITextView {
 ///   - fontSize: The font size of the error text.
 /// - Returns: A configured UIView displaying the error message.
 @MainActor
-internal func errorTpliOS(_ error: VPErrors, _ color: Color, _ fontSize: CGFloat) -> UIView {
+internal func errorTpl(_ error: VPErrors, _ color: Color, _ fontSize: CGFloat) -> UIView {
     let textView = ErrorMsgViewIOS()
     textView.backgroundColor = .clear
     textView.text = error.description

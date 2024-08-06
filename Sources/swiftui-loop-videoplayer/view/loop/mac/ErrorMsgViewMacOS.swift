@@ -56,7 +56,7 @@ internal class ErrorMsgViewMacOS: NSTextView {
 ///   - color: The color to be used for the error text.
 ///   - fontSize: The font size to be used for the error text.
 /// - Returns: An `NSView` containing the error message text view centered with padding.
-internal func errorTplmacOS(_ error: VPErrors, _ color: Color, _ fontSize: CGFloat) -> NSView {
+internal func errorTpl(_ error: VPErrors, _ color: Color, _ fontSize: CGFloat) -> NSView {
     let textView = ErrorMsgViewMacOS()
     textView.isEditable = false
     textView.isSelectable = false

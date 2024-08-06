@@ -18,6 +18,10 @@ import AppKit
 @MainActor
 struct LoopPlayerViewMacOS: NSViewRepresentable, LoopPlayerViewProtocol {
     
+    typealias View = NSView
+    
+    typealias ErrorView = ErrorMsgViewMacOS
+    
     /// Settings for the player view
     public let settings: Settings
     
@@ -44,23 +48,15 @@ struct LoopPlayerViewMacOS: NSViewRepresentable, LoopPlayerViewProtocol {
             activateFullScreenConstraints(for: player, in: container)
         }
         
-        if let error = error {
-            let errorView = errorTplmacOS(error, settings.errorColor, settings.errorFontSize)
-            container.addSubview(errorView)
-            activateFullScreenConstraints(for: errorView, in: container)
-        }
+        makeErrorView(container, error: error)
         
         return container
     }
     
     func updateNSView(_ nsView: NSView, context: Context) {
-        nsView.subviews.filter { $0 is ErrorMsgViewMacOS }.forEach { $0.removeFromSuperview() }
+        nsView.subviews.filter { $0 is ErrorView }.forEach { $0.removeFromSuperview() }
         
-        if let error = error {
-            let errorView = errorTplmacOS(error, settings.errorColor, settings.errorFontSize)
-            nsView.addSubview(errorView)
-            activateFullScreenConstraints(for: errorView, in: nsView)
-        }
+        updateView(nsView, error: error)
     }
     
     func makeCoordinator() -> PlayerErrorCoordinator {
@@ -68,13 +64,4 @@ struct LoopPlayerViewMacOS: NSViewRepresentable, LoopPlayerViewProtocol {
     }
 }
 
-fileprivate func activateFullScreenConstraints(for view: NSView, in containerView: NSView) {
-    view.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-        view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-        view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-        view.topAnchor.constraint(equalTo: containerView.topAnchor),
-        view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-    ])
-}
 #endif

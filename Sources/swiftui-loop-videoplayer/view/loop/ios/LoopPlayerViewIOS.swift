@@ -19,6 +19,11 @@ import UIKit
 @MainActor
 struct LoopPlayerViewIOS: UIViewRepresentable, LoopPlayerViewProtocol {
     
+    typealias View = UIView
+    
+    typealias ErrorView = ErrorMsgViewIOS
+    
+    
     /// Settings for the player view
     public let settings: Settings
     
@@ -48,11 +53,7 @@ struct LoopPlayerViewIOS: UIViewRepresentable, LoopPlayerViewProtocol {
             activateFullScreenConstraints(for: player, in: container)
         }
         
-        if let error = error {
-            let errorView = errorTpliOS(error, settings.errorColor, settings.errorFontSize)
-            container.addSubview(errorView)
-            activateFullScreenConstraints(for: errorView, in: container)
-        }
+        makeErrorView(container, error: error)
         
         return container
     }
@@ -62,15 +63,10 @@ struct LoopPlayerViewIOS: UIViewRepresentable, LoopPlayerViewProtocol {
     ///   - uiView: The UIView to update
     ///   - context: The context for the view
     func updateUIView(_ uiView: UIView, context: Context) {
-        uiView.subviews.filter { $0 is ErrorMsgViewIOS }.forEach { $0.removeFromSuperview() }
+        uiView.subviews.filter { $0 is ErrorView }.forEach { $0.removeFromSuperview() }
         
-        if let error = error {
-            let errorView = errorTpliOS(error, settings.errorColor, settings.errorFontSize)
-            uiView.addSubview(errorView)
-            activateFullScreenConstraints(for: errorView, in: uiView)
-        }
+        updateView(uiView, error: error)
     }
-
     
     /// Creates the coordinator for handling player errors
     /// - Returns: A configured Coordinator
@@ -78,22 +74,4 @@ struct LoopPlayerViewIOS: UIViewRepresentable, LoopPlayerViewProtocol {
         PlayerErrorCoordinator($error)
     }
 }
-
-// MARK: - Helpers for iOS and tvOS
-
-/// Activates full-screen constraints for a view within a container view.
-///
-/// - Parameters:
-///   - view: The view to be constrained.
-///   - containerView: The container view to which the constraints are applied.
-fileprivate func activateFullScreenConstraints(for view: UIView, in containerView: UIView) {
-    view.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-        view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-        view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-        view.topAnchor.constraint(equalTo: containerView.topAnchor),
-        view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-    ])
-}
-
 #endif
