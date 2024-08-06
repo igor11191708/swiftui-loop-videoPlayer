@@ -16,10 +16,10 @@ import AppKit
 /// A view representable for macOS to display a looping video player.
 @available(macOS 11.0, *)
 @MainActor
-struct LoopPlayerViewMacOS: NSViewRepresentable {
+struct LoopPlayerViewMacOS: NSViewRepresentable, LoopPlayerViewProtocol {
     
     /// Settings for the player view
-    private let settings: Settings
+    public let settings: Settings
     
     /// The video asset to be played.
     private let asset: AVURLAsset?
@@ -39,7 +39,7 @@ struct LoopPlayerViewMacOS: NSViewRepresentable {
         let container = NSView()
         
         if let asset{
-            let player = createPlayerView(context: context, asset: asset)
+            let player: LoopingPlayerNSView = createPlayerView(context: context, asset: asset)
             container.addSubview(player)
             activateFullScreenConstraints(for: player, in: container)
         }
@@ -63,32 +63,8 @@ struct LoopPlayerViewMacOS: NSViewRepresentable {
         }
     }
     
-    private func createPlayerView(context: Context, asset: AVURLAsset) -> LoopingPlayerNSView {
-        let player = LoopingPlayerNSView(asset: asset, gravity: settings.gravity)
-        player.delegate = context.coordinator
-        
-        return player
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    @MainActor
-    class Coordinator: NSObject, PlayerErrorDelegate {
-        let parent: LoopPlayerViewMacOS
-        
-        init(_ parent: LoopPlayerViewMacOS) {
-            self.parent = parent
-        }
-        
-        deinit {
-            print("deinit Coordinator")
-        }
-        
-        func didReceiveError(_ error: VPErrors) {
-                self.parent.error = error
-        }
+    func makeCoordinator() -> PlayerErrorCoordinator {
+        PlayerErrorCoordinator($error)
     }
 }
 

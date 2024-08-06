@@ -1,5 +1,5 @@
 //
-//  LoopingPlayerProtocol.swift
+//  LoopingPlayerNSView.swift
 //
 //
 //  Created by Igor  on 05.08.24.
@@ -11,12 +11,14 @@ import SwiftUI
 import AVKit
 #endif
 
-#if canImport(UIKit)
-import UIKit
+#if canImport(AppKit)
+import AppKit
 
-@available(iOS 14.0, tvOS 14.0, *)
+/// A NSView subclass that loops video using AVFoundation on macOS.
+/// This class handles the initialization and management of a looping video player with customizable video gravity.
+@available(macOS 11.0, *)
 @MainActor
-class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
+class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {
     
     /// The AVPlayerLayer that displays the video content.
     private let playerLayer = AVPlayerLayer()
@@ -41,7 +43,7 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     /// - Parameters:
     ///   - asset: The AVURLAsset to be played.
     ///   - gravity: The AVLayerVideoGravity to be applied to the video layer.
-    init(asset: AVURLAsset, gravity: AVLayerVideoGravity) {
+    required init(asset: AVURLAsset, gravity: AVLayerVideoGravity) {
         super.init(frame: .zero)
         setupPlayerComponents(asset: asset, gravity: gravity)
     }
@@ -50,7 +52,7 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
         fatalError("init(coder:) has not been implemented")
     }
 
-    /// Configures the provided AVQueuePlayer with specific properties for video playback.
+    /// Configures the player with settings for looping, muted playback, and visual layout.
     ///
     /// This method sets the video gravity and muted state of the player, and assigns it to a player layer.
     /// It is intended to set up the player with the necessary configuration for video presentation based on the given gravity.
@@ -61,16 +63,18 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
         player.isMuted = true
         playerLayer.player = player
         playerLayer.videoGravity = gravity
-        playerLayer.backgroundColor = UIColor.clear.cgColor
-        layer.addSublayer(playerLayer)
+        playerLayer.backgroundColor = NSColor.clear.cgColor
+        layer = CALayer()
+        layer?.addSublayer(playerLayer)
+        wantsLayer = true
         
         playerLooper = AVPlayerLooper(player: player, templateItem: player.items().first!)
         player.play()
     }
-
+    
     /// Lays out subviews and adjusts the frame of the player layer to match the view's bounds.
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func layout() {
+        super.layout()
         playerLayer.frame = bounds
     }
 
@@ -84,6 +88,3 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     }
 }
 #endif
-
-
-

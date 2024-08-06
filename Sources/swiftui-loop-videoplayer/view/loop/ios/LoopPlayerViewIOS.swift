@@ -14,10 +14,10 @@ import AVKit
 #if os(iOS) || os(tvOS)
 @available(iOS 14.0, tvOS 14.0, *)
 @MainActor
-struct LoopPlayerViewIOS: UIViewRepresentable {
+struct LoopPlayerViewIOS: UIViewRepresentable, LoopPlayerViewProtocol {
     
     /// Settings for the player view
-    private let settings: Settings
+    public let settings: Settings
     
     /// The video asset to be played.
     private let asset: AVURLAsset?
@@ -39,7 +39,8 @@ struct LoopPlayerViewIOS: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
         let container = UIView()
         
-        if let player = createPlayerView(context: context){
+        if let asset{
+            let player: LoopingPlayerUIView = createPlayerView(context: context, asset: asset)
             container.addSubview(player)
             activateFullScreenConstraints(for: player, in: container)
         }
@@ -66,45 +67,12 @@ struct LoopPlayerViewIOS: UIViewRepresentable {
             activateFullScreenConstraints(for: errorView, in: uiView)
         }
     }
-    
-    /// Creates the player view
-    /// - Parameter context: The context for the view
-    /// - Returns: A configured LoopingPlayerUIView
-    private func createPlayerView(context: Context) -> LoopingPlayerUIView?{
-        
-        guard let asset else{ return nil }
-        
-        let player = LoopingPlayerUIView(asset: asset, gravity: settings.gravity)
-        player.delegate = context.coordinator
-        return player
-    }
+
     
     /// Creates the coordinator for handling player errors
     /// - Returns: A configured Coordinator
-    func makeCoordinator() -> Coordinator {
-        Coordinator($error)
-    }
-    
-    @MainActor
-    class Coordinator: NSObject, PlayerErrorDelegate {
-        
-        @Binding private var error: VPErrors?
-       
-        init(_ error: Binding<VPErrors?>) {
-            self._error = error
-        }
-        
-        deinit {
-            #if DEBUG
-            print("deinit Coordinator")
-            #endif
-        }
-        
-        /// Handles receiving an error and updates the error state in the parent view
-        /// - Parameter error: The error received
-        func didReceiveError(_ error: VPErrors) {
-                self.error = error
-        }
+    func makeCoordinator() -> PlayerErrorCoordinator {
+        PlayerErrorCoordinator($error)
     }
 }
 

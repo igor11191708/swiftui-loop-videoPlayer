@@ -34,6 +34,8 @@ public protocol LoopingPlayerProtocol: AnyObject {
     /// ensuring that all playback errors are managed and reported appropriately.
     var errorObserver: NSKeyValueObservation? { get set }
 
+    init(asset: AVURLAsset, gravity: AVLayerVideoGravity)
+    
     /// Sets up the necessary observers on the AVPlayerItem and AVQueuePlayer to monitor changes and errors.
     ///
     /// - Parameters:
