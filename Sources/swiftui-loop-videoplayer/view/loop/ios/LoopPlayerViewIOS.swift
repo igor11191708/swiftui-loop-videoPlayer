@@ -12,6 +12,9 @@ import AVKit
 #endif
 
 #if os(iOS) || os(tvOS)
+
+import UIKit
+
 @available(iOS 14.0, tvOS 14.0, *)
 @MainActor
 struct LoopPlayerViewIOS: UIViewRepresentable, LoopPlayerViewProtocol {
@@ -59,7 +62,7 @@ struct LoopPlayerViewIOS: UIViewRepresentable, LoopPlayerViewProtocol {
     ///   - uiView: The UIView to update
     ///   - context: The context for the view
     func updateUIView(_ uiView: UIView, context: Context) {
-        uiView.subviews.filter { $0 is ErrorMsgTextViewIOS }.forEach { $0.removeFromSuperview() }
+        uiView.subviews.filter { $0 is ErrorMsgViewIOS }.forEach { $0.removeFromSuperview() }
         
         if let error = error {
             let errorView = errorTpliOS(error, settings.errorColor, settings.errorFontSize)
@@ -78,36 +81,6 @@ struct LoopPlayerViewIOS: UIViewRepresentable, LoopPlayerViewProtocol {
 
 // MARK: - Helpers for iOS and tvOS
 
-fileprivate class ErrorMsgTextViewIOS: UITextView {
-    
-    /// Adjusts the top content inset to vertically center the text.
-    override var contentSize: CGSize {
-        didSet {
-            var top = (bounds.size.height - contentSize.height * zoomScale) / 2.0
-            top = max(0, top)
-            contentInset = UIEdgeInsets(top: top, left: 0, bottom: 0, right: 0)
-        }
-    }
-}
-
-/// Creates an error message view for iOS with the specified error, color, and font size.
-///
-/// - Parameters:
-///   - error: The error to display.
-///   - color: The color of the error text.
-///   - fontSize: The font size of the error text.
-/// - Returns: A configured UIView displaying the error message.
-@MainActor
-fileprivate func errorTpliOS(_ error: VPErrors, _ color: Color, _ fontSize: CGFloat) -> UIView {
-    let textView = ErrorMsgTextViewIOS()
-    textView.backgroundColor = .clear
-    textView.text = error.description
-    textView.textAlignment = .center
-    textView.font = UIFont.systemFont(ofSize: fontSize)
-    textView.textColor = UIColor(color)
-    return textView
-}
-
 /// Activates full-screen constraints for a view within a container view.
 ///
 /// - Parameters:
@@ -124,7 +97,3 @@ fileprivate func activateFullScreenConstraints(for view: UIView, in containerVie
 }
 
 #endif
-
-
-
-
