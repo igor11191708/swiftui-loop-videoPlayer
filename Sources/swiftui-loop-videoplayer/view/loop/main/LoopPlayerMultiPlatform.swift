@@ -67,7 +67,7 @@ extension LoopPlayerMultiPlatform: UIViewRepresentable{
     /// Creates the container view with the player view and error view if needed
     /// - Parameter context: The context for the view
     /// - Returns: A configured UIView
-    func makeUIView(context: Context) -> UIView {
+    @MainActor func makeUIView(context: Context) -> UIView {
        let container = UIView()
    
        if let player: PlayerView = makePlayerView(
@@ -85,7 +85,7 @@ extension LoopPlayerMultiPlatform: UIViewRepresentable{
     /// - Parameters:
     ///   - uiView: The UIView to update
     ///   - context: The context for the view
-    func updateUIView(_ uiView: UIView, context: Context) {
+    @MainActor func updateUIView(_ uiView: UIView, context: Context) {
         uiView.subviews.filter { $0 is ErrorView }.forEach { $0.removeFromSuperview() }
         
         updateView(uiView, error: error)
@@ -98,7 +98,7 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
     /// Creates the NSView for the representable component. It initializes the view, configures it with a player if available, and adds an error view if necessary.
     /// - Parameter context: The context containing environment and state information used during view creation.
     /// - Returns: A fully configured NSView containing both the media player and potentially an error message display.
-    func makeNSView(context: Context) -> NSView {
+    @MainActor func makeNSView(context: Context) -> NSView {
         let container = NSView()
     
         if let player: PlayerView = makePlayerView(
@@ -116,7 +116,7 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
     /// - Parameters:
     ///   - nsView: The NSView that needs updating.
     ///   - context: The context containing environment and state information used during the view update.
-    func updateNSView(_ nsView: NSView, context: Context) {
+    @MainActor func updateNSView(_ nsView: NSView, context: Context) {
         nsView.subviews.filter { $0 is ErrorView }.forEach { $0.removeFromSuperview() }
         
         updateView(nsView, error: error)
