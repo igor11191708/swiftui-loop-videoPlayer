@@ -19,7 +19,7 @@ import UIKit
 class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     
     /// The AVPlayerLayer that displays the video content.
-    private let playerLayer = AVPlayerLayer()
+    internal let playerLayer = AVPlayerLayer()
     
     /// The looper responsible for continuous video playback.
     internal var playerLooper: AVPlayerLooper?
@@ -50,26 +50,6 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
         fatalError("init(coder:) has not been implemented")
     }
 
-    /// Configures the provided AVQueuePlayer with specific properties for video playback.
-    ///
-    /// This method sets the video gravity and muted state of the player, and assigns it to a player layer.
-    /// It is intended to set up the player with the necessary configuration for video presentation based on the given gravity.
-    /// - Parameters:
-    ///   - player: The AVQueuePlayer to be configured.
-    ///   - gravity: The AVLayerVideoGravity determining how the video content should be scaled or fit within the player layer.
-    internal func configurePlayer(_ player: AVQueuePlayer, gravity: AVLayerVideoGravity) {
-        player.isMuted = true
-        playerLayer.player = player
-        playerLayer.videoGravity = gravity
-        playerLayer.backgroundColor = UIColor.clear.cgColor
-        layer.addSublayer(playerLayer)
-        
-        if let firstItem = player.items().first {
-            playerLooper = AVPlayerLooper(player: player, templateItem: firstItem)
-        }
-        player.play()
-    }
-
     /// Lays out subviews and adjusts the frame of the player layer to match the view's bounds.
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -86,6 +66,3 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     }
 }
 #endif
-
-
-

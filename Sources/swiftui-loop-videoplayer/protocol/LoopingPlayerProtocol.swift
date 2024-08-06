@@ -7,7 +7,11 @@
 
 import AVFoundation
 import Foundation
-
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 /// A protocol defining the requirements for a looping video player.
 ///
 /// Conforming types are expected to manage a video player that can loop content continuously,
@@ -15,6 +19,16 @@ import Foundation
 @available(iOS 14, macOS 11, tvOS 14, *)
 @MainActor
 public protocol LoopingPlayerProtocol: AnyObject {
+    
+    var playerLayer : AVPlayerLayer { get }
+    
+    #if canImport(UIKit)
+        var layer : CALayer { get }
+    #elseif canImport(AppKit)
+        var layer : CALayer? { get set }
+        var wantsLayer : Bool { get set }
+    #endif
+    
     /// The looper responsible for continuous video playback.
     var playerLooper: AVPlayerLooper? { get set }
 
@@ -121,6 +135,33 @@ extension LoopingPlayerProtocol {
         
         // Set up observers to monitor status and errors
         setupObservers(for: item, player: player)
+    }
+    
+    /// Configures the provided AVQueuePlayer with specific properties for video playback.
+    ///
+    /// This method sets the video gravity and muted state of the player, and assigns it to a player layer.
+    /// It is intended to set up the player with the necessary configuration for video presentation based on the given gravity.
+    /// - Parameters:
+    ///   - player: The AVQueuePlayer to be configured.
+    ///   - gravity: The AVLayerVideoGravity determining how the video content should be scaled or fit within the player layer.
+    internal func configurePlayer(_ player: AVQueuePlayer, gravity: AVLayerVideoGravity) {
+        player.isMuted = true
+        playerLayer.player = player
+        playerLayer.videoGravity = gravity
+        #if canImport(UIKit)
+        playerLayer.backgroundColor = UIColor.clear.cgColor
+        layer.addSublayer(playerLayer)
+        #elseif canImport(AppKit)
+        playerLayer.backgroundColor = NSColor.clear.cgColor
+        layer = CALayer()
+        layer?.addSublayer(playerLayer)
+        wantsLayer = true
+        #endif
+        
+        if let firstItem = player.items().first {
+            playerLooper = AVPlayerLooper(player: player, templateItem: firstItem)
+        }
+        player.play()
     }
     
     /// Sets up observers on the player item and the player to track their status and error states.
