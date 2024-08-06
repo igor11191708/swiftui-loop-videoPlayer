@@ -57,6 +57,8 @@ public struct LoopPlayerView: View {
     // MARK: - API
        
    public var body: some View {
-      MultiPlatformLoopPlayerView(settings: settings, videoId: videoId)
+       LoopPlayerMultiPlatform(settings: settings)
+           .frame(maxWidth: .infinity, maxHeight: .infinity)
+           .id(videoId)
    }
 }
