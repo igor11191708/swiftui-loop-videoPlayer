@@ -31,13 +31,6 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | **EColor** | Error message text color. | .red |
 | **EFontSize** | Size of the error text. | 17.0 |
 
-## Example Usage
-
-### Simple Initialization
-
-```swift
-LoopPlayerView(fileName: "sample_video", ext: "mp4")
-
 ## How to use the package
 ### 1. Create LoopPlayerView
 
