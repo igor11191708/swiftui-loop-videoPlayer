@@ -64,7 +64,9 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
         playerLayer.backgroundColor = UIColor.clear.cgColor
         layer.addSublayer(playerLayer)
         
-        playerLooper = AVPlayerLooper(player: player, templateItem: player.items().first!)
+        if let firstItem = player.items().first {
+            playerLooper = AVPlayerLooper(player: player, templateItem: firstItem)
+        }
         player.play()
     }
 

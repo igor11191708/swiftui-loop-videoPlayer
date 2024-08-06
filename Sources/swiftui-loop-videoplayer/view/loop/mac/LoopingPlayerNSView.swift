@@ -68,7 +68,9 @@ class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {
         layer?.addSublayer(playerLayer)
         wantsLayer = true
         
-        playerLooper = AVPlayerLooper(player: player, templateItem: player.items().first!)
+        if let firstItem = player.items().first {
+            playerLooper = AVPlayerLooper(player: player, templateItem: firstItem)
+        }
         player.play()
     }
     
