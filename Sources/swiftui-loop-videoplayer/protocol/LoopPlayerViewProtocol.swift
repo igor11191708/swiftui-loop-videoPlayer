@@ -23,7 +23,7 @@ public protocol LoopPlayerViewProtocol {
 }
 
 #if os(iOS) || os(tvOS)
-
+@available(iOS 14, tvOS 14, *)
 extension LoopPlayerViewProtocol where Self: UIViewRepresentable, Context == UIViewRepresentableContext<Self> {
     
     /// Creates a player view for looping video content.
@@ -46,7 +46,7 @@ extension LoopPlayerViewProtocol where Self: UIViewRepresentable, Context == UIV
 #endif
 
 #if canImport(AppKit)
-
+@available(macOS 11, *)
 extension LoopPlayerViewProtocol where Self: NSViewRepresentable, Context == NSViewRepresentableContext<Self> {
     
     /// Creates a player view for looping video content.
@@ -68,7 +68,7 @@ extension LoopPlayerViewProtocol where Self: NSViewRepresentable, Context == NSV
 #endif
 
 @MainActor
-class PlayerErrorCoordinator: NSObject, PlayerErrorDelegate {
+internal class PlayerErrorCoordinator: NSObject, PlayerErrorDelegate {
     
     @Binding private var error: VPErrors?
    
