@@ -23,6 +23,7 @@ struct LoopPlayerViewIOS: UIViewRepresentable, LoopPlayerViewProtocol {
     
     typealias ErrorView = ErrorMsgViewIOS
     
+    typealias PlayerView = LoopingPlayerUIView
     
     /// Settings for the player view
     public let settings: Settings
@@ -45,12 +46,13 @@ struct LoopPlayerViewIOS: UIViewRepresentable, LoopPlayerViewProtocol {
     /// - Parameter context: The context for the view
     /// - Returns: A configured UIView
     func makeUIView(context: Context) -> UIView {
-        let container = UIView()
-        
-        if let asset{
-            let player: LoopingPlayerUIView = createPlayerView(context: context, asset: asset)
-            compose(container, player)
-        }
+       let container = UIView()
+   
+       if let player: PlayerView = makePlayerView(
+            container,
+            asset: asset){
+           player.delegate = context.coordinator
+       }
         
         makeErrorView(container, error: error)
         
@@ -67,8 +69,8 @@ struct LoopPlayerViewIOS: UIViewRepresentable, LoopPlayerViewProtocol {
         updateView(uiView, error: error)
     }
     
-    /// Creates the coordinator for handling player errors
-    /// - Returns: A configured Coordinator
+    /// Creates a coordinator that handles error-related updates and interactions between the SwiftUI view and its underlying model.
+    /// - Returns: An instance of PlayerErrorCoordinator that can be used to manage error states and communicate between the view and model.
     func makeCoordinator() -> PlayerErrorCoordinator {
         PlayerErrorCoordinator($error)
     }
