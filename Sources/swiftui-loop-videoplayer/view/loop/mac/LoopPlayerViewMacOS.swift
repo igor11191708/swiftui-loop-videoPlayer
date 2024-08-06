@@ -44,8 +44,7 @@ struct LoopPlayerViewMacOS: NSViewRepresentable, LoopPlayerViewProtocol {
         
         if let asset{
             let player: LoopingPlayerNSView = createPlayerView(context: context, asset: asset)
-            container.addSubview(player)
-            activateFullScreenConstraints(for: player, in: container)
+            compose(container, player)
         }
         
         makeErrorView(container, error: error)

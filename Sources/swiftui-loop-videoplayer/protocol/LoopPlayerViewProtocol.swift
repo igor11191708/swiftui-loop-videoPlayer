@@ -46,19 +46,28 @@ public extension LoopPlayerViewProtocol{
         makeErrorView(view, error: error)
     }
     
+    /// Constructs an error view and adds it to the specified view if an error is present.
+    /// - Parameters:
+    ///   - view: The view to which the error message view will be added.
+    ///   - error: The optional error which, if present, triggers the creation and addition of an error-specific view.
     @MainActor
-    func makeErrorView(_ view: View, error: VPErrors?){
+    func makeErrorView(_ view: View, error: VPErrors?) {
         if let error = error {
-
             let errorView = errorTpl(error, settings.errorColor, settings.errorFontSize)
-            
-
             view.addSubview(errorView)
-            
             activateFullScreenConstraints(for: errorView, in: view)
         }
     }
-    
+
+    /// Adds a subview to a given view and activates full-screen constraints on the subview within the parent view.
+    /// - Parameters:
+    ///   - view: The parent view to which the subview will be added.
+    ///   - subView: The subview that will be added to the parent view.
+    @MainActor
+    func compose(_ view: View, _ subView: View) {
+        view.addSubview(subView)
+        activateFullScreenConstraints(for: subView, in: view)
+    }
 }
 
 #if os(iOS) || os(tvOS)
