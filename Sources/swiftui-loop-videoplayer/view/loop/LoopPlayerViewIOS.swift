@@ -1,5 +1,5 @@
 //
-//  MultiPlatformLoopPlayerView.swift
+//  LoopPlayerViewIOS.swift
 //
 //
 //  Created by Igor  on 05.08.24.
@@ -14,7 +14,7 @@ import AVKit
 #if os(iOS) || os(tvOS)
 @available(iOS 14.0, tvOS 14.0, *)
 @MainActor
-struct LoopPlayerViewRepresentableIOS: UIViewRepresentable {
+struct LoopPlayerViewIOS: UIViewRepresentable {
     
     /// Settings for the player view
     private let settings: Settings
@@ -28,21 +28,9 @@ struct LoopPlayerViewRepresentableIOS: UIViewRepresentable {
     /// Initializes the player view with settings
     /// - Parameter settings: The settings to configure the player view
     init(settings: Settings) {
-        let name = settings.name
-        let e: VPErrors?
-        
-        self.asset = assetForName(name: name, ext: settings.ext)
         self.settings = settings
-        
-        if !settings.areUnique{
-            e = .settingsNotUnique
-        }else if asset == nil{
-             e = .sourceNotFound(name)
-        }else{
-            e = nil
-        }
-
-        self._error = State(initialValue: e)
+        self.asset = assetForName(name: settings.name, ext: settings.ext)
+        self._error = State(initialValue: detectError(settings: settings, asset: self.asset))
     }
     
     /// Creates the container view with the player view and error view if needed
@@ -157,7 +145,7 @@ fileprivate func errorTpliOS(_ error: VPErrors, _ color: Color, _ fontSize: CGFl
 /// - Parameters:
 ///   - view: The view to be constrained.
 ///   - containerView: The container view to which the constraints are applied.
-func activateFullScreenConstraints(for view: UIView, in containerView: UIView) {
+fileprivate func activateFullScreenConstraints(for view: UIView, in containerView: UIView) {
     view.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
         view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),

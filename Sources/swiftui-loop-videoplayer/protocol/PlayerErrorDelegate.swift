@@ -11,7 +11,7 @@ import Foundation
 ///
 /// Conforming to this protocol allows a class to respond to error events that occur within a media player context.
 @available(iOS 14, macOS 11, tvOS 14, *)
-protocol PlayerErrorDelegate: AnyObject {
+public protocol PlayerErrorDelegate: AnyObject {
     /// Called when an error is encountered within the media player.
     ///
     /// This method provides a way for delegate objects to respond to error conditions, allowing them to handle or

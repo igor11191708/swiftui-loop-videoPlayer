@@ -1,5 +1,5 @@
 //
-//  LoopPlayerViewRepresentableMacOS.swift
+//  LoopPlayerViewMacOS.swift
 //
 //
 //  Created by Igor  on 05.08.24.
@@ -16,7 +16,7 @@ import AppKit
 /// A view representable for macOS to display a looping video player.
 @available(macOS 11.0, *)
 @MainActor
-struct LoopPlayerViewRepresentableMacOS: NSViewRepresentable {
+struct LoopPlayerViewMacOS: NSViewRepresentable {
     
     /// Settings for the player view
     private let settings: Settings
@@ -27,24 +27,12 @@ struct LoopPlayerViewRepresentableMacOS: NSViewRepresentable {
     /// State to store any error that occurs
     @State private var error: VPErrors?
 
-    /// Initializes the player view with settings
-    /// - Parameter settings: The settings to configure the player view
+    /// Initializes the video player with given settings.
+    /// - Parameter settings: The settings for the video player.
     init(settings: Settings) {
-        let name = settings.name
-        let e: VPErrors?
-        
-        self.asset = assetForName(name: name, ext: settings.ext)
         self.settings = settings
-        
-        if !settings.areUnique{
-            e = .settingsNotUnique
-        }else if asset == nil{
-             e = .sourceNotFound(name)
-        }else{
-            e = nil
-        }
-
-        self._error = State(initialValue: e)
+        self.asset = assetForName(name: settings.name, ext: settings.ext)
+        self._error = State(initialValue: detectError(settings: settings, asset: self.asset))
     }
     
     func makeNSView(context: Context) -> NSView {
@@ -88,9 +76,9 @@ struct LoopPlayerViewRepresentableMacOS: NSViewRepresentable {
     
     @MainActor
     class Coordinator: NSObject, PlayerErrorDelegate {
-        let parent: LoopPlayerViewRepresentableMacOS
+        let parent: LoopPlayerViewMacOS
         
-        init(_ parent: LoopPlayerViewRepresentableMacOS) {
+        init(_ parent: LoopPlayerViewMacOS) {
             self.parent = parent
         }
         
@@ -103,6 +91,8 @@ struct LoopPlayerViewRepresentableMacOS: NSViewRepresentable {
         }
     }
 }
+
+// MARK: - Fileprivate
 
 /// A custom NSTextView for displaying error messages on macOS.
 fileprivate class ErrorMsgTextViewMacOS: NSTextView {
@@ -175,7 +165,7 @@ fileprivate func errorTplmacOS(_ error: VPErrors, _ color: Color, _ fontSize: CG
     return containerView
 }
 
-func activateFullScreenConstraints(for view: NSView, in containerView: NSView) {
+fileprivate func activateFullScreenConstraints(for view: NSView, in containerView: NSView) {
     view.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
         view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
@@ -186,3 +176,5 @@ func activateFullScreenConstraints(for view: NSView, in containerView: NSView) {
 }
 
 #endif
+
+

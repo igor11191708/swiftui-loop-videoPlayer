@@ -14,7 +14,7 @@ import Foundation
 /// handle errors, and notify a delegate of important events.
 @available(iOS 14, macOS 11, tvOS 14, *)
 @MainActor
-protocol LoopingPlayerProtocol: AnyObject {
+public protocol LoopingPlayerProtocol: AnyObject {
     /// The looper responsible for continuous video playback.
     var playerLooper: AVPlayerLooper? { get set }
 
@@ -114,57 +114,3 @@ extension LoopingPlayerProtocol {
         delegate?.didReceiveError(.remoteVideoError(error))
     }
 }
-
-/// Retrieves a video asset from either a network URL or a local file specified by name and extension.
-///
-/// - Parameters:
-///   - name: The name of the file or URL.
-///   - ext: The file extension for local resources.
-/// - Returns: An AVURLAsset initialized with the specified URL or file path.
-/// - Throws: VPErrors.sourceNotFound if neither a valid URL nor a local file can be located.
-func assetForName(name: String, ext: String) -> AVURLAsset? {
-    if let url = URL.validURLFromString(name) {
-        return AVURLAsset(url: url)
-    } else if let fileUrl = Bundle.main.url(forResource: name, withExtension: extractExtension(from: name) ?? ext) {
-        return AVURLAsset(url: fileUrl)
-    }
-    return nil
-}
-
-/// Checks whether a given filename contains an extension and returns the extension if it exists.
-///
-/// - Parameter name: The filename to check.
-/// - Returns: An optional string containing the extension if it exists, otherwise nil.
-fileprivate func extractExtension(from name: String) -> String? {
-    let pattern = "^.*\\.([^\\s]+)$"
-    let regex = try? NSRegularExpression(pattern: pattern, options: [])
-    let range = NSRange(location: 0, length: name.utf16.count)
-    
-    if let match = regex?.firstMatch(in: name, options: [], range: range) {
-        if let extensionRange = Range(match.range(at: 1), in: name) {
-            return String(name[extensionRange])
-        }
-    }
-    return nil
-}
-
-func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayerLooper?, statusObserver: inout NSKeyValueObservation?, errorObserver: inout NSKeyValueObservation?) {
-    // Invalidate and remove references to observers
-    statusObserver?.invalidate()
-    errorObserver?.invalidate()
-    statusObserver = nil
-    errorObserver = nil
-
-    // Pause the player and release player-related resources
-    player?.pause()
-    player = nil
-    playerLooper?.disableLooping()
-    playerLooper = nil
-
-    // Debugging statement to confirm cleanup in debug builds
-    #if DEBUG
-    print("Cleaned up AVPlayer and observers.")
-    #endif
-}
-
-

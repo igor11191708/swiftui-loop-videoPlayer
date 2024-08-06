@@ -21,11 +21,11 @@ struct MultiPlatformLoopPlayerView: View {
 
     var body: some View {
         #if os(iOS) || os(tvOS)
-        LoopPlayerViewRepresentableIOS(settings: settings)
+        LoopPlayerViewIOS(settings: settings)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .id(videoId)
         #elseif os(macOS)
-        LoopPlayerViewRepresentableMacOS(settings: settings)
+        LoopPlayerViewMacOS(settings: settings)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .id(videoId)
         #endif

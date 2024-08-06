@@ -57,7 +57,7 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     /// - Parameters:
     ///   - player: The AVQueuePlayer to be configured.
     ///   - gravity: The AVLayerVideoGravity determining how the video content should be scaled or fit within the player layer.
-    func configurePlayer(_ player: AVQueuePlayer, gravity: AVLayerVideoGravity) {
+    internal func configurePlayer(_ player: AVQueuePlayer, gravity: AVLayerVideoGravity) {
         player.isMuted = true
         playerLayer.player = player
         playerLayer.videoGravity = gravity
