@@ -24,7 +24,14 @@ public protocol LoopingPlayerProtocol: AnyObject {
     /// The delegate to be notified about errors encountered by the player.
     var delegate: PlayerErrorDelegate? { get set }
     
+    /// An optional NSKeyValueObservation to monitor changes in the playback status of the video.
+    /// This observer should be set up to watch for changes such as play, pause, or errors in the AVPlayerItem,
+    /// allowing the conforming object to respond to different states of the video playback.
     var statusObserver: NSKeyValueObservation? { get set }
+
+    /// An optional NSKeyValueObservation to monitor errors encountered by the video player.
+    /// This observer should be configured to detect and handle errors from the AVQueuePlayer,
+    /// ensuring that all playback errors are managed and reported appropriately.
     var errorObserver: NSKeyValueObservation? { get set }
 
     /// Sets up the necessary observers on the AVPlayerItem and AVQueuePlayer to monitor changes and errors.
@@ -44,16 +51,51 @@ public protocol LoopingPlayerProtocol: AnyObject {
     /// - Parameter player: The AVQueuePlayer that encountered an error.
     func handlePlayerError(_ player: AVPlayer)
     
-    
     /// Configures the provided AVQueuePlayer with specific properties for video playback.
     /// - Parameters:
     ///   - player: The AVQueuePlayer to be configured.
     ///   - gravity: The AVLayerVideoGravity determining how the video content should be scaled or fit within the player layer.
     func configurePlayer(_ player: AVQueuePlayer, gravity: AVLayerVideoGravity)
+    
+    // Playback control methods
+
+    /// Initiates or resumes playback of the video.
+    /// This method should be implemented to start playing the video from its current position.
+    func play()
+
+    /// Pauses the current video playback.
+    /// This method should be implemented to pause the video, allowing it to be resumed later from the same position.
+    func pause()
+
+    /// Seeks to a specific point in the video.
+    /// This method should be implemented to allow seeking to a particular time within the video.
+    /// - Parameter time: The CMTime representing the target position to seek to in the video.
+    func seek(to time: CMTime)
 }
 
 extension LoopingPlayerProtocol {
     
+    
+    // Implementations of playback control methods
+
+    /// Initiates playback of the video.
+    /// This method starts or resumes playing the video from the current position.
+    func play() {
+        player?.play()
+    }
+
+    /// Pauses the video playback.
+    /// This method pauses the video if it is currently playing, allowing it to be resumed later from the same position.
+    func pause() {
+        player?.pause()
+    }
+
+    /// Seeks the video to a specific time.
+    /// This method moves the playback position to the specified time with precise accuracy.
+    /// - Parameter time: The target time to seek to in the video timeline.
+    func seek(to time: CMTime) {
+        player?.seek(to: time, toleranceBefore: .zero, toleranceAfter: .zero)
+    }
     
     /// Sets up the player components using the provided asset and video gravity.
     ///
