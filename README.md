@@ -3,7 +3,7 @@
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FThe-Igor%2Fswiftui-loop-videoplayer%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/The-Igor/swiftui-loop-videoplayer)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FThe-Igor%2Fswiftui-loop-videoplayer%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/The-Igor/swiftui-loop-videoplayer)
 
-This package uses a declarative approach to declare parameters for the video component based on building blocks. This implementation might give you some insights into how SwiftUI works under the hood. You can also pass parameters in the common way.
+`LoopPlayerView` is a SwiftUI component designed to loop video playback seamlessly on iOS, macOS, and tvOS platforms. This package uses a declarative approach to declare parameters for the video component based on building blocks. This implementation might give you some insights into how SwiftUI works under the hood. You can also pass parameters in the common way.
 
 ## Disclaimer on Video Sources like YouTube
 Please note that using videos from URLs requires ensuring that you have the right to use and stream these videos. Videos hosted on platforms like YouTube cannot be used directly due to restrictions in their terms of service. Always ensure the video URL is compliant with copyright laws and platform policies.
@@ -11,7 +11,32 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ## [SwiftUI loop video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
-  ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui.gif)
+  ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui.gif)  
+
+## API Specifications
+
+| Property/Method             | Type                          | Description                                                            |
+|-----------------------------|-------------------------------|------------------------------------------------------------------------|
+| `settings`                  | `Settings`                    | A struct containing configuration settings for the video player.      |
+| `init(fileName:ext:gravity:eColor:eFontSize:)` | Constructor       | Initializes the player with specific video parameters.                 |
+| `init(_ settings: () -> Settings)` | Constructor | Initializes the player with a declarative settings block.              |
+
+### Initializer Parameters Settings
+
+| Name | Description | Default |
+| --- | --- |  --- |
+| **SourceName** | The URL or local filename of the video. If a valid URL (http or https) is provided, the video will be streamed from the URL. If not a URL, the system will check if a video with the given name exists in the local bundle. The local name provided can either include an extension or be without one. The system first checks if the local name contains an extension. If the local name includes an extension, it extracts this extension and uses it as the default. If the local name does not contain an extension, the system assigns a default extension of .mp4 The default file extension can be set up via Ext param. | - |
+| **Ext** | File extension for the video, used when loading from local resources. This is optional when a URL is provided and the URL ends with the video file extension. | "mp4" |
+| **Gravity** | How the video content should be resized to fit the player's bounds. | .resizeAspect |
+| **EColor** | Error message text color. | .red |
+| **EFontSize** | Size of the error text. | 17.0 |
+
+## Example Usage
+
+### Simple Initialization
+
+```swift
+LoopPlayerView(fileName: "sample_video", ext: "mp4")
 
 ## How to use the package
 ### 1. Create LoopPlayerView
@@ -59,15 +84,6 @@ LoopPlayerView{
 
 You can group error settings in group **ErrorGroup** or just pass all settings as a linear list of settings. You don't need to follow some specific order for settings, just pass in an arbitrary order you are interested in. The only required setting is now **SourceName**.
 
-### Settings
-
-| Name | Description | Default |
-| --- | --- |  --- |
-| **SourceName** | The URL or local filename of the video. If a valid URL (http or https) is provided, the video will be streamed from the URL. If not a URL, the system will check if a video with the given name exists in the local bundle. The local name provided can either include an extension or be without one. The system first checks if the local name contains an extension. If the local name includes an extension, it extracts this extension and uses it as the default. If the local name does not contain an extension, the system assigns a default extension of .mp4 The default file extension can be set up via Ext param. | - |
-| **Ext** | File extension for the video, used when loading from local resources. This is optional when a URL is provided and the URL ends with the video file extension. | "mp4" |
-| **Gravity** | How the video content should be resized to fit the player's bounds. | .resizeAspect |
-| **EColor** | Error message text color. | .red |
-| **EFontSize** | Size of the error text. | 17.0 |
 
 ### Supported Video Types and Formats
 The AVFoundation framework used in the package supports a wide range of video formats and codecs, including both file-based media and streaming protocols. Below is a list of supported video types, codecs, and streaming protocols organized into a grid according to Apple’s documentation. Sorry, didn’t check all codecs and files. Hope they are all work well.
