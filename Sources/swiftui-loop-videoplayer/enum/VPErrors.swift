@@ -7,6 +7,7 @@
 
 import Foundation
 
+@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
 /// An enumeration of possible errors that can occur in the video player.
 public enum VPErrors: Error, CustomStringConvertible, Sendable {
     

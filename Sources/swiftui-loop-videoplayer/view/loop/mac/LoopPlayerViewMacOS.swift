@@ -74,5 +74,4 @@ struct LoopPlayerViewMacOS: NSViewRepresentable, LoopPlayerViewProtocol {
         PlayerErrorCoordinator($error)
     }
 }
-
 #endif

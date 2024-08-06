@@ -10,6 +10,11 @@ import Foundation
 #if os(macOS)
 import AppKit
 
+/// Activates full-screen constraints for a given view within its container view.
+/// This method sets up constraints to make the `view` fill the entire `containerView`.
+/// - Parameters:
+///   - view: The view for which full-screen constraints will be applied.
+///   - containerView: The parent view in which `view` will be constrained to match the full size.
 func activateFullScreenConstraints(for view: NSView, in containerView: NSView) {
     view.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
