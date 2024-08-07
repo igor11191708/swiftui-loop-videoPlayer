@@ -17,14 +17,12 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ## API Specifications
 
-## API Specifications
-
 | Property/Method                       | Type                          | Description                                                            |
 |---------------------------------------|-------------------------------|------------------------------------------------------------------------|
 | `settings`                            | `Settings`                    | A struct containing configuration settings for the video player.       |
 | `command`                             | `Binding<PlaybackCommand>`    | A binding to control playback actions (play, pause, or seek).          |
-| `init(fileName:ext:gravity:eColor:eFontSize:command:)` | Constructor       | Initializes the player with specific video parameters and playback command binding. |
-| `init(_ settings: () -> Settings, command:)` | Constructor | Initializes the player with a declarative settings block and playback command binding. |
+| `init(fileName:<br>ext:<br>gravity:<br>eColor:<br>eFontSize:<br>command:)` | Constructor       | Initializes the player with specific video parameters and playback command binding. |
+| `init(_ settings:<br> () -> Settings,<br> command:)` | Constructor | Initializes the player with a declarative settings block and playback command binding. |
 
 ### Playback Commands
 
