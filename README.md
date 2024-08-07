@@ -154,7 +154,7 @@ struct VideoView: View {
 }
 ```
 
-![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/commands.gif)
+![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/play_commands.gif)
 
 ## Practical idea for the package
 You can introduce video hints about some functionality into the app, for example how to add positions to favorites. Put loop video hint into background or open as popup.
