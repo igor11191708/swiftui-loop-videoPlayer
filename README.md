@@ -48,6 +48,18 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | **EColor** | Error message text color. | .red |
 | **EFontSize** | Size of the error text. | 17.0 |
 
+
+
+In the core of this package, I use `AVQueuePlayer`. Here are the supported features that are automatically enabled by `AVQueuePlayer` without passing any extra parameters:
+
+| Feature                                                                                                    | Description                                                                                                   |
+|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| Hardware accelerator                                                                                       | `AVQueuePlayer` uses hardware acceleration by default where available.                                        |
+| 4k/HDR/HDR10/HDR10+/Dolby Vision                                                                           | These high-definition and high-dynamic-range formats are natively supported by `AVQueuePlayer`.               |
+| Multichannel Audio/Dolby Atmos/Spatial Audio                                                               | `AVQueuePlayer` supports advanced audio formats natively.                                                     |
+| Text subtitle/Image subtitle/Closed Captions                                                               | Subtitle and caption tracks included in the video file are automatically detected and rendered.               |
+| Automatically switch to multi-bitrate streams based on network                                             | Adaptive bitrate streaming is handled automatically by `AVQueuePlayer` when streaming from a source that supports it. |
+
 ## How to use the package
 ### 1. Create LoopPlayerView
 
