@@ -26,6 +26,12 @@ public enum PlaybackCommand: Equatable {
     /// Command to position the video at the end.
     case end
     
+    /// Command to mute the video.
+    case mute
+    
+    /// Command to unmute the video.
+    case unmute
+    
     public static func == (lhs: PlaybackCommand, rhs: PlaybackCommand) -> Bool {
         switch (lhs, rhs) {
         case (.play, .play):
@@ -37,6 +43,10 @@ public enum PlaybackCommand: Equatable {
         case (.begin, .begin):
             return true
         case (.end, .end):
+            return true
+        case (.mute, .mute):
+            return true
+        case (.unmute, .unmute):
             return true
         default:
             return false

@@ -83,14 +83,30 @@ public protocol LoopingPlayerProtocol: AnyObject {
     /// This method should be implemented to pause the video, allowing it to be resumed later from the same position.
     func pause()
 
-    /// Seeks to a specific point in the video.
-    /// This method should be implemented to allow seeking to a particular time within the video.
-    /// - Parameter time: The CMTime representing the target position to seek to in the video.
-    func seek(to time: CMTime)
+    /// Seeks the video to a specific time.
+    /// This method moves the playback position to the specified time with precise accuracy.
+    /// - Parameter time: The target time to seek to in the video timeline.
+    func seek(to time: Double)
+    
+    /// Seeks to the start of the video.
+    /// This method positions the playback at the beginning of the video.
+    func seekToStart()
+    
+    /// Seeks to the end of the video.
+    /// This method positions the playback at the end of the video.
+    func seekToEnd()
+    
+    /// Mutes the video playback.
+    /// This method silences the audio of the video.
+    func mute()
+    
+    /// Unmutes the video playback.
+    /// This method restores the audio of the video.
+    func unmute()
+    
 }
 
 extension LoopingPlayerProtocol {
-    
     
     // Implementations of playback control methods
 
@@ -109,34 +125,64 @@ extension LoopingPlayerProtocol {
     /// Seeks the video to a specific time.
     /// This method moves the playback position to the specified time with precise accuracy.
     /// - Parameter time: The target time to seek to in the video timeline.
-    func seek(to time: CMTime) {
-        player?.seek(to: time, toleranceBefore: .zero, toleranceAfter: .zero)
+    func seek(to time: Double) {
+        seekToTime(player: player, seekTimeInSeconds: time)
     }
     
-    /// Sets the playback command for the video player.
-    /// - Parameter value: The `PlaybackCommand` to set. This can be one of the following:
-    ///   - `play`: Command to play the video.
-    ///   - `pause`: Command to pause the video.
-    ///   - `seek(to:)`: Command to seek to a specific time in the video. The parameter is the target position in seconds.
-    ///   - `begin`: Command to position the video at the beginning (seek to time zero).
-    ///   - `end`: Command to position the video at the end (seek to the video's duration).
-    func setCommand(_ value: PlaybackCommand) {
-        switch value {
-        case .play:
-            player?.play()
-        case .pause:
-            player?.pause()
-        case .seek(to: let time):
-            seekToTime(player: player, seekTimeInSeconds: time)
-        case .begin:
-            seekToTime(player: player, seekTimeInSeconds: 0)
-        case .end:
-            if let duration = player?.currentItem?.duration {
-                let endTime = CMTimeGetSeconds(duration)
-                seekToTime(player: player, seekTimeInSeconds: endTime)
-            }
+    /// Seeks to the start of the video.
+    /// This method positions the playback at the beginning of the video.
+    func seekToStart() {
+        seekToTime(player: player, seekTimeInSeconds: 0)
+    }
+    
+    /// Seeks to the end of the video.
+    /// This method positions the playback at the end of the video.
+    func seekToEnd() {
+        if let duration = player?.currentItem?.duration {
+            let endTime = CMTimeGetSeconds(duration)
+            seekToTime(player: player, seekTimeInSeconds: endTime)
         }
     }
+    
+    /// Mutes the video playback.
+    /// This method silences the audio of the video.
+    func mute() {
+        player?.isMuted = true
+    }
+    
+    /// Unmutes the video playback.
+    /// This method restores the audio of the video.
+    func unmute() {
+        player?.isMuted = false
+    }
+    
+   /// Sets the playback command for the video player.
+   /// - Parameter value: The `PlaybackCommand` to set. This can be one of the following:
+   ///   - `play`: Command to play the video.
+   ///   - `pause`: Command to pause the video.
+   ///   - `seek(to:)`: Command to seek to a specific time in the video.
+   ///   - `begin`: Command to position the video at the beginning.
+   ///   - `end`: Command to position the video at the end.
+   ///   - `mute`: Command to mute the video.
+   ///   - `unmute`: Command to unmute the video.
+   func setCommand(_ value: PlaybackCommand) {
+       switch value {
+       case .play:
+           play()
+       case .pause:
+           pause()
+       case .seek(to: let time):
+           seek(to: time)
+       case .begin:
+           seekToStart()
+       case .end:
+           seekToEnd()
+       case .mute:
+           mute()
+       case .unmute:
+           unmute()
+       }
+   }
     
     /// Sets up the player components using the provided asset and video gravity.
     ///
