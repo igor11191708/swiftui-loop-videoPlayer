@@ -11,7 +11,9 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ## [SwiftUI video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
-  ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui.gif)  
+![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/play_commands.gif)
+
+![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui.gif)  
 
 ## API Specifications
 
@@ -32,7 +34,7 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | `begin`                     | Command to position the video at the beginning. |                                                                                                      |
 | `end`                       | Command to position the video at the end. | 
 
-![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/play_commands.gif)
+
 
 ### Initializer Parameters Settings
 
