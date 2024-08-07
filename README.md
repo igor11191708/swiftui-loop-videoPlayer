@@ -29,6 +29,8 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | `play`                      | Command to play the video.                                                                                                                            |
 | `pause`                     | Command to pause the video.                                                                                                                           |
 | `seek(to: Double)`          | Command to seek to a specific time in the video. The parameter is the target position in seconds. Note: Errors such as seeking out of bounds are not currently handled and will be silently ignored. Potential errors include: <br> - `.seekTimeOutOfBounds` <br> - `.invalidDuration` <br> - `.playerOrCurrentItemNil`. Future versions may introduce error handling for these cases. |
+| `begin`                     | Command to position the video at the beginning. |                                                                                                      |
+| `end`                       | Command to position the video at the end. | 
 
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/play_commands.gif)
 

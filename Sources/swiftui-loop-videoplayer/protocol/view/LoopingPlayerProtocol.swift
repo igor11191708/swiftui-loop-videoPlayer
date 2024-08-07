@@ -113,11 +113,28 @@ extension LoopingPlayerProtocol {
         player?.seek(to: time, toleranceBefore: .zero, toleranceAfter: .zero)
     }
     
-    func setCommand(_ value : PlaybackCommand){
-        switch value{
-            case .play : player?.play()
-            case .pause : player?.pause()
-        case .seek(to: let time) : seekToTime(player: player, seekTimeInSeconds: time)
+    /// Sets the playback command for the video player.
+    /// - Parameter value: The `PlaybackCommand` to set. This can be one of the following:
+    ///   - `play`: Command to play the video.
+    ///   - `pause`: Command to pause the video.
+    ///   - `seek(to:)`: Command to seek to a specific time in the video. The parameter is the target position in seconds.
+    ///   - `begin`: Command to position the video at the beginning (seek to time zero).
+    ///   - `end`: Command to position the video at the end (seek to the video's duration).
+    func setCommand(_ value: PlaybackCommand) {
+        switch value {
+        case .play:
+            player?.play()
+        case .pause:
+            player?.pause()
+        case .seek(to: let time):
+            seekToTime(player: player, seekTimeInSeconds: time)
+        case .begin:
+            seekToTime(player: player, seekTimeInSeconds: 0)
+        case .end:
+            if let duration = player?.currentItem?.duration {
+                let endTime = CMTimeGetSeconds(duration)
+                seekToTime(player: player, seekTimeInSeconds: endTime)
+            }
         }
     }
     

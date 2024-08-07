@@ -20,6 +20,12 @@ public enum PlaybackCommand: Equatable {
     /// - Parameter time: The CMTime representing the target position to seek to in the video.
     case seek(to: Double)
     
+    /// Command to position the video at the beginning.
+    case begin
+    
+    /// Command to position the video at the end.
+    case end
+    
     public static func == (lhs: PlaybackCommand, rhs: PlaybackCommand) -> Bool {
         switch (lhs, rhs) {
         case (.play, .play):
@@ -28,6 +34,10 @@ public enum PlaybackCommand: Equatable {
             return true
         case (.seek(let lhsTime), .seek(let rhsTime)):
             return lhsTime == rhsTime
+        case (.begin, .begin):
+            return true
+        case (.end, .end):
+            return true
         default:
             return false
         }
