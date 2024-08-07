@@ -113,6 +113,14 @@ extension LoopingPlayerProtocol {
         player?.seek(to: time, toleranceBefore: .zero, toleranceAfter: .zero)
     }
     
+    func setCommand(_ value : PlaybackCommand){
+        switch value{
+            case .play : player?.play()
+            case .pause : player?.pause()
+        case .seek(to: let time) : seekToTime(player: player, seekTimeInSeconds: time)
+        }
+    }
+    
     /// Sets up the player components using the provided asset and video gravity.
     ///
     /// This method initializes an AVPlayerItem with the provided asset,

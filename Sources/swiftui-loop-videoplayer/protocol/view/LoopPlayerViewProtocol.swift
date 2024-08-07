@@ -35,9 +35,14 @@ public protocol LoopPlayerViewProtocol {
     /// Settings for configuring the video player.
     var settings: Settings { get }
     
-    /// Initializes the video player with specific settings.
-    /// - Parameter settings: The settings to configure the player.
-    init(settings: Settings)
+    /// Initializes a new instance with the provided settings and playback command.
+    ///
+    /// - Parameters:
+    ///   - settings: An instance of `Settings` containing configuration details.
+    ///   - command: A binding to a `PlaybackCommand` that controls playback actions.
+    ///
+    /// This initializer sets up the necessary configuration and command bindings for playback functionality.
+    init(settings: Settings, command: Binding<PlaybackCommand>)
     
 }
 

@@ -37,6 +37,8 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
     typealias PlayerView = LoopingPlayerNSView
     #endif
     
+    @Binding public var command : PlaybackCommand
+    
     /// Settings for the player view
     public let settings: Settings
     
@@ -46,10 +48,16 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
     /// State to store any error that occurs
     @State private var error: VPErrors?
 
-    /// Initializes the player view with settings
-    /// - Parameter settings: The settings to configure the player view
-    init(settings: Settings) {
+    /// Initializes a new instance with the provided settings and playback command.
+    ///
+    /// - Parameters:
+    ///   - settings: An instance of `Settings` containing configuration details.
+    ///   - command: A binding to a `PlaybackCommand` that controls playback actions.
+    ///
+    /// This initializer sets up the necessary configuration and command bindings for playback functionality.
+    init(settings: Settings, command: Binding<PlaybackCommand>) {
         self.settings = settings
+        self._command = command
         self.asset = assetForName(name: settings.name, ext: settings.ext)
         self._error = State(initialValue: detectError(settings: settings, asset: self.asset))
     }
@@ -87,6 +95,7 @@ extension LoopPlayerMultiPlatform: UIViewRepresentable{
     ///   - context: The context for the view
     @MainActor func updateUIView(_ uiView: UIView, context: Context) {
         uiView.subviews.filter { $0 is ErrorView }.forEach { $0.removeFromSuperview() }
+        uiView.subviews.compactMap{ $0 as? LoopingPlayerProtocol }.forEach { $0.setCommand(command) }
         
         updateView(uiView, error: error)
     }
@@ -118,6 +127,8 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
     ///   - context: The context containing environment and state information used during the view update.
     @MainActor func updateNSView(_ nsView: NSView, context: Context) {
         nsView.subviews.filter { $0 is ErrorView }.forEach { $0.removeFromSuperview() }
+        
+        nsView.subviews.compactMap{ $0 as? LoopingPlayerProtocol }.forEach { $0.setCommand(command) }
         
         updateView(nsView, error: error)
     }

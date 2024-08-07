@@ -82,3 +82,26 @@ func detectError(settings: Settings, asset: AVURLAsset?) -> VPErrors? {
         return nil
     }
 }
+
+import AVFoundation
+
+/// Seeks to the specified time in the given player if the time is within the video's duration.
+/// - Parameters:
+///   - player: The `AVQueuePlayer` instance to seek in.
+///   - seekTimeInSeconds: The time to seek to, in seconds.
+///
+/// Note: Errors such as seeking out of the bounds of the video duration are not handled in this function.
+/// These issues will be silently ignored. Error handling may be introduced in a future version of the package.
+func seekToTime(player: AVQueuePlayer?, seekTimeInSeconds: Double) {
+    guard let player = player, let currentItem = player.currentItem else {
+        return
+    }
+    
+    let duration = currentItem.duration
+    if CMTimeGetSeconds(duration) > 0 {
+        let seekTime = CMTime(seconds: seekTimeInSeconds, preferredTimescale: 600)
+        if CMTimeCompare(seekTime, duration) <= 0 && CMTimeCompare(seekTime, .zero) >= 0 {
+            player.seek(to: seekTime)
+        }
+    }
+}
