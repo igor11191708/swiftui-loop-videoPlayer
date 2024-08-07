@@ -9,7 +9,7 @@
 Please note that using videos from URLs requires ensuring that you have the right to use and stream these videos. Videos hosted on platforms like YouTube cannot be used directly due to restrictions in their terms of service. Always ensure the video URL is compliant with copyright laws and platform policies.
 
 
-## [SwiftUI loop video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
+## [SwiftUI video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
   ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui.gif)  
 
@@ -105,7 +105,7 @@ The AVFoundation framework used in the package supports a wide range of video fo
 | **M4V**                  |                  |                                     |
 | `.m4v`                   |                  |                                     |
 
-## New Functionality: Remote Video URLs
+## Remote Video URLs
 The package now supports using remote video URLs, allowing you to stream videos directly from web resources. This is an extension to the existing functionality that primarily focused on local video files. Here's how to specify a remote URL within the settings:
 
 ```swift
@@ -131,15 +131,35 @@ LoopPlayerView{
 
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/remote_video_player_swiftui.gif)
 
+## New Functionality: Playback Commands
+
+The package now supports playback commands, allowing you to control video playback actions such as play, pause, and seek to specific times. 
+
+```swift
+struct VideoView: View {
+    @State private var playbackCommand: PlaybackCommand = .play
+
+    var body: some View {
+        LoopPlayerView(
+            {
+                Settings {
+                    SourceName("swipe")
+                }
+            },
+            command: $playbackCommand
+        )
+    }
+}
+```
+
+![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/commands.gif)
+
 ## Practical idea for the package
 You can introduce video hints about some functionality into the app, for example how to add positions to favorites. Put loop video hint into background or open as popup.
 
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui_video_hint.gif)
 
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/tip_video_swiftui.gif)
-
-## Change video file dynamically 
-  ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/change_video_file.gif)
   
 ## Documentation(API)
 - You need to have Xcode 13 installed in order to have access to Documentation Compiler (DocC)
