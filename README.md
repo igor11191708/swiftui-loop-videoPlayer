@@ -17,6 +17,8 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ## API Specifications
 
+## API Specifications
+
 | Property/Method                       | Type                          | Description                                                            |
 |---------------------------------------|-------------------------------|------------------------------------------------------------------------|
 | `settings`                            | `Settings`                    | A struct containing configuration settings for the video player.       |
