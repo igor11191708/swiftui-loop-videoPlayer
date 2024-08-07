@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-#if os(macOS)
+#if canImport(AppKit)
 import AppKit
 
 /// A custom NSTextView for displaying error messages on macOS.

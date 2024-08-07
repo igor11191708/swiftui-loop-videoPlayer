@@ -14,7 +14,7 @@ import SwiftUI
 @MainActor
 public protocol LoopPlayerViewProtocol {
     
-    #if os(iOS) || os(tvOS)
+#if canImport(UIKit)
     associatedtype View : UIView
     #elseif os(macOS)
     associatedtype View : NSView
@@ -24,7 +24,7 @@ public protocol LoopPlayerViewProtocol {
     
     associatedtype ErrorView
 
-    #if os(iOS) || os(tvOS)
+    #if canImport(UIKit)
         associatedtype PlayerView: LoopingPlayerProtocol, UIView
     #elseif os(macOS)
         associatedtype PlayerView: LoopingPlayerProtocol, NSView

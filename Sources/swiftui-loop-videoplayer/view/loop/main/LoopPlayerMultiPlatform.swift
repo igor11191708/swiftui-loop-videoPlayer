@@ -23,13 +23,13 @@ import AppKit
 @MainActor
 struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
     
-    #if os(iOS) || os(tvOS)
+    #if canImport(UIKit)
     typealias View = UIView
     
     typealias ErrorView = ErrorMsgViewIOS
     
     typealias PlayerView = LoopingPlayerUIView
-    #elseif os(macOS)
+    #elseif canImport(AppKit)
     typealias View = NSView
     
     typealias ErrorView = ErrorMsgViewMacOS
@@ -70,7 +70,7 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
     }
 }
 
-#if os(iOS) || os(tvOS)
+#if canImport(UIKit)
 extension LoopPlayerMultiPlatform: UIViewRepresentable{
     /// Creates the container view with the player view and error view if needed
     /// - Parameter context: The context for the view
@@ -102,7 +102,7 @@ extension LoopPlayerMultiPlatform: UIViewRepresentable{
 }
 #endif
 
-#if os(macOS)
+#if canImport(AppKit)
 extension LoopPlayerMultiPlatform: NSViewRepresentable{
     /// Creates the NSView for the representable component. It initializes the view, configures it with a player if available, and adds an error view if necessary.
     /// - Parameter context: The context containing environment and state information used during view creation.

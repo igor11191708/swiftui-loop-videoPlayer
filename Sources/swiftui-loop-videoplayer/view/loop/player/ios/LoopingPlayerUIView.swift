@@ -11,7 +11,7 @@ import SwiftUI
 import AVKit
 #endif
 
-#if os(iOS) || os(tvOS)
+#if canImport(UIKit)
 import UIKit
 
 @available(iOS 14.0, tvOS 14.0, *)

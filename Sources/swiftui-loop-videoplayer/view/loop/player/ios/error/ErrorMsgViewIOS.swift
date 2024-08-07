@@ -8,7 +8,7 @@
 import SwiftUI
 import Foundation
 
-#if os(iOS) || os(tvOS)
+#if canImport(UIKit)
 import UIKit
 
 internal class ErrorMsgViewIOS: UITextView {

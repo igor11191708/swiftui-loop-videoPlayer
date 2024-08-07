@@ -7,7 +7,7 @@
 
 import Foundation
 
-#if os(macOS)
+#if canImport(AppKit)
 import AppKit
 
 /// Activates full-screen constraints for a given view within its container view.
@@ -26,7 +26,7 @@ func activateFullScreenConstraints(for view: NSView, in containerView: NSView) {
 }
 #endif
 
-#if os(iOS) || os(tvOS)
+#if canImport(UIKit)
 import UIKit
 
 /// Activates full-screen constraints for a view within a container view.

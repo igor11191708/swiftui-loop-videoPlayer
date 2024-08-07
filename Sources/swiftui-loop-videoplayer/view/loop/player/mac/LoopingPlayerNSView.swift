@@ -11,7 +11,7 @@ import SwiftUI
 import AVKit
 #endif
 
-#if os(macOS)
+#if canImport(AppKit)
 import AppKit
 
 /// A NSView subclass that loops video using AVFoundation on macOS.
