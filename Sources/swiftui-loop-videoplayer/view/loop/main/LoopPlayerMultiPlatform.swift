@@ -97,7 +97,13 @@ extension LoopPlayerMultiPlatform: UIViewRepresentable{
     ///   - context: The context for the view
     @MainActor func updateUIView(_ uiView: UIView, context: Context) {
         uiView.subviews.filter { $0 is ErrorView }.forEach { $0.removeFromSuperview() }
-        uiView.subviews.compactMap{ $0 as? LoopingPlayerProtocol }.forEach { $0.setCommand(command) }
+        uiView.subviews.compactMap{ $0 as? LoopingPlayerProtocol }.forEach {
+            if let asset = getAssetIfChanged(settings: settings, asset: $0.currentAsset){
+                $0.update(asset: asset)
+            }else{
+                $0.setCommand(command)
+            }
+        }
         
         updateView(uiView, error: error)
     }
