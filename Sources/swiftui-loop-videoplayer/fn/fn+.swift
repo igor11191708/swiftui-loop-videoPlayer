@@ -73,7 +73,7 @@ func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayerLooper?, 
 ///   - settings: The settings for the video player.
 ///   - asset: The asset for the video player.
 /// - Returns: The detected error or nil if no error.
-func detectError(settings: Settings, asset: AVURLAsset?) -> VPErrors? {
+func detectError(settings: VideoSettings, asset: AVURLAsset?) -> VPErrors? {
     if !settings.areUnique {
         return .settingsNotUnique
     } else if asset == nil {

@@ -9,7 +9,7 @@ import SwiftUI
 import AVKit
 
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
-public struct Settings: Equatable{
+public struct VideoSettings: Equatable{
     
     // MARK: - Public properties
     

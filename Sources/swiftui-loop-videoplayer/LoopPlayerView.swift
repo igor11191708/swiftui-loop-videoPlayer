@@ -15,7 +15,7 @@ import AVKit
 public struct LoopPlayerView: View {
     
     /// Set of settings for video the player
-    public let settings: Settings
+    @Binding public var settings: VideoSettings
     
     /// Binding to a playback command that controls playback actions
     @Binding public var command: PlaybackCommand
@@ -44,7 +44,8 @@ public struct LoopPlayerView: View {
     ) {
         self._command = command
         
-        settings = Settings {
+        _settings = .constant(
+        VideoSettings {
             SourceName(fileName)
             Ext(ext)
             Gravity(gravity)
@@ -53,6 +54,7 @@ public struct LoopPlayerView: View {
                 EFontSize(eFontSize)
             }
         }
+        )
     }
     
     /// Player initializer in a declarative way
@@ -60,18 +62,30 @@ public struct LoopPlayerView: View {
     ///   - settings: Set of settings
     ///   - command: A binding to control playback actions
     public init(
-        _ settings: () -> Settings,
+        _ settings: () -> VideoSettings,
         command: Binding<PlaybackCommand> = .constant(.play)
     ) {
+
         self._command = command
-        self.settings = settings()
+        _settings = .constant(settings())
+    }
+    
+    /// Player initializer in a declarative way
+    /// - Parameters:
+    ///   - settings: A binding to the set of settings for the video player
+    ///   - command: A binding to control playback actions
+    public init(
+        settings: Binding<VideoSettings>,
+        command: Binding<PlaybackCommand> = .constant(.play)
+    ) {
+        self._settings = settings
+        self._command = command
     }
     
     // MARK: - API
        
    public var body: some View {
-       LoopPlayerMultiPlatform(settings: settings, command: $command)
+       LoopPlayerMultiPlatform(settings: $settings, command: $command)
            .frame(maxWidth: .infinity, maxHeight: .infinity)
-           .id(videoId)
    }
 }

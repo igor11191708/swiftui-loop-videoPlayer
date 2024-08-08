@@ -70,7 +70,47 @@ public protocol LoopingPlayerProtocol: AbstractPlayer {
 }
 
 extension LoopingPlayerProtocol {
-
+    
+    /// The current asset being played, if available.
+    ///
+    /// This computed property checks the current item of the player.
+    /// If the current item exists and its asset can be cast to AVURLAsset,
+    var currentAsset : AVURLAsset?{
+        if let currentItem = player?.currentItem {
+            return currentItem.asset as? AVURLAsset
+        }
+        return nil
+    }
+    
+    /// Updates the player to play a new asset and handles the playback state.
+       ///
+       /// This method pauses the player if it was previously playing,
+       /// replaces the current player item with a new item created from the provided asset,
+       /// and seeks to the start of the new item. It resumes playing if the player was playing before the update.
+       ///
+       /// - Parameters:
+       ///   - asset: The AVURLAsset to load into the player.
+    func update(asset: AVURLAsset){
+        // Optionally, check if the player is currently playing
+        let wasPlaying = player?.rate != 0
+        
+        // Pause the player if it was playing
+        if wasPlaying {
+            player?.pause()
+        }
+        
+        // Replace the current item with a new item created from the asset
+        let newItem = AVPlayerItem(asset: asset)
+        player?.replaceCurrentItem(with: newItem)
+        
+        // Seek to the beginning of the item if you want to start from the start
+        player?.seek(to: .zero, completionHandler: { _ in
+            // Resume playing if the player was playing before
+            if wasPlaying {
+                self.player?.play()
+            }
+        })
+    }
     
     /// Sets up the player components using the provided asset and video gravity.
     ///

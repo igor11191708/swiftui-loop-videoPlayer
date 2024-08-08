@@ -40,13 +40,14 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
     @Binding public var command : PlaybackCommand
     
     /// Settings for the player view
-    public let settings: Settings
-    
-    /// The video asset to be played.
-    private let asset: AVURLAsset?
-    
+    @Binding public var settings: VideoSettings
+       
     /// State to store any error that occurs
     @State private var error: VPErrors?
+    
+    var asset : AVURLAsset?{
+        assetForName(name: settings.name, ext: settings.ext)
+    }
 
     /// Initializes a new instance with the provided settings and playback command.
     ///
@@ -55,11 +56,12 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
     ///   - command: A binding to a `PlaybackCommand` that controls playback actions.
     ///
     /// This initializer sets up the necessary configuration and command bindings for playback functionality.
-    init(settings: Settings, command: Binding<PlaybackCommand>) {
-        self.settings = settings
+    init(settings: Binding<VideoSettings>, command: Binding<PlaybackCommand>) {
+        self._settings = settings
         self._command = command
-        self.asset = assetForName(name: settings.name, ext: settings.ext)
-        self._error = State(initialValue: detectError(settings: settings, asset: self.asset))
+        let settings = settings.wrappedValue
+        let asset = assetForName(name: settings.name, ext: settings.ext)
+        self._error = State(initialValue: detectError(settings: settings, asset: asset))
     }
 
     
@@ -109,7 +111,7 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
     /// - Returns: A fully configured NSView containing both the media player and potentially an error message display.
     @MainActor func makeNSView(context: Context) -> NSView {
         let container = NSView()
-    
+        
         if let player: PlayerView = makePlayerView(
              container,
              asset: asset){
@@ -128,9 +130,32 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
     @MainActor func updateNSView(_ nsView: NSView, context: Context) {
         nsView.subviews.filter { $0 is ErrorView }.forEach { $0.removeFromSuperview() }
         
-        nsView.subviews.compactMap{ $0 as? LoopingPlayerProtocol }.forEach { $0.setCommand(command) }
+        nsView.subviews.compactMap{ $0 as? LoopingPlayerProtocol }.forEach {
+            if let asset = getAssetIfChanged(settings: settings, asset: $0.currentAsset){
+                $0.update(asset: asset)
+            }else{
+                $0.setCommand(command)
+            }
+        }
         
         updateView(nsView, error: error)
     }
 }
 #endif
+
+fileprivate func getAssetIfChanged(settings: VideoSettings, asset: AVURLAsset?) -> AVURLAsset?{
+    let a = assetForName(name: settings.name, ext: settings.ext)
+    
+    guard asset != nil else{
+        return a
+    }
+    
+    if let newUrl = a?.url, let oldUrl = asset?.url, newUrl != oldUrl{
+        return a
+    }
+
+    return nil
+}
+
+
+

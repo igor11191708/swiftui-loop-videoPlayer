@@ -20,10 +20,10 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 | Property/Method                       | Type                          | Description                                                            |
 |---------------------------------------|-------------------------------|------------------------------------------------------------------------|
-| `settings`                            | `Settings`                    | A struct containing configuration settings for the video player.       |
+| `settings`                            | `VideoSettings`                    | A struct containing configuration settings for the video player.       |
 | `command`                             | `Binding<PlaybackCommand>`    | A binding to control playback actions (play, pause, or seek).          |
 | `init(fileName:ext:gravity:` <br> `eColor:eFontSize:command:)` | Constructor       | Initializes the player with specific video parameters and playback command binding. |
-| `init(settings: () -> Settings, command:)` | Constructor | Initializes the player with a declarative settings block and playback command binding. |
+| `init(settings: () -> VideoSettings, command:)` | Constructor | Initializes the player with a declarative settings block and playback command binding. |
 
 ### Playback Commands
 
@@ -71,7 +71,7 @@ or in a declarative way
 
  ```swift
     LoopPlayerView{
-            Settings{
+            VideoSettings{
                 SourceName("swipe")
                 Ext("mp8") // Set default extension here If not provided then mp4 is default
                 Gravity(.resizeAspectFill)
@@ -85,7 +85,7 @@ or in a declarative way
           
  ```swift            
        LoopPlayerView{
-            Settings{
+            VideoSettings{
                 SourceName("swipe")
                 Gravity(.resizeAspectFill)
                 EFontSize(27)                  
@@ -95,7 +95,7 @@ or in a declarative way
 
 ```swift
 LoopPlayerView{
-    Settings{
+    VideoSettings{
         SourceName('https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8')
         ErrorGroup{
             EFontSize(27)
@@ -128,7 +128,7 @@ The package now supports using remote video URLs, allowing you to stream videos 
 
 ```swift
 LoopPlayerView{
-    Settings{
+    VideoSettings{
         SourceName('https://example.com/video')
         Gravity(.resizeAspectFill)  // Video content fit
         ErrorGroup{
@@ -160,7 +160,7 @@ struct VideoView: View {
     var body: some View {
         LoopPlayerView(
             {
-                Settings {
+                VideoSettings {
                     SourceName("swipe")
                 }
             },
