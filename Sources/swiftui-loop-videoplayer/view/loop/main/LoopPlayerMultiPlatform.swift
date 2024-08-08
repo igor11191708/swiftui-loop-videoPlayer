@@ -51,11 +51,11 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
 
     /// Initializes a new instance with the provided settings and playback command.
     ///
-    /// - Parameters:
-    ///   - settings: An instance of `Settings` containing configuration details.
-    ///   - command: A binding to a `PlaybackCommand` that controls playback actions.
-    ///
     /// This initializer sets up the necessary configuration and command bindings for playback functionality.
+    ///
+    /// - Parameters:
+    ///   - settings: A binding to an instance of `VideoSettings` containing configuration details.
+    ///   - command: A binding to a `PlaybackCommand` that controls playback actions.
     init(settings: Binding<VideoSettings>, command: Binding<PlaybackCommand>) {
         self._settings = settings
         self._command = command
@@ -149,6 +149,11 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
 }
 #endif
 
+/// Checks if the asset has changed based on the provided settings and current asset.
+/// - Parameters:
+///   - settings: The current video settings, containing the asset's name and extension.
+///   - asset: The current asset being played.
+/// - Returns: A new `AVURLAsset` if the asset has changed, or `nil` if the asset remains the same.
 fileprivate func getAssetIfChanged(settings: VideoSettings, asset: AVURLAsset?) -> AVURLAsset?{
     let a = assetForName(name: settings.name, ext: settings.ext)
     
