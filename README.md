@@ -12,23 +12,6 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ## [SwiftUI video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
-![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/filters.gif)
-
-### Video Sample
-
-“Big Buck Bunny” video, an open-source animated film created by the Blender Foundation. This video is instrumental in demonstrating the capabilities of the open source video processing software.
-
-Credits:
-
-    •    Original Creation: Blender Foundation
-
-    •    Video Title: “Big Buck Bunny”
-
-    •    Source: Big Buck Bunny https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-
-    •    License: The video is released under the Creative Commons Attribution 3.0 License, which allows for reuse, redistribution, and modification for any purpose, even commercially, as long as appropriate credit is given. https://creativecommons.org/licenses/by/3.0/
-
-
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui.gif)  
 
 ## API Specifications
