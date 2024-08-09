@@ -44,7 +44,7 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | `unloop`                    | Command to disable looping of the video playback. This command will only take effect if the video is currently being looped.                                                                |
 | `brightness(Float)`         | Command to adjust the brightness of the video playback. The `brightness` parameter is a `Float` value typically ranging from -1.0 (darkest) to 1.0 (brightest). Values outside this range will be clamped to the nearest valid value. |
 | `contrast(Float)`           | Command to adjust the contrast of the video playback. The `contrast` parameter is a `Float` value typically ranging from 0.0 (no contrast) to 4.0 (high contrast). Values outside this range will be clamped to the nearest valid value. |
-| `filter(name: String, parameters: [String: Any])` | Applies a specific Core Image filter to the video. |
+| `filter(CIFilter)` | Applies a specific Core Image filter to the video. |
 | `removeAllFilters`          | Command to remove all applied filters from the video playback.                                                                                        |
 | `audioTrack(String)`        | Command to select a specific audio track based on language code. The `languageCode` parameter specifies the desired audio track's language (e.g., "en" for English). |
 

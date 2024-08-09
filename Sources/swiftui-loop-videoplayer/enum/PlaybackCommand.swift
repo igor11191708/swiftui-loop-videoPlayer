@@ -1,4 +1,5 @@
 import AVFoundation
+import CoreImage
 
 /// An enumeration of possible playback commands.
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
@@ -53,12 +54,10 @@ public enum PlaybackCommand: Equatable {
     /// - Parameter contrast: A `Float` value typically ranging from 0.0 to 4.0.
     case contrast(Float)
 
-    /// Command to apply a specific Core Image filter to the video, with an option to clear existing filters first.
-    /// - Parameters:
-    ///   - name: Name of the Core Image filter.
-    ///   - parameters: Dictionary of parameters to configure the filter.
-    ///   - clearExisting: Boolean indicating whether to remove all existing filters before applying this one.
-    case filter(name: String, parameters: [String: Any])
+    /// Command to apply a specific Core Image filter to the video.
+    /// - Parameter filter: A `CIFilter` object representing the filter to be applied.
+    /// This filter is added to the current stack of filters, allowing for multiple filters to be combined and applied sequentially.
+    case filter(CIFilter)
 
     /// Command to remove all applied filters from the video playback.
     case removeAllFilters
@@ -95,26 +94,10 @@ public enum PlaybackCommand: Equatable {
         case (.audioTrack(let lhsCode), .audioTrack(let rhsCode)):
             return lhsCode == rhsCode
 
-        case (.filter(let lhsName,let lhsParameters), .filter(let rhsName, let rhsParameters)):
-            return lhsName == rhsName && compareParameters(lhsParameters, rhsParameters)
+        case (.filter(let lhs), .filter(let rhs)):
+            return lhs == rhs
         default:
             return false
         }
     }
-}
-
-// Local function to compare two dictionaries
-fileprivate func compareParameters(_ lhs: [String: Any], _ rhs: [String: Any]) -> Bool {
-    let lhsString = parametersToString(lhs)
-    let rhsString = parametersToString(rhs)
-    return lhsString == rhsString
-}
-
-// Local function to convert parameters dictionary to a sorted string
-fileprivate func parametersToString(_ parameters: [String: Any]) -> String {
-    let sortedKeys = parameters.keys.sorted()
-    return sortedKeys.map { key in
-        let value = parameters[key]!
-        return "\(key):\(value)"
-    }.joined(separator: ",")
 }

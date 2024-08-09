@@ -72,7 +72,7 @@ public protocol AbstractPlayer: AnyObject {
     func adjustContrast(to contrast: Float)
 
     /// Applies a Core Image filter to the video player's content.
-    func applyFilter(name: String, parameters: [String: Any])
+    func applyFilter(_ value: CIFilter)
 
     /// Removes all filters from the video playback.
     func removeAllFilters()
@@ -242,24 +242,18 @@ extension AbstractPlayer{
     }
 
     /// Applies a Core Image filter to the video playback.
-    /// - Parameters:
-    ///   - name: Name of the Core Image filter.
-    ///   - parameters: Dictionary of parameters to configure the filter.
-    ///   - clearExisting: A boolean indicating whether to clear existing filters before applying the new filter.
-    func applyFilter(name: String, parameters: [String: Any]) {
-        appendFilter(name: name, parameters: parameters)
-        applyVideoComposition()
+    /// This function adds the provided filter to the stack of existing filters and updates the video composition accordingly.
+    /// - Parameter value: A `CIFilter` object representing the filter to be applied to the video playback.
+    func applyFilter(_ value: CIFilter) {
+        appendFilter(value) // Appends the provided filter to the current stack.
+        applyVideoComposition() // Updates the video composition to include the new filter.
     }
     
     /// Appends a Core Image filter to the current list of filters.
-    /// The filter is created based on the provided name and parameters.
     /// - Parameters:
-    ///   - name: The name of the Core Image filter to be applied.
-    ///   - parameters: A dictionary of parameters to configure the filter.
-    private func appendFilter(name: String, parameters: [String: Any]) {
-        if let filter = CIFilter(name: name, parameters: parameters) {
-            filters.append(filter)
-        }
+    ///   - value: Core Image filter to be applied.
+    private func appendFilter(_ value: CIFilter) {
+        filters.append(value)
     }
 
     /// Combines all currently applied filters with brightness and contrast adjustments.
@@ -374,8 +368,8 @@ extension AbstractPlayer{
             adjustBrightness(to: brightness)
         case .contrast(let contrast):
             adjustContrast(to: contrast)
-        case .filter(let name, let parameters):
-            applyFilter(name: name, parameters: parameters)
+        case .filter(let value):
+            applyFilter(value)
         case .removeAllFilters:
             removeAllFilters()
         case .audioTrack(let languageCode):
