@@ -68,8 +68,8 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
     
     /// Creates a coordinator that handles error-related updates and interactions between the SwiftUI view and its underlying model.
     /// - Returns: An instance of PlayerErrorCoordinator that can be used to manage error states and communicate between the view and model.
-    func makeCoordinator() -> PlayerErrorCoordinator {
-        PlayerErrorCoordinator($error)
+    func makeCoordinator() -> PlayerCoordinator {
+        PlayerCoordinator($error)
     }
 }
 
@@ -101,8 +101,12 @@ extension LoopPlayerMultiPlatform: UIViewRepresentable{
         if let player {
             if let asset = getAssetIfChanged(for: settings, and: player.currentAsset) {
                 player.update(asset: asset)
-            } else {
+            } 
+            
+            // Check if command changed before applying it
+            if context.coordinator.getLastCommand != command {
                 player.setCommand(command)
+                context.coordinator.setLastCommand(command) // Update the last command in the coordinator
             }
         }
         
@@ -139,9 +143,13 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
         if let player {
             if let asset = getAssetIfChanged(for: settings, and: player.currentAsset){
                 player.update(asset: asset)
-            }else{
-                player.setCommand(command)
             }
+            // Check if command changed before applying it
+            if context.coordinator.getLastCommand != command {
+                player.setCommand(command)
+                context.coordinator.setLastCommand(command) // Update the last command in the coordinator
+            }
+            
         }
         
         updateView(nsView, error: error)

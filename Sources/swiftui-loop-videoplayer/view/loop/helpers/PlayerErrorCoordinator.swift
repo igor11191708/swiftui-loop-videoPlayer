@@ -8,23 +8,44 @@
 import SwiftUI
 
 @MainActor
-internal class PlayerErrorCoordinator: NSObject, PlayerErrorDelegate {
+internal class PlayerCoordinator: NSObject, PlayerErrorDelegate {
     
+    /// Stores the last command applied to the player.
+    private var lastCommand: PlaybackCommand?
+    
+    /// A binding to an optional `VPErrors` instance, used to report errors back to the parent view.
     @Binding private var error: VPErrors?
    
+    /// Initializes a new instance of `PlayerCoordinator`.
+    /// - Parameter error: A binding to an optional `VPErrors` instance to manage error reporting.
     init(_ error: Binding<VPErrors?>) {
         self._error = error
     }
     
+    /// Deinitializes the coordinator and prints a debug message if in DEBUG mode.
     deinit {
         #if DEBUG
         print("deinit Coordinator")
         #endif
     }
     
-    /// Handles receiving an error and updates the error state in the parent view
-    /// - Parameter error: The error received
+    /// Handles receiving an error and updates the error state in the parent view.
+    /// This method is called when an error is encountered during playback or other operations.
+    /// - Parameter error: The error received.
     func didReceiveError(_ error: VPErrors) {
-            self.error = error
+        self.error = error
+    }
+    
+    /// Sets the last command applied to the player.
+    /// This method updates the stored `lastCommand` to the provided value.
+    /// - Parameter command: The `PlaybackCommand` that was last applied to the player.
+    func setLastCommand(_ command: PlaybackCommand) {
+        self.lastCommand = command
+    }
+    
+    /// Retrieves the last command applied to the player.
+    /// - Returns: The `PlaybackCommand` that was last applied to the player.
+    var getLastCommand : PlaybackCommand? {
+        return lastCommand
     }
 }
