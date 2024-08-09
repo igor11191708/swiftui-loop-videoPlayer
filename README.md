@@ -25,17 +25,21 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | `init(fileName:ext:gravity:` <br> `eColor:eFontSize:command:)` | Constructor       | Initializes the player with specific video parameters and playback command binding. |
 | `init(settings: () -> VideoSettings, command:)` | Constructor | Initializes the player with a declarative settings block and playback command binding. |
 
+
 ### Playback Commands
 
 | Command                     | Description                                                                                                                                          |
 |-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `play`                      | Command to play the video.                                                                                                                            |
 | `pause`                     | Command to pause the video.                                                                                                                           |
-| `seek(to: Double)`          | Command to seek to a specific time in the video. The parameter is the target position in seconds. Note: Errors such as seeking out of bounds are not currently handled and will be silently ignored. Potential errors include: <br> - `.seekTimeOutOfBounds`<br> - `.invalidDuration` <br> - `.playerOrCurrentItemNil `. <br> Future versions may introduce error handling for these cases. |
-| `begin`                     | Command to position the video at the beginning. |                                                                                                      |
-| `end`                       | Command to position the video at the end. | 
-| `mute`                      | Command to mute the video. By default, the player is muted.           |                                                                                |
-| `unmute`                    | Command to unmute the video. |
+| `seek(to: Double)`          | Command to seek to a specific time in the video. The parameter is the target position in seconds. If the time is negative, the playback will move to the start of the video. If the time exceeds the video's duration, the playback will move to the end of the video. If the time is within the video’s duration, the playback will move to the specified time. |
+| `begin`                     | Command to position the video at the beginning.                                                                                                       |
+| `end`                       | Command to position the video at the end.                                                                                                             |
+| `mute`                      | Command to mute the video. By default, the player is muted.                                                                                           |
+| `unmute`                    | Command to unmute the video.                                                                                                                          |
+| `volume(Float)`             | Command to adjust the volume of the video playback. The `volume` parameter is a `Float` value between 0.0 (mute) and 1.0 (full volume). If a value outside this range is passed, it will be clamped to the nearest valid value (0.0 or 1.0). |
+| `subtitles(String?)`        | Command to set subtitles to a specified language or turn them off. Pass a language code (e.g., "en" for English) to set subtitles, or `nil` to turn them off. |
+| `playbackSpeed(Float)`      | Command to adjust the playback speed of the video. The `speed` parameter is a `Float` value representing the playback speed (e.g., 1.0 for normal speed, 0.5 for half speed, 2.0 for double speed). If a negative value is passed, it will be clamped to 0.0. |
 
 
 ### Initializer Parameters Settings
