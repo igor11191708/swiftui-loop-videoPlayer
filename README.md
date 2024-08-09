@@ -162,7 +162,6 @@ LoopPlayerView{
 | Direct MP4 URLs | Yes | Directly accessible MP4 URLs can be used if they are hosted on servers that permit CORS. |
 | HLS Streams | Yes | HLS streams are supported and can be used for live streaming purposes. |
 
-![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/remote_video_player_swiftui.gif)
 
 ## New Functionality: Playback Commands
 
