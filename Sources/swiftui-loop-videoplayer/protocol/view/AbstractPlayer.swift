@@ -274,19 +274,18 @@ extension AbstractPlayer{
     /// This method combines the existing filters and brightness/contrast adjustments, creates a new video composition,
     /// and assigns it to the current AVPlayerItem. The video is paused during this process to ensure smooth application.
     /// This method is not supported on Vision OS.
-    /// - Note: Creating the video composition can be a heavy operation, especially with complex filters or high-resolution videos.
-    /// It’s recommended to handle this operation asynchronously to prevent UI lag or freezing.
     private func applyVideoComposition() {
         guard let player = player, let currentItem = player.currentItem else { return }
         
         let allFilters = combineFilters
         #if !os(visionOS)
+        // Might be heavy operation need to explore
         let videoComposition = AVVideoComposition(asset: currentItem.asset, applyingCIFiltersWithHandler: { request in
             handleVideoComposition(request: request, filters: allFilters)
         })
         
         player.pause()
-        // Applying the video composition (potentially heavy operation)
+        // Applying the video composition
         currentItem.videoComposition = videoComposition
         player.play()
         #endif

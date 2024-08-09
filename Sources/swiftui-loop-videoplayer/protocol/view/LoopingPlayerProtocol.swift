@@ -99,7 +99,9 @@ extension LoopingPlayerProtocol {
         // Replace the current item with a new item created from the asset
         let newItem = AVPlayerItem(asset: asset)
         unloop()
-        removeAllFilters()
+        if !filters.isEmpty{
+            removeAllFilters()
+        }
         player?.replaceCurrentItem(with: newItem)
         
         // Seek to the beginning of the item if you want to start from the start
