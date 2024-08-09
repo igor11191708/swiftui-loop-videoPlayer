@@ -13,8 +13,12 @@ Please note that using videos from URLs requires ensuring that you have the righ
 ## [SwiftUI video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/filters.gif)
-The video used in this example is from:
-[Big Buck Bunny MP4](https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4)
+
+### Video Sample
+
+The video used in this example, "Big Buck Bunny," is provided under the [Creative Commons Attribution 3.0 License](https://creativecommons.org/licenses/by/3.0/). It was originally created by the Blender Foundation. Any modifications to the video are listed here.
+
+[Stream or Download Big Buck Bunny](https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4))
 
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui.gif)  
 
