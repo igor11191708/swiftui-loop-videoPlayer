@@ -284,10 +284,21 @@ extension AbstractPlayer{
             handleVideoComposition(request: request, filters: allFilters)
         })
         
-        player.pause()
+        // Optionally, check if the player is currently playing
+        let wasPlaying = player.rate != 0
+        
+        // Pause the player if it was playing
+        if wasPlaying {
+            player.pause()
+        }
+        
         // Applying the video composition
         currentItem.videoComposition = videoComposition
-        player.play()
+        
+        if wasPlaying{
+            player.play()
+        }
+        
         #endif
     }
 
