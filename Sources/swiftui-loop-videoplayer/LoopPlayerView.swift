@@ -45,15 +45,15 @@ public struct LoopPlayerView: View {
         self._command = command
         
         _settings = .constant(
-        VideoSettings {
-            SourceName(fileName)
-            Ext(ext)
-            Gravity(gravity)
-            ErrorGroup {
-                EColor(eColor)
-                EFontSize(eFontSize)
+            VideoSettings {
+                SourceName(fileName)
+                Ext(ext)
+                Gravity(gravity)
+                ErrorGroup {
+                    EColor(eColor)
+                    EFontSize(eFontSize)
+                }
             }
-        }
         )
     }
     

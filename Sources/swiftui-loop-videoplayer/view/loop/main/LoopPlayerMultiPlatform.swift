@@ -37,6 +37,7 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
     typealias PlayerView = LoopingPlayerNSView
     #endif
     
+    /// Command for the player view
     @Binding public var command : PlaybackCommand
     
     /// Settings for the player view
@@ -166,6 +167,3 @@ fileprivate func getAssetIfChanged(for settings: VideoSettings, and asset: AVURL
 
     return nil
 }
-
-
-
