@@ -2,7 +2,7 @@
 //  LoopingPlayerProtocol.swift
 //
 //
-//  Created by Igor  on 05.08.24.
+//  Created by Igor Shelopaev on 05.08.24.
 //
 
 import AVFoundation
@@ -18,7 +18,7 @@ import AppKit
 /// handle errors, and notify a delegate of important events.
 @available(iOS 14, macOS 11, tvOS 14, *)
 @MainActor
-public protocol LoopingPlayerProtocol: AbstractPlayer {
+public protocol LoopingPlayerProtocol: AbstractPlayer{
     
     var playerLayer : AVPlayerLayer { get }
     

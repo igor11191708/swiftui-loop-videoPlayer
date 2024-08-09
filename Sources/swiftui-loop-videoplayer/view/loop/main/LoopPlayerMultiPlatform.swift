@@ -2,7 +2,7 @@
 //  LoopPlayerMultiPlatform.swift
 //
 //
-//  Created by Igor  on 05.08.24.
+//  Created by Igor Shelopaev on 05.08.24.
 //
 
 import SwiftUI
@@ -46,7 +46,7 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
     @State private var error: VPErrors?
     
     var asset : AVURLAsset?{
-        assetForName(name: settings.name, ext: settings.ext)
+        assetFor(settings)
     }
 
     /// Initializes a new instance with the provided settings and playback command.
@@ -60,7 +60,7 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
         self._settings = settings
         self._command = command
         let settings = settings.wrappedValue
-        let asset = assetForName(name: settings.name, ext: settings.ext)
+        let asset =  assetFor(settings)
         self._error = State(initialValue: detectError(settings: settings, asset: asset))
     }
 
@@ -96,12 +96,12 @@ extension LoopPlayerMultiPlatform: UIViewRepresentable{
     ///   - uiView: The UIView to update
     ///   - context: The context for the view
     @MainActor func updateUIView(_ uiView: UIView, context: Context) {
-        uiView.subviews.filter { $0 is ErrorView }.forEach { $0.removeFromSuperview() }
-        uiView.subviews.compactMap{ $0 as? LoopingPlayerProtocol }.forEach {
-            if let asset = getAssetIfChanged(settings: settings, asset: $0.currentAsset){
-                $0.update(asset: asset)
-            }else{
-                $0.setCommand(command)
+        let player = uiView.findFirstSubview(ofType: PlayerView.self)
+        if let player {
+            if let asset = getAssetIfChanged(for: settings, and: player.currentAsset) {
+                player.update(asset: asset)
+            } else {
+                player.setCommand(command)
             }
         }
         
@@ -134,13 +134,12 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
     ///   - nsView: The NSView that needs updating.
     ///   - context: The context containing environment and state information used during the view update.
     @MainActor func updateNSView(_ nsView: NSView, context: Context) {
-        nsView.subviews.filter { $0 is ErrorView }.forEach { $0.removeFromSuperview() }
-        
-        nsView.subviews.compactMap{ $0 as? LoopingPlayerProtocol }.forEach {
-            if let asset = getAssetIfChanged(settings: settings, asset: $0.currentAsset){
-                $0.update(asset: asset)
+        let player = nsView.findFirstSubview(ofType: PlayerView.self)
+        if let player {
+            if let asset = getAssetIfChanged(for: settings, and: player.currentAsset){
+                player.update(asset: asset)
             }else{
-                $0.setCommand(command)
+                player.setCommand(command)
             }
         }
         
@@ -154,15 +153,15 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
 ///   - settings: The current video settings, containing the asset's name and extension.
 ///   - asset: The current asset being played.
 /// - Returns: A new `AVURLAsset` if the asset has changed, or `nil` if the asset remains the same.
-fileprivate func getAssetIfChanged(settings: VideoSettings, asset: AVURLAsset?) -> AVURLAsset?{
-    let a = assetForName(name: settings.name, ext: settings.ext)
+fileprivate func getAssetIfChanged(for settings: VideoSettings, and asset: AVURLAsset?) -> AVURLAsset?{
+    let newAsset =  assetFor(settings)
     
     guard asset != nil else{
-        return a
+        return newAsset
     }
     
-    if let newUrl = a?.url, let oldUrl = asset?.url, newUrl != oldUrl{
-        return a
+    if let newUrl = newAsset?.url, let oldUrl = asset?.url, newUrl != oldUrl{
+        return newAsset
     }
 
     return nil

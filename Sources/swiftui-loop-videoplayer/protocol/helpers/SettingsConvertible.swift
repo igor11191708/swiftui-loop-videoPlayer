@@ -2,7 +2,7 @@
 //  SettingsConvertible.swift
 //  
 //
-//  Created by Igor on 07.07.2023.
+//  Created by Igor Shelopaev on 07.07.2023.
 //
 
 import Foundation

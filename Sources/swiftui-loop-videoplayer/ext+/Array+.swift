@@ -2,7 +2,7 @@
 //  Array+.swift
 //  
 //
-//  Created by Igor on 09.07.2023.
+//  Created by Igor Shelopaev on 09.07.2023.
 //
 
 import Foundation

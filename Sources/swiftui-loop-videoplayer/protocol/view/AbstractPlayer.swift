@@ -2,7 +2,7 @@
 //  AbstractPlayer.swift
 //
 //
-//  Created by Igor  on 07.08.24.
+//  Created by Igor Shelopaev on 07.08.24.
 //
 
 import AVFoundation

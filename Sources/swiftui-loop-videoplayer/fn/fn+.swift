@@ -2,25 +2,27 @@
 //  fn+.swift
 //
 //
-//  Created by Igor  on 06.08.24.
+//  Created by Igor Shelopaev on 06.08.24.
 //
 
 import Foundation
 import AVFoundation
 
-/// Retrieves a video asset from either a network URL or a local file specified by name and extension.
-///
-/// - Parameters:
-///   - name: The name of the file or URL.
-///   - ext: The file extension for local resources.
-/// - Returns: An AVURLAsset initialized with the specified URL or file path.
-/// - Throws: VPErrors.sourceNotFound if neither a valid URL nor a local file can be located.
-func assetForName(name: String, ext: String) -> AVURLAsset? {
+/// Retrieves an `AVURLAsset` based on specified video settings.
+/// - Parameter settings: The `VideoSettings` object containing details like name and extension of the video.
+/// - Returns: An optional `AVURLAsset`. Returns `nil` if the video cannot be located either by URL or in the app bundle.
+func assetFor(_ settings: VideoSettings) -> AVURLAsset? {
+    let name = settings.name
+    let ext = settings.ext
+    
+    // Attempt to create a URL directly from the provided video name string
     if let url = URL.validURLFromString(name) {
         return AVURLAsset(url: url)
+    // If direct URL creation fails, attempt to locate the video in the main bundle using the name and extension
     } else if let fileUrl = Bundle.main.url(forResource: name, withExtension: extractExtension(from: name) ?? ext) {
         return AVURLAsset(url: fileUrl)
     }
+    
     return nil
 }
 

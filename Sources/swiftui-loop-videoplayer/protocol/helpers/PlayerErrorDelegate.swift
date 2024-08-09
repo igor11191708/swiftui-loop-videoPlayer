@@ -2,7 +2,7 @@
 //  PlayerErrorDelegate.swift
 //
 //
-//  Created by Igor  on 05.08.24.
+//  Created by Igor Shelopaev on 05.08.24.
 //
 
 import Foundation
