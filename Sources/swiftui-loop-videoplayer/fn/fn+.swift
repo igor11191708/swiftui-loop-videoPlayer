@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import CoreImage
 
 /// Retrieves an `AVURLAsset` based on specified video settings.
 /// - Parameter settings: The `VideoSettings` object containing details like name and extension of the video.
@@ -83,4 +84,29 @@ func detectError(settings: VideoSettings, asset: AVURLAsset?) -> VPErrors? {
     } else {
         return nil
     }
+}
+
+/// Processes an asynchronous video composition request by applying a series of CIFilters.
+/// This function ensures each frame processed conforms to specified filter effects.
+///
+/// - Parameters:
+///   - request: An AVAsynchronousCIImageFilteringRequest object representing the current video frame to be processed.
+///   - filters: An array of CIFilters to be applied sequentially to the video frame.
+///
+/// The function starts by clamping the source image to ensure coordinates remain within the image bounds,
+/// applies each filter in the provided array, and completes by returning the modified image to the composition request.
+internal func handleVideoComposition(request: AVAsynchronousCIImageFilteringRequest, filters: [CIFilter]) {
+    // Start with the source image, ensuring it's clamped to avoid any coordinate issues
+    var currentImage = request.sourceImage.clampedToExtent()
+    
+    // Apply each filter in the array to the image
+    for filter in filters {
+        filter.setValue(currentImage, forKey: kCIInputImageKey)
+        if let outputImage = filter.outputImage {
+            currentImage = outputImage.clampedToExtent()
+        }
+    }
+    
+    // Finish the composition request by outputting the final image
+    request.finish(with: currentImage, context: nil)
 }

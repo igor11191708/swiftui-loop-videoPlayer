@@ -42,7 +42,18 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | `playbackSpeed(Float)`      | Command to adjust the playback speed of the video. The `speed` parameter is a `Float` value representing the playback speed (e.g., 1.0 for normal speed, 0.5 for half speed, 2.0 for double speed). If a negative value is passed, it will be clamped to 0.0. |
 | `loop`                      | Command to enable looping of the video playback. By default, looping is enabled, so this command will have no effect if looping is already active.     |
 | `unloop`                    | Command to disable looping of the video playback. This command will only take effect if the video is currently being looped.                                                                |
+| `brightness(Float)`         | Command to adjust the brightness of the video playback. The `brightness` parameter is a `Float` value typically ranging from -1.0 (darkest) to 1.0 (brightest). Values outside this range will be clamped to the nearest valid value. |
+| `contrast(Float)`           | Command to adjust the contrast of the video playback. The `contrast` parameter is a `Float` value typically ranging from 0.0 (no contrast) to 4.0 (high contrast). Values outside this range will be clamped to the nearest valid value. |
+| `filter(name: String, parameters: [String: Any])` | Applies a specific Core Image filter to the video. |
+| `removeAllFilters`          | Command to remove all applied filters from the video playback.                                                                                        |
+| `audioTrack(String)`        | Command to select a specific audio track based on language code. The `languageCode` parameter specifies the desired audio track's language (e.g., "en" for English). |
 
+
+### Additional Notes on Brightness and Contrast
+
+- **Brightness and Contrast**: These settings function also filters but are managed separately from the filter stack. Adjustments to brightness and contrast are applied additionally and independently of the image filters.
+- **Persistent Settings**: Changes to brightness and contrast do not reset when the filter stack is cleared. They remain at their last set values and must be adjusted or reset separately by the developer as needed.
+- **Independent Management**: Developers should manage brightness and contrast adjustments through their dedicated methods or properties to ensure these settings are accurately reflected in the video output.
 
 ### Initializer Parameters Settings
 

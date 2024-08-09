@@ -18,6 +18,15 @@ import UIKit
 @MainActor
 class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     
+    /// `filters` is an array that stores CIFilter objects used to apply different image processing effects
+    internal var filters: [CIFilter] = []
+
+    /// `brightness` represents the adjustment level for the brightness of the video content.
+    internal var brightness: Float = 0
+
+    /// `contrast` indicates the level of contrast adjustment for the video content.
+    internal var contrast: Float = 1
+    
     /// The AVPlayerLayer that displays the video content.
     internal let playerLayer = AVPlayerLayer()
     

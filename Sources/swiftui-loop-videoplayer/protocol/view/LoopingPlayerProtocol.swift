@@ -18,8 +18,8 @@ import AppKit
 /// handle errors, and notify a delegate of important events.
 @available(iOS 14, macOS 11, tvOS 14, *)
 @MainActor
-public protocol LoopingPlayerProtocol: AbstractPlayer{
-    
+public protocol LoopingPlayerProtocol: AbstractPlayer{   
+
     var playerLayer : AVPlayerLayer { get }
     
     #if canImport(UIKit)
@@ -99,6 +99,7 @@ extension LoopingPlayerProtocol {
         // Replace the current item with a new item created from the asset
         let newItem = AVPlayerItem(asset: asset)
         unloop()
+        removeAllFilters()
         player?.replaceCurrentItem(with: newItem)
         
         // Seek to the beginning of the item if you want to start from the start

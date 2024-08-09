@@ -6,10 +6,20 @@
 //
 
 import AVFoundation
-import Foundation
+import CoreImage
 
 @available(iOS 14, macOS 11, tvOS 14, *)
-public protocol AbstractPlayer: AnyObject{
+@MainActor
+public protocol AbstractPlayer: AnyObject {
+    
+    /// Adjusts the brightness of the video. Default is 0 (no change), with positive values increasing and negative values decreasing brightness.
+    var brightness: Float { get set }
+
+    /// Controls the contrast of the video. Default is 1 (no change), with values above 1 enhancing and below 1 reducing contrast.
+    var contrast: Float { get set }
+
+    /// Holds an array of CIFilters to be applied to the video. Filters are applied in the order they are added to the array.
+    var filters: [CIFilter] { get set }
     
     /// The looper responsible for continuous video playback.
     var playerLooper: AVPlayerLooper? { get set }
@@ -47,6 +57,32 @@ public protocol AbstractPlayer: AnyObject{
     /// Unmutes the video playback.
     /// This method restores the audio of the video.
     func unmute()
+
+    /// Adjusts the volume for the video playback.
+    /// - Parameter volume: A `Float` value between 0.0 (mute) and 1.0 (full volume).
+    /// If the value is out of range, it will be clamped to the nearest valid value.
+    func setVolume(_ volume: Float)
+
+    /// Adjusts the brightness of the video playback.
+    /// - Parameter brightness: A `Float` value representing the brightness level. Typically ranges from -1.0 to 1.0.
+    func adjustBrightness(to brightness: Float)
+
+    /// Adjusts the contrast of the video playback.
+    /// - Parameter contrast: A `Float` value representing the contrast level. Typically ranges from 0.0 to 4.0.
+    func adjustContrast(to contrast: Float)
+
+    /// Applies a Core Image filter to the video player's content.
+    func applyFilter(name: String, parameters: [String: Any])
+
+    /// Removes all filters from the video playback.
+    func removeAllFilters()
+
+    /// Selects an audio track for the video playback.
+    /// - Parameter languageCode: The language code (e.g., "en" for English) of the desired audio track.
+    func selectAudioTrack(languageCode: String)
+
+    /// Sets the playback command for the video player.
+    func setCommand(_ value: PlaybackCommand)
 }
 
 extension AbstractPlayer{
@@ -138,6 +174,7 @@ extension AbstractPlayer{
     ///   - language: The language code (e.g., "en" for English) for the desired subtitles.
     ///               Pass `nil` to turn off subtitles.
     func setSubtitles(to language: String?) {
+        #if !os(visionOS)
         guard let currentItem = player?.currentItem,
               let group = currentItem.asset.mediaSelectionGroup(forMediaCharacteristic: .legible) else {
             return
@@ -157,6 +194,7 @@ extension AbstractPlayer{
             // Turn off subtitles by deselecting any option in the legible media selection group
             currentItem.select(nil, in: group)
         }
+        #endif
     }
     
     /// Enables looping for the current video item.
@@ -186,6 +224,106 @@ extension AbstractPlayer{
         playerLooper?.disableLooping()
         playerLooper = nil
     }
+
+    /// Adjusts the brightness of the video playback.
+    /// - Parameter brightness: A `Float` value representing the brightness level. Typically ranges from -1.0 to 1.0.
+    func adjustBrightness(to brightness: Float) {
+        let clampedBrightness = max(-1.0, min(brightness, 1.0))  // Clamp brightness to the range [-1.0, 1.0]
+        self.brightness = clampedBrightness
+        applyVideoComposition()
+    }
+
+    /// Adjusts the contrast of the video playback.
+    /// - Parameter contrast: A `Float` value representing the contrast level. Typically ranges from 0.0 to 4.0.
+    func adjustContrast(to contrast: Float) {
+        let clampedContrast = max(0.0, min(contrast, 4.0))  // Clamp contrast to the range [0.0, 4.0]
+        self.contrast = clampedContrast
+        applyVideoComposition()
+    }
+
+    /// Applies a Core Image filter to the video playback.
+    /// - Parameters:
+    ///   - name: Name of the Core Image filter.
+    ///   - parameters: Dictionary of parameters to configure the filter.
+    ///   - clearExisting: A boolean indicating whether to clear existing filters before applying the new filter.
+    func applyFilter(name: String, parameters: [String: Any]) {
+        appendFilter(name: name, parameters: parameters)
+        applyVideoComposition()
+    }
+    
+    /// Appends a Core Image filter to the current list of filters.
+    /// The filter is created based on the provided name and parameters.
+    /// - Parameters:
+    ///   - name: The name of the Core Image filter to be applied.
+    ///   - parameters: A dictionary of parameters to configure the filter.
+    private func appendFilter(name: String, parameters: [String: Any]) {
+        if let filter = CIFilter(name: name, parameters: parameters) {
+            filters.append(filter)
+        }
+    }
+
+    /// Combines all currently applied filters with brightness and contrast adjustments.
+    /// Brightness and contrast are applied as additional filters on top of the existing filters in the stack.
+    /// - Returns: An array of CIFilter objects that include the existing filters and the brightness/contrast adjustments.
+    private var combineFilters: [CIFilter] {
+        var allFilters = filters
+        if let filter = CIFilter(name: "CIColorControls", parameters: [kCIInputBrightnessKey: brightness]) {
+            allFilters.append(filter)
+        }
+        if let filter = CIFilter(name: "CIColorControls", parameters: [kCIInputContrastKey: contrast]) {
+            allFilters.append(filter)
+        }
+        return allFilters
+    }
+
+    /// Applies the current set of filters to the video using an AVVideoComposition.
+    /// This method combines the existing filters and brightness/contrast adjustments, creates a new video composition,
+    /// and assigns it to the current AVPlayerItem. The video is paused during this process to ensure smooth application.
+    /// This method is not supported on Vision OS.
+    /// - Note: Creating the video composition can be a heavy operation, especially with complex filters or high-resolution videos.
+    /// It’s recommended to handle this operation asynchronously to prevent UI lag or freezing.
+    private func applyVideoComposition() {
+        guard let player = player, let currentItem = player.currentItem else { return }
+        
+        let allFilters = combineFilters
+        #if !os(visionOS)
+        let videoComposition = AVVideoComposition(asset: currentItem.asset, applyingCIFiltersWithHandler: { request in
+            handleVideoComposition(request: request, filters: allFilters)
+        })
+        
+        player.pause()
+        // Applying the video composition (potentially heavy operation)
+        currentItem.videoComposition = videoComposition
+        player.play()
+        #endif
+    }
+
+    /// Removes all filters from the video playback.
+    func removeAllFilters() {
+        filters = []
+        applyVideoComposition()
+    }
+
+    /// Selects an audio track for the video playback.
+    /// - Parameter languageCode: The language code (e.g., "en" for English) of the desired audio track.
+    func selectAudioTrack(languageCode: String) {
+        guard let currentItem = player?.currentItem else { return }
+        #if !os(visionOS)
+        // Retrieve the media selection group for audible tracks
+        if let group = currentItem.asset.mediaSelectionGroup(forMediaCharacteristic: .audible) {
+            
+            // Filter options by language code using Locale
+            let options = group.options.filter { option in
+                return option.locale?.languageCode == languageCode
+            }
+            
+            // Select the first matching option, if available
+            if let option = options.first {
+                currentItem.select(option, in: group)
+            }
+        }
+        #endif
+    }
     
     /// Sets the playback command for the video player.
     /// - Parameter value: The `PlaybackCommand` to set. This can be one of the following:
@@ -201,6 +339,11 @@ extension AbstractPlayer{
     ///   - `playbackSpeed`: Command to adjust the playback speed of the video.
     ///   - `loop`: Command to enable looping of the video playback.
     ///   - `unloop`: Command to disable looping of the video playback.
+    ///   - `brightness`: Command to adjust the brightness of the video playback.
+    ///   - `contrast`: Command to adjust the contrast of the video playback.
+    ///   - `filter`: Command to apply a specific Core Image filter to the video.
+    ///   - `removeAllFilters`: Command to remove all applied filters from the video playback.
+    ///   - `audioTrack`: Command to select a specific audio track based on language code.
     func setCommand(_ value: PlaybackCommand) {
         switch value {
         case .play:
@@ -227,6 +370,16 @@ extension AbstractPlayer{
             loop()
         case .unloop:
             unloop()
+        case .brightness(let brightness):
+            adjustBrightness(to: brightness)
+        case .contrast(let contrast):
+            adjustContrast(to: contrast)
+        case .filter(let name, let parameters):
+            applyFilter(name: name, parameters: parameters)
+        case .removeAllFilters:
+            removeAllFilters()
+        case .audioTrack(let languageCode):
+            selectAudioTrack(languageCode: languageCode)
         }
     }
 }
