@@ -28,8 +28,6 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ### Playback Commands
 
-### Playback Commands
-
 | Command                     | Description                                                                                                                                          |
 |-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `play`                      | Command to play the video.                                                                                                                            |
