@@ -16,7 +16,7 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ### Video Sample
 
-“Big Buck Bunny” video, an open-source animated film created by the Blender Foundation. This video is instrumental in demonstrating the capabilities of our video processing software.
+“Big Buck Bunny” video, an open-source animated film created by the Blender Foundation. This video is instrumental in demonstrating the capabilities of the open source video processing software.
 
 Credits:
 
