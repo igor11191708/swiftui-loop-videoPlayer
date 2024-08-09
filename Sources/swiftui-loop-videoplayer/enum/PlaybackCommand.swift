@@ -1,10 +1,3 @@
-//
-//  PlaybackCommand.swift
-//
-//
-//  Created by Igor Shelopaev on 06.08.24.
-//
-
 import AVFoundation
 
 /// An enumeration of possible playback commands.
@@ -44,23 +37,26 @@ public enum PlaybackCommand: Equatable {
     /// Command to set the playback speed of the video playback.
     /// - Parameter speed: A `Float` value representing the playback speed (e.g., 1.0 for normal speed, 0.5 for half speed, 2.0 for double speed).
     case playbackSpeed(Float)
+    
+    /// Command to enable looping of the video playback.
+    case loop
+    
+    /// Command to disable looping of the video playback.
+    case unloop
 
     public static func == (lhs: PlaybackCommand, rhs: PlaybackCommand) -> Bool {
         switch (lhs, rhs) {
-        case (.play, .play):
-            return true
-        case (.pause, .pause):
+        case (.play, .play),
+             (.pause, .pause),
+             (.begin, .begin),
+             (.end, .end),
+             (.mute, .mute),
+             (.unmute, .unmute),
+             (.loop, .loop),
+             (.unloop, .unloop):
             return true
         case (.seek(let lhsTime), .seek(let rhsTime)):
             return lhsTime == rhsTime
-        case (.begin, .begin):
-            return true
-        case (.end, .end):
-            return true
-        case (.mute, .mute):
-            return true
-        case (.unmute, .unmute):
-            return true
         case (.volume(let lhsVolume), .volume(let rhsVolume)):
             return lhsVolume == rhsVolume
         case (.subtitles(let lhsLanguage), .subtitles(let rhsLanguage)):

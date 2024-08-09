@@ -10,6 +10,10 @@ import Foundation
 
 @available(iOS 14, macOS 11, tvOS 14, *)
 public protocol AbstractPlayer: AnyObject{
+    
+    /// The looper responsible for continuous video playback.
+    var playerLooper: AVPlayerLooper? { get set }
+    
     /// The queue player that plays the video items.
     var player: AVQueuePlayer? { get set }
     
@@ -155,6 +159,34 @@ extension AbstractPlayer{
         }
     }
     
+    /// Enables looping for the current video item.
+    /// This method sets up the `playerLooper` to loop the currently playing item indefinitely.
+    func loop() {
+        guard let player = player, let currentItem = player.currentItem else {
+            return
+        }
+
+        // Check if the video is already being looped
+        if playerLooper != nil {
+            return // Already looped, no need to loop again
+        }
+
+        // Initialize the player looper with the current item
+        playerLooper = AVPlayerLooper(player: player, templateItem: currentItem)
+    }
+    
+    /// Disables looping for the current video item.
+    /// This method removes the `playerLooper`, stopping the loop.
+    func unloop() {
+        // Check if the video is not looped (i.e., playerLooper is nil)
+        guard playerLooper != nil else {
+            return // Not looped, no need to unloop
+        }
+
+        playerLooper?.disableLooping()
+        playerLooper = nil
+    }
+    
     /// Sets the playback command for the video player.
     /// - Parameter value: The `PlaybackCommand` to set. This can be one of the following:
     ///   - `play`: Command to play the video.
@@ -167,28 +199,34 @@ extension AbstractPlayer{
     ///   - `volume`: Command to adjust the volume of the video playback.
     ///   - `subtitles`: Command to set subtitles to a specified language or turn them off.
     ///   - `playbackSpeed`: Command to adjust the playback speed of the video.
-   func setCommand(_ value: PlaybackCommand) {
-       switch value {
-       case .play:
-           play()
-       case .pause:
-           pause()
-       case .seek(to: let time):
-           seek(to: time)
-       case .begin:
-           seekToStart()
-       case .end:
-           seekToEnd()
-       case .mute:
-           mute()
-       case .unmute:
-           unmute()
-       case .volume(let volume):
-           setVolume(volume)
-       case .subtitles(let language):
-           setSubtitles(to: language)
-       case .playbackSpeed(let speed):
-           setPlaybackSpeed(speed)
-       }
-   }
+    ///   - `loop`: Command to enable looping of the video playback.
+    ///   - `unloop`: Command to disable looping of the video playback.
+    func setCommand(_ value: PlaybackCommand) {
+        switch value {
+        case .play:
+            play()
+        case .pause:
+            pause()
+        case .seek(to: let time):
+            seek(to: time)
+        case .begin:
+            seekToStart()
+        case .end:
+            seekToEnd()
+        case .mute:
+            mute()
+        case .unmute:
+            unmute()
+        case .volume(let volume):
+            setVolume(volume)
+        case .subtitles(let language):
+            setSubtitles(to: language)
+        case .playbackSpeed(let speed):
+            setPlaybackSpeed(speed)
+        case .loop:
+            loop()
+        case .unloop:
+            unloop()
+        }
+    }
 }

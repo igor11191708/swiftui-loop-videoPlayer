@@ -28,9 +28,6 @@ public protocol LoopingPlayerProtocol: AbstractPlayer{
         var layer : CALayer? { get set }
         var wantsLayer : Bool { get set }
     #endif
-    
-    /// The looper responsible for continuous video playback.
-    var playerLooper: AVPlayerLooper? { get set }
 
     /// The delegate to be notified about errors encountered by the player.
     var delegate: PlayerErrorDelegate? { get set }
@@ -101,6 +98,7 @@ extension LoopingPlayerProtocol {
         
         // Replace the current item with a new item created from the asset
         let newItem = AVPlayerItem(asset: asset)
+        unloop()
         player?.replaceCurrentItem(with: newItem)
         
         // Seek to the beginning of the item if you want to start from the start
@@ -157,9 +155,7 @@ extension LoopingPlayerProtocol {
         wantsLayer = true
         #endif
         
-        if let firstItem = player.items().first {
-            playerLooper = AVPlayerLooper(player: player, templateItem: firstItem)
-        }
+        loop()
         player.play()
     }
     

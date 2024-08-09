@@ -28,6 +28,8 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ### Playback Commands
 
+### Playback Commands
+
 | Command                     | Description                                                                                                                                          |
 |-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `play`                      | Command to play the video.                                                                                                                            |
@@ -40,6 +42,8 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | `volume(Float)`             | Command to adjust the volume of the video playback. The `volume` parameter is a `Float` value between 0.0 (mute) and 1.0 (full volume). If a value outside this range is passed, it will be clamped to the nearest valid value (0.0 or 1.0). |
 | `subtitles(String?)`        | Command to set subtitles to a specified language or turn them off. Pass a language code (e.g., "en" for English) to set subtitles, or `nil` to turn them off. |
 | `playbackSpeed(Float)`      | Command to adjust the playback speed of the video. The `speed` parameter is a `Float` value representing the playback speed (e.g., 1.0 for normal speed, 0.5 for half speed, 2.0 for double speed). If a negative value is passed, it will be clamped to 0.0. |
+| `loop`                      | Command to enable looping of the video playback. By default, looping is enabled, so this command will have no effect if looping is already active.     |
+| `unloop`                    | Command to disable looping of the video playback. This command will only take effect if the video is currently being looped.                                                                |
 
 
 ### Initializer Parameters Settings
