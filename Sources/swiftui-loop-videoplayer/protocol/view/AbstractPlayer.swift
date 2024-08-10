@@ -307,6 +307,9 @@ extension AbstractPlayer{
 
     /// Removes all filters from the video playback.
     func removeAllFilters(apply : Bool = true) {
+        
+        guard !filters.isEmpty else { return }
+        
         filters = []
         if apply{
             applyVideoComposition()
