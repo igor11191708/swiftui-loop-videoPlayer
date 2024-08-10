@@ -72,10 +72,10 @@ public protocol AbstractPlayer: AnyObject {
     func adjustContrast(to contrast: Float)
 
     /// Applies a Core Image filter to the video player's content.
-    func applyFilter(_ value: CIFilter)
+    func applyFilter(_ value: CIFilter, _ clear : Bool)
 
     /// Removes all filters from the video playback.
-    func removeAllFilters()
+    func removeAllFilters(apply : Bool)
 
     /// Selects an audio track for the video playback.
     /// - Parameter languageCode: The language code (e.g., "en" for English) of the desired audio track.
@@ -244,7 +244,10 @@ extension AbstractPlayer{
     /// Applies a Core Image filter to the video playback.
     /// This function adds the provided filter to the stack of existing filters and updates the video composition accordingly.
     /// - Parameter value: A `CIFilter` object representing the filter to be applied to the video playback.
-    func applyFilter(_ value: CIFilter) {
+    func applyFilter(_ value: CIFilter, _ clear : Bool) {
+        if clear{
+            removeAllFilters(apply: false)
+        }
         appendFilter(value) // Appends the provided filter to the current stack.
         applyVideoComposition() // Updates the video composition to include the new filter.
     }
@@ -303,9 +306,11 @@ extension AbstractPlayer{
     }
 
     /// Removes all filters from the video playback.
-    func removeAllFilters() {
+    func removeAllFilters(apply : Bool = true) {
         filters = []
-        applyVideoComposition()
+        if apply{
+            applyVideoComposition()
+        }
     }
 
     /// Selects an audio track for the video playback.
@@ -378,8 +383,8 @@ extension AbstractPlayer{
             adjustBrightness(to: brightness)
         case .contrast(let contrast):
             adjustContrast(to: contrast)
-        case .filter(let value):
-            applyFilter(value)
+        case .filter(let value, let clear):
+            applyFilter(value, clear)
         case .removeAllFilters:
             removeAllFilters()
         case .audioTrack(let languageCode):

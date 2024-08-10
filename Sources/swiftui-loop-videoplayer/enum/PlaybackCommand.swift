@@ -55,9 +55,11 @@ public enum PlaybackCommand: Equatable {
     case contrast(Float)
 
     /// Command to apply a specific Core Image filter to the video.
-    /// - Parameter filter: A `CIFilter` object representing the filter to be applied.
-    /// This filter is added to the current stack of filters, allowing for multiple filters to be combined and applied sequentially.
-    case filter(CIFilter)
+    /// - Parameters:
+    ///   - filter: A `CIFilter` object representing the filter to be applied.
+    ///   - clear: A Boolean value indicating whether to clear the existing filter stack before applying this filter.
+    /// This filter is added to the current stack of filters, allowing for multiple filters to be combined and applied sequentially, unless `clear` is true.
+    case filter(CIFilter, clear: Bool = false)
 
     /// Command to remove all applied filters from the video playback.
     case removeAllFilters
@@ -94,8 +96,8 @@ public enum PlaybackCommand: Equatable {
         case (.audioTrack(let lhsCode), .audioTrack(let rhsCode)):
             return lhsCode == rhsCode
 
-        case (.filter(let lhs), .filter(let rhs)):
-            return lhs == rhs
+        case (.filter(let lhsFilter, let lhsClear), .filter(let rhsFilter, let rhsClear)):
+            return lhsFilter == rhsFilter && lhsClear == rhsClear
         default:
             return false
         }
