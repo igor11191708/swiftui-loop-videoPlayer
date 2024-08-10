@@ -277,7 +277,7 @@ extension AbstractPlayer{
     /// This method combines the existing filters and brightness/contrast adjustments, creates a new video composition,
     /// and assigns it to the current AVPlayerItem. The video is paused during this process to ensure smooth application.
     /// This method is not supported on Vision OS.
-    private func applyVideoComposition() {
+    func applyVideoComposition() {
         guard let player = player, let currentItem = player.currentItem else { return }
         
         let allFilters = combineFilters

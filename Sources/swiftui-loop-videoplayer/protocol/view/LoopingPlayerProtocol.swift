@@ -96,14 +96,14 @@ extension LoopingPlayerProtocol {
             player?.pause()
         }
         
-        removeStatusObserver()
+        removeItemObservers()
         unloop()
         removeAllFilters()
         
         // Replace the current item with a new item created from the asset
         let newItem = AVPlayerItem(asset: asset)
         
-        addStatusObserver(for: newItem)
+        addItemObservers(for: newItem)
         
         player?.replaceCurrentItem(with: newItem)
         
@@ -171,20 +171,23 @@ extension LoopingPlayerProtocol {
     ///   - item: The player item to observe.
     ///   - player: The player to observe.
     func setupObservers(for item: AVPlayerItem, player: AVQueuePlayer) {
-        addStatusObserver(for: item)
+        addItemObservers(for: item)
         errorObserver = player.observe(\.error, options: [.new]) { [weak self] player, _ in
             self?.handlePlayerError(player)
         }
     }
     
-    func removeStatusObserver(){
+    func removeItemObservers(){
         statusObserver?.invalidate()
         statusObserver = nil
+        
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
     }
     
-    func addStatusObserver(for item: AVPlayerItem){
-        statusObserver = item.observe(\.status, options: [.new]) { [weak self] item, _ in
+    func addItemObservers(for item: AVPlayerItem){
+        statusObserver = item.observe(\.status, options: [.new, .old]) { [weak self] item, _ in
             self?.handlePlayerItemStatusChange(item)
+            print(item)
         }
     }
 
