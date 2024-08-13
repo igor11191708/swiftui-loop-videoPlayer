@@ -169,14 +169,24 @@ extension LoopingPlayerProtocol {
         }
     }
     
+    /// Removes the observers associated with the current AVPlayerItem.
+    ///
+    /// This function invalidates the status observer and removes the notification observer for the AVPlayerItem's end time event.
     func removeItemObservers(){
+        // Invalidate and remove the status observer.
         statusObserver?.invalidate()
         statusObserver = nil
         
+        // Remove the observer for the AVPlayerItemDidPlayToEndTime notification.
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
     }
-    
+
+    /// Adds observers to the specified AVPlayerItem.
+    ///
+    /// This function observes changes to the status of the AVPlayerItem and registers a handler for status changes.
+    /// - Parameter item: The AVPlayerItem to observe.
     func addItemObservers(for item: AVPlayerItem){
+        // Observe the status property of the AVPlayerItem and handle changes using the provided closure.
         statusObserver = item.observe(\.status, options: [.new, .old]) { [weak self] item, _ in
             self?.handlePlayerItemStatusChange(item)
             print(item)
@@ -266,5 +276,4 @@ extension LoopingPlayerProtocol {
             removeAllVectors()
         }
     }
-
 }
