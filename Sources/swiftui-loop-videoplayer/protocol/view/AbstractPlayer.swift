@@ -206,10 +206,9 @@ extension AbstractPlayer{
 
         // Check if the video is already being looped
         if playerLooper != nil {
-            return // Already looped, no need to loop again
+            return
         }
 
-        // Initialize the player looper with the current item
         playerLooper = AVPlayerLooper(player: player, templateItem: currentItem)
     }
     
@@ -264,15 +263,10 @@ extension AbstractPlayer{
     /// and assigns it to the current AVPlayerItem. The video is paused during this process to ensure smooth application.
     /// This method is not supported on Vision OS.
     func applyVideoComposition() {
-        guard let player = player, let currentItem = player.currentItem else { return }
-        
+        guard let player = player else { return }
         let allFilters = combineFilters(filters, brightness, contrast)
-        #if !os(visionOS)
-        // Might be heavy operation need to explore
-        let videoComposition = AVVideoComposition(asset: currentItem.asset, applyingCIFiltersWithHandler: { request in
-            handleVideoComposition(request: request, filters: allFilters)
-        })
         
+        #if !os(visionOS)
         // Optionally, check if the player is currently playing
         let wasPlaying = player.rate != 0
         
@@ -281,8 +275,14 @@ extension AbstractPlayer{
             player.pause()
         }
         
-        // Applying the video composition
-        currentItem.videoComposition = videoComposition
+        player.items().forEach{ item in
+            
+            let videoComposition = AVVideoComposition(asset: item.asset, applyingCIFiltersWithHandler: { request in
+                handleVideoComposition(request: request, filters: allFilters)
+            })
+
+            item.videoComposition = videoComposition
+        }
         
         if wasPlaying{
             player.play()
