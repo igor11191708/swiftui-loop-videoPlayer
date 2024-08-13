@@ -59,28 +59,7 @@ When you use the `addVector` command, you can dynamically add a new vector graph
    - The `clear` parameter determines whether existing vector layers should be removed before adding the new one. If set to `true`, all existing vector layers are cleared, and only the new layer will be displayed.
    - The vector layer will be laid out directly over the video stream, allowing it to appear as part of the video playback experience.
 
-These commands allow developers to seamlessly manage vector elements over a video, providing flexible options for adding and removing visual enhancements during playback. By leveraging the `ShapeLayerBuilderProtocol`, developers can create custom vector graphics that integrate smoothly into the video content.
-
-### ShapeLayerBuilderProtocol
-
-```swift
-/// A protocol defining a builder for creating shape layers with a unique identifier.
-///
-/// Conforming types will be able to construct a CAShapeLayer based on provided frame, bounds, and center.
-@available(iOS 14, macOS 11, tvOS 14, *)
-public protocol ShapeLayerBuilderProtocol: Identifiable {
-    
-    var id : UUID { get }
-    
-    /// Builds a CAShapeLayer using specified geometry.
-    ///
-    /// - Parameters:
-    ///   - geometry: A tuple containing frame, bounds, and center as `CGRect` and `CGPoint`.
-    /// - Returns: A configured `CAShapeLayer`.
-    @MainActor
-    func build(with geometry: (frame: CGRect, bounds: CGRect)) -> CAShapeLayer
-    
-}
+These commands allow you to seamlessly manage vector elements over a video, providing flexible options for adding and removing visual enhancements during playback. By leveraging the `ShapeLayerBuilderProtocol`, you can create custom vector graphics that integrate smoothly into the video content.
 
 ### Additional Notes on Brightness and Contrast
 
