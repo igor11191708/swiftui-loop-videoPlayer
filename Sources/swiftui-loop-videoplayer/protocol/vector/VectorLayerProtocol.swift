@@ -49,20 +49,22 @@ public protocol LayerMakerProtocol {
 
 extension LayerMakerProtocol{
     
-    @MainActor
+    
     /// Adds a vector layer to the composite layer using a specified builder.
     ///
     /// - Parameters:
     ///   - builder: An instance conforming to `ShapeLayerBuilderProtocol` that constructs the vector layer.
     ///   - clear: A Boolean value that indicates whether to clear existing vector layers before adding the new one.
+    @MainActor 
     func addVectorLayer(builder : any ShapeLayerBuilderProtocol, clear: Bool){
         if clear{ removeAllVectors() }
         let layer = builder.build(with: (frame, bounds))
         compositeLayer.addSublayer(layer)
     }
     
-    @MainActor
+    
     /// Removes all vector layers from the composite layer.
+    @MainActor 
     func removeAllVectors(){
             compositeLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
     }
