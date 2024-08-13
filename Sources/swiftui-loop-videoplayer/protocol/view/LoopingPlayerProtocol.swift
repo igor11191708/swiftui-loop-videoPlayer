@@ -68,17 +68,6 @@ public protocol LoopingPlayerProtocol: AbstractPlayer{
 
 extension LoopingPlayerProtocol {
     
-    /// The current asset being played, if available.
-    ///
-    /// This computed property checks the current item of the player.
-    /// If the current item exists and its asset can be cast to AVURLAsset,
-    var currentAsset : AVURLAsset?{
-        if let currentItem = player?.currentItem {
-            return currentItem.asset as? AVURLAsset
-        }
-        return nil
-    }
-    
     /// Updates the player to play a new asset and handles the playback state.
        ///
        /// This method pauses the player if it was previously playing,

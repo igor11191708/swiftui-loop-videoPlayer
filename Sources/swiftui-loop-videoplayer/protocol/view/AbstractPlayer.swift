@@ -12,6 +12,12 @@ import CoreImage
 @MainActor
 public protocol AbstractPlayer: AnyObject {
     
+    /// Retrieves the current item being played.
+    var currentItem : AVPlayerItem? { get }
+    
+    /// The current asset being played, if available.
+    var currentAsset : AVURLAsset? { get }
+    
     /// Adjusts the brightness of the video. Default is 0 (no change), with positive values increasing and negative values decreasing brightness.
     var brightness: Float { get set }
 
@@ -86,6 +92,28 @@ public protocol AbstractPlayer: AnyObject {
 }
 
 extension AbstractPlayer{
+
+    /// Retrieves the current item being played.
+    ///
+    /// This computed property checks if there is a current item available in the player.
+    /// If available, it returns the `currentItem`; otherwise, it returns `nil`.
+    var currentItem : AVPlayerItem?{
+        if let currentItem = player?.currentItem {
+            return currentItem
+        }
+        return nil
+    }
+    
+    /// The current asset being played, if available.
+    ///
+    /// This computed property checks the current item of the player.
+    /// If the current item exists and its asset can be cast to AVURLAsset,
+    var currentAsset : AVURLAsset?{
+        if let currentItem = currentItem {
+            return currentItem.asset as? AVURLAsset
+        }
+        return nil
+    }
     
     // Implementations of playback control methods
 
@@ -135,7 +163,7 @@ extension AbstractPlayer{
     /// Seeks to the end of the video.
     /// This method positions the playback at the end of the video.
     func seekToEnd() {
-        if let duration = player?.currentItem?.duration {
+        if let duration = currentItem?.duration {
             let endTime = CMTimeGetSeconds(duration)
             seek(to: endTime)
         }
@@ -175,8 +203,8 @@ extension AbstractPlayer{
     ///               Pass `nil` to turn off subtitles.
     func setSubtitles(to language: String?) {
         #if !os(visionOS)
-        guard let currentItem = player?.currentItem,
-              let group = currentItem.asset.mediaSelectionGroup(forMediaCharacteristic: .legible) else {
+        guard let currentItem = currentItem,
+              let group = currentAsset?.mediaSelectionGroup(forMediaCharacteristic: .legible) else {
             return
         }
 
@@ -274,7 +302,7 @@ extension AbstractPlayer{
         if wasPlaying {
             player.pause()
         }
-        
+               
         player.items().forEach{ item in
             
             let videoComposition = AVVideoComposition(asset: item.asset, applyingCIFiltersWithHandler: { request in
@@ -312,10 +340,10 @@ extension AbstractPlayer{
     /// Selects an audio track for the video playback.
     /// - Parameter languageCode: The language code (e.g., "en" for English) of the desired audio track.
     func selectAudioTrack(languageCode: String) {
-        guard let currentItem = player?.currentItem else { return }
+        guard let currentItem = currentItem else { return }
         #if !os(visionOS)
         // Retrieve the media selection group for audible tracks
-        if let group = currentItem.asset.mediaSelectionGroup(forMediaCharacteristic: .audible) {
+        if let group = currentAsset?.mediaSelectionGroup(forMediaCharacteristic: .audible) {
             
             // Filter options by language code using Locale
             let options = group.options.filter { option in
