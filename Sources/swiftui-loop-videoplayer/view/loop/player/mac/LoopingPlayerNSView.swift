@@ -29,6 +29,8 @@ class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {
     /// `contrast` indicates the level of contrast adjustment for the video content.
     internal var contrast: Float = 1
     
+    internal let compositeLayer = CALayer()
+    
     /// The AVPlayerLayer that displays the video content.
     internal let playerLayer = AVPlayerLayer()
     

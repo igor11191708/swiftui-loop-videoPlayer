@@ -64,6 +64,15 @@ public enum PlaybackCommand: Equatable {
     /// Command to remove all applied filters from the video playback.
     case removeAllFilters
 
+    /// Represents a command to create and possibly clear existing vectors using a shape layer builder.
+    /// - Parameters:
+    ///   - builder: An instance conforming to `ShapeLayerBuilderProtocol` which will provide the shape layer.
+    ///   - clear: A Boolean value that determines whether existing vector graphics should be cleared before applying the new vector. Defaults to `false`.
+    case addVector(any ShapeLayerBuilderProtocol, clear: Bool = false)
+
+    /// Represents a command to remove all vector graphics from the current view or context.
+    case removeAllVectors
+    
     /// Command to select a specific audio track based on language code.
     /// - Parameter languageCode: The language code (e.g., "en" for English) of the desired audio track.
     case audioTrack(languageCode: String)
@@ -72,7 +81,7 @@ public enum PlaybackCommand: Equatable {
         switch (lhs, rhs) {
         case (.play, .play), (.pause, .pause), (.begin, .begin), (.end, .end),
              (.mute, .mute), (.unmute, .unmute), (.loop, .loop), (.unloop, .unloop),
-             (.removeAllFilters, .removeAllFilters):
+             (.removeAllFilters, .removeAllFilters), (.removeAllVectors, .removeAllVectors):
             return true
 
         case (.seek(let lhsTime), .seek(let rhsTime)):
@@ -98,6 +107,8 @@ public enum PlaybackCommand: Equatable {
 
         case (.filter(let lhsFilter, let lhsClear), .filter(let rhsFilter, let rhsClear)):
             return lhsFilter == rhsFilter && lhsClear == rhsClear
+        case let (.addVector(lhsBuilder, lhsClear), .addVector(rhsBuilder, rhsClear)):
+            return lhsBuilder.id == rhsBuilder.id && lhsClear == rhsClear
         default:
             return false
         }

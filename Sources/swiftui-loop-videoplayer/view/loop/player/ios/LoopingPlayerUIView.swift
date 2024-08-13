@@ -27,6 +27,8 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     /// `contrast` indicates the level of contrast adjustment for the video content.
     internal var contrast: Float = 1
     
+    internal let compositeLayer = CALayer()
+    
     /// The AVPlayerLayer that displays the video content.
     internal let playerLayer = AVPlayerLayer()
     
@@ -52,7 +54,7 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     ///   - gravity: The AVLayerVideoGravity to be applied to the video layer.
     required init(asset: AVURLAsset, gravity: AVLayerVideoGravity) {
         super.init(frame: .zero)
-        setupPlayerComponents(asset: asset, gravity: gravity)
+        setupPlayerComponents(asset: asset, gravity: gravity)        
     }
 
     required init?(coder: NSCoder) {

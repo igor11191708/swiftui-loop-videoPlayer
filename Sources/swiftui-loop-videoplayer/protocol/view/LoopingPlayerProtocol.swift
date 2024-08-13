@@ -18,9 +18,7 @@ import AppKit
 /// handle errors, and notify a delegate of important events.
 @available(iOS 14, macOS 11, tvOS 14, *)
 @MainActor
-public protocol LoopingPlayerProtocol: AbstractPlayer{   
-
-    var playerLayer : AVPlayerLayer { get }
+public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     
     #if canImport(UIKit)
         var layer : CALayer { get }
@@ -28,6 +26,8 @@ public protocol LoopingPlayerProtocol: AbstractPlayer{
         var layer : CALayer? { get set }
         var wantsLayer : Bool { get set }
     #endif
+    
+    var playerLayer : AVPlayerLayer { get }
 
     /// The delegate to be notified about errors encountered by the player.
     var delegate: PlayerErrorDelegate? { get set }
@@ -143,13 +143,16 @@ extension LoopingPlayerProtocol {
         #if canImport(UIKit)
         playerLayer.backgroundColor = UIColor.clear.cgColor
         layer.addSublayer(playerLayer)
+        layer.addSublayer(compositeLayer)
         #elseif canImport(AppKit)
         playerLayer.backgroundColor = NSColor.clear.cgColor
-        layer = CALayer()
-        layer?.addSublayer(playerLayer)
-        wantsLayer = true
+        let layer = CALayer()
+        layer.addSublayer(playerLayer)
+        layer.addSublayer(compositeLayer)
+        self.layer = layer
+        self.wantsLayer = true
         #endif
-        
+        compositeLayer.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
         loop()
         player.play()
     }
@@ -199,4 +202,69 @@ extension LoopingPlayerProtocol {
         guard let error = player.error else { return }
         delegate?.didReceiveError(.remoteVideoError(error))
     }
+    
+    func setCommand(_ value: PlaybackCommand) {
+        /// Sets the playback command for the video player.
+        /// - Parameter value: The `PlaybackCommand` to set. This can be one of the following:
+        ///   - `play`: Command to play the video.
+        ///   - `pause`: Command to pause the video.
+        ///   - `seek(to:)`: Command to seek to a specific time in the video.
+        ///   - `begin`: Command to position the video at the beginning.
+        ///   - `end`: Command to position the video at the end.
+        ///   - `mute`: Command to mute the video.
+        ///   - `unmute`: Command to unmute the video.
+        ///   - `volume`: Command to adjust the volume of the video playback.
+        ///   - `subtitles`: Command to set subtitles to a specified language or turn them off.
+        ///   - `playbackSpeed`: Command to adjust the playback speed of the video.
+        ///   - `loop`: Command to enable looping of the video playback.
+        ///   - `unloop`: Command to disable looping of the video playback.
+        ///   - `brightness`: Command to adjust the brightness of the video playback.
+        ///   - `contrast`: Command to adjust the contrast of the video playback.
+        ///   - `filter`: Command to apply a specific Core Image filter to the video.
+        ///   - `removeAllFilters`: Command to remove all applied filters from the video playback.
+        ///   - `audioTrack`: Command to select a specific audio track based on language code.
+        ///   - `vector`: Sets a vector graphic operation on the video player.
+        ///   - `removeAllVectors`: Clears all vector graphics from the video player.
+        switch value {
+        case .play:
+            play()
+        case .pause:
+            pause()
+        case .seek(to: let time):
+            seek(to: time)
+        case .begin:
+            seekToStart()
+        case .end:
+            seekToEnd()
+        case .mute:
+            mute()
+        case .unmute:
+            unmute()
+        case .volume(let volume):
+            setVolume(volume)
+        case .subtitles(let language):
+            setSubtitles(to: language)
+        case .playbackSpeed(let speed):
+            setPlaybackSpeed(speed)
+        case .loop:
+            loop()
+        case .unloop:
+            unloop()
+        case .brightness(let brightness):
+            adjustBrightness(to: brightness)
+        case .contrast(let contrast):
+            adjustContrast(to: contrast)
+        case .filter(let value, let clear):
+            applyFilter(value, clear)
+        case .removeAllFilters:
+            removeAllFilters()
+        case .audioTrack(let languageCode):
+            selectAudioTrack(languageCode: languageCode)
+        case .addVector(let builder, let clear):
+            addVectorLayer(builder: builder, clear: clear)
+        case .removeAllVectors:
+            removeAllVectors()
+        }
+    }
+
 }
