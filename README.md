@@ -13,7 +13,6 @@ Please note that using videos from URLs requires ensuring that you have the righ
 ## [SwiftUI video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/video_filters.gif) 
-![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/vector.gif) 
 
 ## API Specifications
 
@@ -23,7 +22,6 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | `command`                             | `Binding<PlaybackCommand>`    | A binding to control playback actions (play, pause, or seek).          |
 | `init(fileName:ext:gravity:` <br> `eColor:eFontSize:command:)` | Constructor       | Initializes the player with specific video parameters and playback command binding. |
 | `init(settings: () -> VideoSettings, command:)` | Constructor | Initializes the player with a declarative settings block and playback command binding. |
-
 
 ### Playback Commands
 
