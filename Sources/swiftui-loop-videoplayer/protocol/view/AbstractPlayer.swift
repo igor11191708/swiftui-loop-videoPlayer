@@ -259,20 +259,6 @@ extension AbstractPlayer{
         filters.append(value)
     }
 
-    /// Combines all currently applied filters with brightness and contrast adjustments.
-    /// Brightness and contrast are applied as additional filters on top of the existing filters in the stack.
-    /// - Returns: An array of CIFilter objects that include the existing filters and the brightness/contrast adjustments.
-    private var combineFilters: [CIFilter] {
-        var allFilters = filters
-        if let filter = CIFilter(name: "CIColorControls", parameters: [kCIInputBrightnessKey: brightness]) {
-            allFilters.append(filter)
-        }
-        if let filter = CIFilter(name: "CIColorControls", parameters: [kCIInputContrastKey: contrast]) {
-            allFilters.append(filter)
-        }
-        return allFilters
-    }
-
     /// Applies the current set of filters to the video using an AVVideoComposition.
     /// This method combines the existing filters and brightness/contrast adjustments, creates a new video composition,
     /// and assigns it to the current AVPlayerItem. The video is paused during this process to ensure smooth application.
@@ -280,7 +266,7 @@ extension AbstractPlayer{
     func applyVideoComposition() {
         guard let player = player, let currentItem = player.currentItem else { return }
         
-        let allFilters = combineFilters
+        let allFilters = combineFilters(filters, brightness, contrast)
         #if !os(visionOS)
         // Might be heavy operation need to explore
         let videoComposition = AVVideoComposition(asset: currentItem.asset, applyingCIFiltersWithHandler: { request in
@@ -305,7 +291,14 @@ extension AbstractPlayer{
         #endif
     }
 
-    /// Removes all filters from the video playback.
+    /// Removes all applied CIFilters from the video playback.
+    ///
+    /// This function clears the array of filters and optionally re-applies the video composition
+    /// to ensure the changes take effect immediately.
+    ///
+    /// - Parameters:
+    ///   - apply: A Boolean value indicating whether to immediately apply the video composition after removing the filters.
+    ///            Defaults to `true`.
     func removeAllFilters(apply : Bool = true) {
         
         guard !filters.isEmpty else { return }

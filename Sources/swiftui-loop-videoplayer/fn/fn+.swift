@@ -110,3 +110,24 @@ internal func handleVideoComposition(request: AVAsynchronousCIImageFilteringRequ
     // Finish the composition request by outputting the final image
     request.finish(with: currentImage, context: nil)
 }
+
+/// Combines an array of CIFilters with additional brightness and contrast adjustments.
+///
+/// This function appends brightness and contrast adjustments as CIFilters to the existing array of filters.
+///
+/// - Parameters:
+///   - filters: An array of CIFilter objects to which the brightness and contrast filters will be added.
+///   - brightness: A Float value representing the brightness adjustment to apply.
+///   - contrast: A Float value representing the contrast adjustment to apply.
+///
+/// - Returns: An array of CIFilter objects, including the original filters and the added brightness and contrast adjustments.
+internal func combineFilters(_ filters: [CIFilter],_ brightness:  Float,_ contrast: Float) -> [CIFilter] {
+    var allFilters = filters
+    if let filter = CIFilter(name: "CIColorControls", parameters: [kCIInputBrightnessKey: brightness]) {
+        allFilters.append(filter)
+    }
+    if let filter = CIFilter(name: "CIColorControls", parameters: [kCIInputContrastKey: contrast]) {
+        allFilters.append(filter)
+    }
+    return allFilters
+}
