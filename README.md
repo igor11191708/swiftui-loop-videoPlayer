@@ -13,6 +13,7 @@ Please note that using videos from URLs requires ensuring that you have the righ
 ## [SwiftUI video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/video_filters.gif) 
+![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/vector.gif) 
 
 ## API Specifications
 
@@ -45,7 +46,41 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | `filter(CIFilter, clear: Bool)` | Applies a specific Core Image filter to the video. If `clear` is true, any existing filters on the stack are removed before applying the new filter; otherwise, the new filter is added to the existing stack. |
 | `removeAllFilters`          | Command to remove all applied filters from the video playback.                                                                                        |
 | `audioTrack(String)`        | Command to select a specific audio track based on language code. The `languageCode` parameter specifies the desired audio track's language (e.g., "en" for English). |
+| `addVector(ShapeLayerBuilderProtocol, clear: Bool)` | Command to add a vector graphic layer over the video stream. The `builder` parameter is an instance conforming to `ShapeLayerBuilderProtocol`. The `clear` parameter specifies whether to clear existing vector layers before adding the new one.                                                                                                           |
+| `removeAllVectors`                       | Command to remove all vector graphic layers from the video stream. |
 
+
+### Additional Notes on Adding and Removing Vector Graphics
+
+When you use the `addVector` command, you can dynamically add a new vector graphic layer (such as a logo or animated vector) over the video stream. This is particularly useful for enhancing the user experience with overlays, such as branding elements, animated graphics.
+
+**Adding a Vector Layer**:
+   - The `addVector` command takes a `ShapeLayerBuilderProtocol` instance. This protocol defines the necessary method to build a `CAShapeLayer` based on the given geometry (frame, bounds).
+   - The `clear` parameter determines whether existing vector layers should be removed before adding the new one. If set to `true`, all existing vector layers are cleared, and only the new layer will be displayed.
+   - The vector layer will be laid out directly over the video stream, allowing it to appear as part of the video playback experience.
+
+These commands allow developers to seamlessly manage vector elements over a video, providing flexible options for adding and removing visual enhancements during playback. By leveraging the `ShapeLayerBuilderProtocol`, developers can create custom vector graphics that integrate smoothly into the video content.
+
+### ShapeLayerBuilderProtocol
+
+```swift
+/// A protocol defining a builder for creating shape layers with a unique identifier.
+///
+/// Conforming types will be able to construct a CAShapeLayer based on provided frame, bounds, and center.
+@available(iOS 14, macOS 11, tvOS 14, *)
+public protocol ShapeLayerBuilderProtocol: Identifiable {
+    
+    var id : UUID { get }
+    
+    /// Builds a CAShapeLayer using specified geometry.
+    ///
+    /// - Parameters:
+    ///   - geometry: A tuple containing frame, bounds, and center as `CGRect` and `CGPoint`.
+    /// - Returns: A configured `CAShapeLayer`.
+    @MainActor
+    func build(with geometry: (frame: CGRect, bounds: CGRect)) -> CAShapeLayer
+    
+}
 
 ### Additional Notes on Brightness and Contrast
 
