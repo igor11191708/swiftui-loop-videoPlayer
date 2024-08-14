@@ -72,27 +72,28 @@ extension LoopingPlayerProtocol {
        /// - Parameters:
        ///   - asset: The AVURLAsset to load into the player.
     func update(asset: AVURLAsset){
-        // Optionally, check if the player is currently playing
-        let wasPlaying = player?.rate != 0
         
-        // Pause the player if it was playing
+        guard let player = player else { return }
+        
+        let wasPlaying = player.rate != 0
+        
         if wasPlaying {
-            player?.pause()
+            player.pause()
         }
         
         // Cleaning
         unloop()
-        
+        while player.items().count > 0 {
+            player.advanceToNextItem()
+        }
         removeAllFilters()
         
         // Replace the current item
         let newItem = AVPlayerItem(asset: asset)
-        
-        player?.replaceCurrentItem(with: newItem)
-        
+        player.replaceCurrentItem(with: newItem)
         loop()
         
-        player?.seek(to: .zero, completionHandler: { _ in
+        player.seek(to: .zero, completionHandler: { _ in
             if wasPlaying {
                 self.player?.play()
             }
