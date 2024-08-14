@@ -50,11 +50,6 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     ///   - player: The AVQueuePlayer to observe for errors.
     func setupObservers(for item: AVPlayerItem, player: AVQueuePlayer)
 
-    /// Responds to changes in the playback status of an AVPlayerItem.
-    ///
-    /// - Parameter item: The AVPlayerItem whose status changed.
-    func handlePlayerItemStatusChange(_ item: AVPlayerItem)
-
     /// Responds to errors reported by the AVQueuePlayer.
     ///
     /// - Parameter player: The AVQueuePlayer that encountered an error.
@@ -169,17 +164,6 @@ internal extension LoopingPlayerProtocol {
     func removeObservers() {
         errorObserver?.invalidate()
         errorObserver = nil
-    }
-
-
-    /// Responds to changes in the status of an AVPlayerItem.
-    ///
-    /// This method checks if the status of the AVPlayerItem indicates a failure.
-    /// If a failure occurs, it notifies the delegate about the error.
-    /// - Parameter item: The AVPlayerItem whose status has changed to be evaluated.
-    func handlePlayerItemStatusChange(_ item: AVPlayerItem) {
-        guard item.status == .failed, let error = item.error else { return }
-        delegate?.didReceiveError(.remoteVideoError(error))
     }
 
     /// Responds to errors reported by the AVPlayer.

@@ -38,9 +38,6 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     /// The queue player that plays the video items.
     internal var player: AVQueuePlayer?
     
-    /// Observer for the status of the AVPlayerItem.
-    internal var statusObserver: NSKeyValueObservation?
-    
     /// Observer for errors from the AVQueuePlayer.
     internal var errorObserver: NSKeyValueObservation?
     

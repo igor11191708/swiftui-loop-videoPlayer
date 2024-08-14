@@ -18,7 +18,7 @@ import AppKit
 /// This class handles the initialization and management of a looping video player with customizable video gravity.
 @available(macOS 11.0, *)
 @MainActor @preconcurrency
-class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {
+class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {   
     
     /// `filters` is an array that stores CIFilter objects used to apply different image processing effects
     internal var filters: [CIFilter] = []
@@ -39,9 +39,6 @@ class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {
     
     /// The queue player that plays the video items.
     internal var player: AVQueuePlayer?
-    
-    /// Observer for the status of the AVPlayerItem.
-    internal var statusObserver: NSKeyValueObservation?
     
     /// Observer for errors from the AVQueuePlayer.
     internal var errorObserver: NSKeyValueObservation?
