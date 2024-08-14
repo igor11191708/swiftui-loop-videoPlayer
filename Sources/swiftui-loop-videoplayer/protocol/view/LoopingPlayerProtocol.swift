@@ -31,11 +31,6 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
 
     /// The delegate to be notified about errors encountered by the player.
     var delegate: PlayerErrorDelegate? { get set }
-    
-    /// An optional NSKeyValueObservation to monitor changes in the playback status of the video.
-    /// This observer should be set up to watch for changes such as play, pause, or errors in the AVPlayerItem,
-    /// allowing the conforming object to respond to different states of the video playback.
-    var statusObserver: NSKeyValueObservation? { get set }
 
     /// An optional NSKeyValueObservation to monitor errors encountered by the video player.
     /// This observer should be configured to detect and handle errors from the AVQueuePlayer,
@@ -85,22 +80,19 @@ extension LoopingPlayerProtocol {
             player?.pause()
         }
         
-        removeItemObservers()
+        // Cleaning
         unloop()
+        
         removeAllFilters()
         
-        // Replace the current item with a new item created from the asset
+        // Replace the current item
         let newItem = AVPlayerItem(asset: asset)
-        
-        addItemObservers(for: newItem)
         
         player?.replaceCurrentItem(with: newItem)
         
         loop()
         
-        // Seek to the beginning of the item if you want to start from the start
         player?.seek(to: .zero, completionHandler: { _ in
-            // Resume playing if the player was playing before
             if wasPlaying {
                 self.player?.play()
             }
@@ -165,35 +157,11 @@ extension LoopingPlayerProtocol {
     ///   - item: The player item to observe.
     ///   - player: The player to observe.
     func setupObservers(for item: AVPlayerItem, player: AVQueuePlayer) {
-        addItemObservers(for: item)
         errorObserver = player.observe(\.error, options: [.new]) { [weak self] player, _ in
             self?.handlePlayerError(player)
         }
     }
-    
-    /// Removes the observers associated with the current AVPlayerItem.
-    ///
-    /// This function invalidates the status observer and removes the notification observer for the AVPlayerItem's end time event.
-    func removeItemObservers(){
-        // Invalidate and remove the status observer.
-        statusObserver?.invalidate()
-        statusObserver = nil
-        
-        // Remove the observer for the AVPlayerItemDidPlayToEndTime notification.
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
-    }
 
-    /// Adds observers to the specified AVPlayerItem.
-    ///
-    /// This function observes changes to the status of the AVPlayerItem and registers a handler for status changes.
-    /// - Parameter item: The AVPlayerItem to observe.
-    func addItemObservers(for item: AVPlayerItem){
-        // Observe the status property of the AVPlayerItem and handle changes using the provided closure.
-        statusObserver = item.observe(\.status, options: [.new, .old]) { [weak self] item, _ in
-            self?.handlePlayerItemStatusChange(item)
-            print(item)
-        }
-    }
 
     /// Responds to changes in the status of an AVPlayerItem.
     ///

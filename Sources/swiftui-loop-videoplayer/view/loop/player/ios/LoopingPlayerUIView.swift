@@ -73,7 +73,7 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     /// pauses the player, and clears out player-related references to assist in clean deinitialization.
     /// It also conditionally logs the cleanup process during debug mode.
     deinit {
-        cleanUp(player: &player, playerLooper: &playerLooper, statusObserver: &statusObserver, errorObserver: &errorObserver)
+        cleanUp(player: &player, playerLooper: &playerLooper, errorObserver: &errorObserver)
     }
 }
 #endif

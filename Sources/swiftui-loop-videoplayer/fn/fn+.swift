@@ -51,11 +51,9 @@ fileprivate func extractExtension(from name: String) -> String? {
 ///   - playerLooper: A reference to the AVPlayerLooper associated with the player. This is also passed by reference to nullify and help in cleaning up.
 ///   - statusObserver: A reference to an observer watching the player's status changes. Passing by reference allows the function to dispose of it properly.
 ///   - errorObserver: A reference to an observer monitoring errors from the player. It is managed in the same way as statusObserver to ensure proper cleanup.
-func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayerLooper?, statusObserver: inout NSKeyValueObservation?, errorObserver: inout NSKeyValueObservation?) {
+func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayerLooper?, errorObserver: inout NSKeyValueObservation?) {
     // Invalidate and remove references to observers
-    statusObserver?.invalidate()
     errorObserver?.invalidate()
-    statusObserver = nil
     errorObserver = nil
 
     // Pause the player and release player-related resources

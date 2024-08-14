@@ -332,6 +332,7 @@ extension AbstractPlayer{
         guard !filters.isEmpty else { return }
         
         filters = []
+        
         if apply{
             applyVideoComposition()
         }
