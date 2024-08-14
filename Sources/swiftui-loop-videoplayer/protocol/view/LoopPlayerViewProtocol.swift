@@ -11,7 +11,7 @@ import SwiftUI
 /// Protocol that defines the common functionalities and properties
 /// for looping video players on different platforms.
 @available(iOS 14, macOS 11, tvOS 14, *)
-@MainActor
+@MainActor @preconcurrency
 public protocol LoopPlayerViewProtocol {
     
 #if canImport(UIKit)

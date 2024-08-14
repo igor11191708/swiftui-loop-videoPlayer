@@ -15,7 +15,7 @@ import AVKit
 import UIKit
 
 @available(iOS 14.0, tvOS 14.0, *)
-@MainActor
+@MainActor @preconcurrency
 class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     
     /// `filters` is an array that stores CIFilter objects used to apply different image processing effects
@@ -71,9 +71,8 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     ///
     /// This method invalidates the status and error observers to prevent memory leaks,
     /// pauses the player, and clears out player-related references to assist in clean deinitialization.
-    /// It also conditionally logs the cleanup process during debug mode.
     deinit {
-        cleanUp(player: &player, playerLooper: &playerLooper, errorObserver: &errorObserver)
+        cleanUp()
     }
 }
 #endif

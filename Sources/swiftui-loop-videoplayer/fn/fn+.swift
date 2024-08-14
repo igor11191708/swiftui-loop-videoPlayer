@@ -44,31 +44,6 @@ fileprivate func extractExtension(from name: String) -> String? {
     return nil
 }
 
-/// Cleans up the resources associated with a video player.
-/// This function nullifies references to the player, player looper, and observers to facilitate resource deallocation and prevent memory leaks.
-/// - Parameters:
-///   - player: A reference to the AVQueuePlayer instance. This parameter is passed by reference to allow the function to nullify the external reference.
-///   - playerLooper: A reference to the AVPlayerLooper associated with the player. This is also passed by reference to nullify and help in cleaning up.
-///   - statusObserver: A reference to an observer watching the player's status changes. Passing by reference allows the function to dispose of it properly.
-///   - errorObserver: A reference to an observer monitoring errors from the player. It is managed in the same way as statusObserver to ensure proper cleanup.
-func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayerLooper?, errorObserver: inout NSKeyValueObservation?) {
-    // Invalidate and remove references to observers
-    errorObserver?.invalidate()
-    errorObserver = nil
-
-    // Pause the player and release player-related resources
-    player?.pause()
-    player = nil
-    playerLooper?.disableLooping()
-    playerLooper = nil
-
-    // Debugging statement to confirm cleanup in debug builds
-    #if DEBUG
-    print("Cleaned up AVPlayer and observers.")
-    #endif
-}
-
-
 /// Detects and returns the appropriate error based on settings and asset.
 /// - Parameters:
 ///   - settings: The settings for the video player.

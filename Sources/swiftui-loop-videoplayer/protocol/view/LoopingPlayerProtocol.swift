@@ -17,7 +17,7 @@ import AppKit
 /// Conforming types are expected to manage a video player that can loop content continuously,
 /// handle errors, and notify a delegate of important events.
 @available(iOS 14, macOS 11, tvOS 14, *)
-@MainActor
+@MainActor @preconcurrency
 public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     
     #if canImport(UIKit)
@@ -61,7 +61,7 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     func handlePlayerError(_ player: AVPlayer)
 }
 
-extension LoopingPlayerProtocol {
+internal extension LoopingPlayerProtocol {
     
     /// Updates the player to play a new asset and handles the playback state.
        ///
@@ -80,22 +80,21 @@ extension LoopingPlayerProtocol {
         if wasPlaying {
             player.pause()
         }
-        
+
         // Cleaning
         unloop()
-        while player.items().count > 0 {
-            player.advanceToNextItem()
-        }
+        clearPlayerQueue()
         removeAllFilters()
+
         
         // Replace the current item
         let newItem = AVPlayerItem(asset: asset)
         player.replaceCurrentItem(with: newItem)
         loop()
-        
-        player.seek(to: .zero, completionHandler: { _ in
+
+        player.seek(to: .zero, completionHandler: { [weak self] _ in
             if wasPlaying {
-                self.player?.play()
+                self?.play()
             }
         })
     }
@@ -131,7 +130,7 @@ extension LoopingPlayerProtocol {
     /// - Parameters:
     ///   - player: The AVQueuePlayer to be configured.
     ///   - gravity: The AVLayerVideoGravity determining how the video content should be scaled or fit within the player layer.
-    internal func configurePlayer(_ player: AVQueuePlayer, gravity: AVLayerVideoGravity) {
+    func configurePlayer(_ player: AVQueuePlayer, gravity: AVLayerVideoGravity) {
         player.isMuted = true
         playerLayer.player = player
         playerLayer.videoGravity = gravity
@@ -162,6 +161,16 @@ extension LoopingPlayerProtocol {
             self?.handlePlayerError(player)
         }
     }
+    
+    /// Removes observers for handling errors.
+    ///
+    /// This method ensures that the error observer is properly invalidated and the reference is cleared.
+    /// It is important to call this method to prevent memory leaks and remove any unwanted side effects
+    /// from obsolete observers.
+    func removeObservers() {
+        errorObserver?.invalidate()
+        errorObserver = nil
+    }
 
 
     /// Responds to changes in the status of an AVPlayerItem.
@@ -182,6 +191,42 @@ extension LoopingPlayerProtocol {
     func handlePlayerError(_ player: AVPlayer) {
         guard let error = player.error else { return }
         delegate?.didReceiveError(.remoteVideoError(error))
+    }
+    
+    /// Cleans up the player and its associated resources.
+    ///
+    /// This function performs several cleanup tasks to ensure that the player is properly
+    /// decommissioned. It pauses playback, removes any registered observers, stops any
+    /// looping, removes all applied filters, and finally nils out the player to release it
+    /// for garbage collection. This method is marked with `@preconcurrency` to indicate that
+    /// it is safe to call in both concurrent and non-concurrent environments, preserving
+    /// compatibility with older code that does not use Swift's new concurrency model.
+    @preconcurrency
+    func cleanUp() {
+        
+        pause()
+        
+        removeObservers()
+        
+        unloop()
+        
+        clearPlayerQueue()
+        
+        removeAllFilters()
+        
+        player = nil
+
+        #if DEBUG
+        print("Cleaned up AVPlayer and observers.")  // Debug log for confirming cleanup.
+        #endif
+    }
+    
+    func clearPlayerQueue() {
+        guard let items = player?.items() else { return }
+        for item in items {
+            // Additional cleanup or processing here
+            player?.remove(item)
+        }
     }
     
     func setCommand(_ value: PlaybackCommand) {

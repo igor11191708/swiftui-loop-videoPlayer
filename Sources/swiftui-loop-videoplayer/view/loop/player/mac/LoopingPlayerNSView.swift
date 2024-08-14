@@ -17,7 +17,7 @@ import AppKit
 /// A NSView subclass that loops video using AVFoundation on macOS.
 /// This class handles the initialization and management of a looping video player with customizable video gravity.
 @available(macOS 11.0, *)
-@MainActor
+@MainActor @preconcurrency
 class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {
     
     /// `filters` is an array that stores CIFilter objects used to apply different image processing effects
@@ -73,9 +73,8 @@ class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {
     ///
     /// This method invalidates the status and error observers to prevent memory leaks,
     /// pauses the player, and clears out player-related references to assist in clean deinitialization.
-    /// It also conditionally logs the cleanup process during debug mode.
     deinit {
-        cleanUp(player: &player, playerLooper: &playerLooper, errorObserver: &errorObserver)
+        cleanUp()
     }
 }
 #endif

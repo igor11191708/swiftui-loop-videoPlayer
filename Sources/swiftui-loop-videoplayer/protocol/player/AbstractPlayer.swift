@@ -9,7 +9,7 @@ import AVFoundation
 import CoreImage
 
 @available(iOS 14, macOS 11, tvOS 14, *)
-@MainActor
+@MainActor @preconcurrency
 public protocol AbstractPlayer: AnyObject {
     
     /// Retrieves the current item being played.
