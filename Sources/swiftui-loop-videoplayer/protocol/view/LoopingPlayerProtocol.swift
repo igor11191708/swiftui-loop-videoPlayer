@@ -78,14 +78,13 @@ internal extension LoopingPlayerProtocol {
         let wasPlaying = player.rate != 0
         
         if wasPlaying {
-            player.pause()
+            pause()
         }
 
         // Cleaning
         unloop()
         clearPlayerQueue()
         removeAllFilters()
-
         
         // Replace the current item
         let newItem = AVPlayerItem(asset: asset)
@@ -215,9 +214,10 @@ internal extension LoopingPlayerProtocol {
         removeAllFilters()
         
         player = nil
+        delegate = nil
 
         #if DEBUG
-        print("Cleaned up AVPlayer and observers.")  // Debug log for confirming cleanup.
+        print("Cleaned up Player!")
         #endif
     }
     
