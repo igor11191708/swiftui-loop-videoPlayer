@@ -330,3 +330,32 @@ extension AbstractPlayer{
     }
 
 }
+
+/// Cleans up resources associated with an AVQueuePlayer and its related components.
+/// This function stops the player, invalidates and clears the observer, and removes all items from the player queue.
+/// It also disables any looping mechanisms before setting the player and its components to nil, ensuring proper deinitialization.
+///
+/// - Parameters:
+///   - player: A reference to the AVQueuePlayer to be cleaned up. Modified directly to deallocate resources.
+///   - playerLooper: A reference to the AVPlayerLooper associated with the player. It's disabled and set to nil.
+///   - errorObserver: A reference to an NSKeyValueObservation monitoring the player, which is invalidated and set to nil.
+internal func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayerLooper?, errorObserver: inout NSKeyValueObservation?) {
+    errorObserver?.invalidate()
+    errorObserver = nil
+
+    player?.pause()
+    
+    playerLooper?.disableLooping()
+    playerLooper = nil
+
+    guard let items = player?.items() else { return }
+    for item in items {
+        player?.remove(item)
+    }
+    
+    player = nil
+
+    #if DEBUG
+    print("Cleaned up AVPlayer and observers.")
+    #endif
+}

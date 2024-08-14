@@ -227,35 +227,6 @@ internal extension LoopingPlayerProtocol {
         #endif
     }
     
-    /// Cleans up the player and its associated resources.
-    ///
-    /// This function performs several cleanup tasks to ensure that the player is properly
-    /// decommissioned. It pauses playback, removes any registered observers, stops any
-    /// looping, removes all applied filters, and finally nils out the player to release it
-    /// for garbage collection. This method is marked with `@preconcurrency` to indicate that
-    /// it is safe to call in both concurrent and non-concurrent environments, preserving
-    /// compatibility with older code that does not use Swift's new concurrency model.
-    @preconcurrency
-    func cleanUp() {
-        
-        pause()
-        
-        removeObservers()
-        
-        unloop()
-        
-        clearPlayerQueue()
-        
-        removeAllFilters()
-        
-        player = nil
-        delegate = nil
-
-        #if DEBUG
-        print("Cleaned up Player!")
-        #endif
-    }
-    
     /// Clears all items from the player's queue.
     func clearPlayerQueue() {
         guard let items = player?.items() else { return }

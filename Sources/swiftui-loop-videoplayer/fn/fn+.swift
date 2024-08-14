@@ -79,3 +79,4 @@ internal func combineFilters(_ filters: [CIFilter],_ brightness:  Float,_ contra
     }
     return allFilters
 }
+
