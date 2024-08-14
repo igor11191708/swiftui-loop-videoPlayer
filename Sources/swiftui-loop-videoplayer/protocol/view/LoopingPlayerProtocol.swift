@@ -96,6 +96,8 @@ extension LoopingPlayerProtocol {
         
         player?.replaceCurrentItem(with: newItem)
         
+        loop()
+        
         // Seek to the beginning of the item if you want to start from the start
         player?.seek(to: .zero, completionHandler: { _ in
             // Resume playing if the player was playing before
