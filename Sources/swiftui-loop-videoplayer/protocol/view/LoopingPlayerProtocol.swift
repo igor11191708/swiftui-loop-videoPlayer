@@ -179,7 +179,7 @@ internal extension LoopingPlayerProtocol {
     ///
     /// The function starts by clamping the source image to ensure coordinates remain within the image bounds,
     /// applies each filter in the provided array, and completes by returning the modified image to the composition request.
-    func handleVideoComposition(request: AVAsynchronousCIImageFilteringRequest, filters: [CIFilter]) {
+    static func handleVideoComposition(request: AVAsynchronousCIImageFilteringRequest, filters: [CIFilter]) {
         // Start with the source image, ensuring it's clamped to avoid any coordinate issues
         var currentImage = request.sourceImage.clampedToExtent()
         
@@ -213,8 +213,8 @@ internal extension LoopingPlayerProtocol {
                
         player.items().forEach{ item in
             
-            let videoComposition = AVVideoComposition(asset: item.asset, applyingCIFiltersWithHandler: { [weak self] request in
-                self?.handleVideoComposition(request: request, filters: allFilters)
+            let videoComposition = AVVideoComposition(asset: item.asset, applyingCIFiltersWithHandler: { request in
+                Self.handleVideoComposition(request: request, filters: allFilters)
             })
 
             item.videoComposition = videoComposition
