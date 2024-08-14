@@ -356,6 +356,6 @@ internal func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayer
     player = nil
 
     #if DEBUG
-    print("Cleaned up AVPlayer and observers.")
+    print("Cleaned up.")
     #endif
 }
