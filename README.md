@@ -35,17 +35,32 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | `mute`                      | Command to mute the video. By default, the player is muted.                                                                                           |
 | `unmute`                    | Command to unmute the video.                                                                                                                          |
 | `volume(Float)`             | Command to adjust the volume of the video playback. The `volume` parameter is a `Float` value between 0.0 (mute) and 1.0 (full volume). If a value outside this range is passed, it will be clamped to the nearest valid value (0.0 or 1.0). |
-| `subtitles(String?)`        | Command to set subtitles to a specified language or turn them off. Pass a language code (e.g., "en" for English) to set subtitles, or `nil` to turn them off. |
 | `playbackSpeed(Float)`      | Command to adjust the playback speed of the video. The `speed` parameter is a `Float` value representing the playback speed (e.g., 1.0 for normal speed, 0.5 for half speed, 2.0 for double speed). If a negative value is passed, it will be clamped to 0.0. |
 | `loop`                      | Command to enable looping of the video playback. By default, looping is enabled, so this command will have no effect if looping is already active.     |
 | `unloop`                    | Command to disable looping of the video playback. This command will only take effect if the video is currently being looped.                                                                |
+
+### Visual Adjustment Commands
+
+| Command                     | Description                                                                                                                                          |
+|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `brightness(Float)`         | Command to adjust the brightness of the video playback. The `brightness` parameter is a `Float` value typically ranging from -1.0 (darkest) to 1.0 (brightest). Values outside this range will be clamped to the nearest valid value. |
 | `contrast(Float)`           | Command to adjust the contrast of the video playback. The `contrast` parameter is a `Float` value typically ranging from 0.0 (no contrast) to 4.0 (high contrast). Values outside this range will be clamped to the nearest valid value. |
 | `filter(CIFilter, clear: Bool)` | Applies a specific Core Image filter to the video. If `clear` is true, any existing filters on the stack are removed before applying the new filter; otherwise, the new filter is added to the existing stack. |
 | `removeAllFilters`          | Command to remove all applied filters from the video playback.                                                                                        |
-| `audioTrack(String)`        | Command to select a specific audio track based on language code. The `languageCode` parameter specifies the desired audio track's language (e.g., "en" for English). |
+
+### Vector Graphics Commands
+
+| Command                                      | Description                                                                                                                                          |
+|----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `addVector(ShapeLayerBuilderProtocol, clear: Bool)` | Command to add a vector graphic layer over the video stream. The `builder` parameter is an instance conforming to `ShapeLayerBuilderProtocol`. The `clear` parameter specifies whether to clear existing vector layers before adding the new one.                                                                                                           |
-| `removeAllVectors`                       | Command to remove all vector graphic layers from the video stream. |
+| `removeAllVectors`                           | Command to remove all vector graphic layers from the video stream.                                                                                    |
+
+### Audio & Language Commands
+
+| Command                     | Description                                                                                                                                          |
+|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `audioTrack(String)`        | Command to select a specific audio track based on language code. The `languageCode` parameter specifies the desired audio track's language (e.g., "en" for English). |
+| `subtitles(String?)`        | Command to set subtitles to a specified language or turn them off. Pass a language code (e.g., "en" for English) to set subtitles, or `nil` to turn them off. |
 
 
 ### Additional Notes on Adding and Removing Vector Graphics
