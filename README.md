@@ -23,6 +23,8 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | `init(fileName:ext:gravity:` <br> `eColor:eFontSize:command:)` | Constructor       | Initializes the player with specific video parameters and playback command binding. |
 | `init(settings: () -> VideoSettings, command:)` | Constructor | Initializes the player with a declarative settings block and playback command binding. |
 
+## Commands
+
 ### Playback Commands
 
 | Command                     | Description                                                                                                                                          |
