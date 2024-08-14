@@ -59,13 +59,9 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
 internal extension LoopingPlayerProtocol {
     
     /// Updates the player to play a new asset and handles the playback state.
-       ///
-       /// This method pauses the player if it was previously playing,
-       /// replaces the current player item with a new item created from the provided asset,
-       /// and seeks to the start of the new item. It resumes playing if the player was playing before the update.
-       ///
-       /// - Parameters:
-       ///   - asset: The AVURLAsset to load into the player.
+    ///
+    /// - Parameters:
+    ///   - asset: The AVURLAsset to load into the player.
     func update(asset: AVURLAsset){
         
         guard let player = player else { return }
@@ -85,7 +81,8 @@ internal extension LoopingPlayerProtocol {
         let newItem = AVPlayerItem(asset: asset)
         player.replaceCurrentItem(with: newItem)
         loop()
-
+        applyVideoComposition()
+        
         player.seek(to: .zero, completionHandler: { [weak self] _ in
             if wasPlaying {
                 self?.play()
@@ -94,10 +91,6 @@ internal extension LoopingPlayerProtocol {
     }
     
     /// Sets up the player components using the provided asset and video gravity.
-    ///
-    /// This method initializes an AVPlayerItem with the provided asset,
-    /// configures an AVQueuePlayer for playback, sets up the player for the view,
-    /// and adds necessary observers to monitor playback status and errors.
     ///
     /// - Parameters:
     ///   - asset: The AVURLAsset to be played.
@@ -119,8 +112,6 @@ internal extension LoopingPlayerProtocol {
     
     /// Configures the provided AVQueuePlayer with specific properties for video playback.
     ///
-    /// This method sets the video gravity and muted state of the player, and assigns it to a player layer.
-    /// It is intended to set up the player with the necessary configuration for video presentation based on the given gravity.
     /// - Parameters:
     ///   - player: The AVQueuePlayer to be configured.
     ///   - gravity: The AVLayerVideoGravity determining how the video content should be scaled or fit within the player layer.
@@ -142,6 +133,9 @@ internal extension LoopingPlayerProtocol {
         #endif
         compositeLayer.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
         loop()
+        if !filters.isEmpty{ // have an idea for the feature
+            applyVideoComposition()
+        }
         player.play()
     }
     
@@ -176,6 +170,63 @@ internal extension LoopingPlayerProtocol {
         delegate?.didReceiveError(.remoteVideoError(error))
     }
     
+    /// Processes an asynchronous video composition request by applying a series of CIFilters.
+    /// This function ensures each frame processed conforms to specified filter effects.
+    ///
+    /// - Parameters:
+    ///   - request: An AVAsynchronousCIImageFilteringRequest object representing the current video frame to be processed.
+    ///   - filters: An array of CIFilters to be applied sequentially to the video frame.
+    ///
+    /// The function starts by clamping the source image to ensure coordinates remain within the image bounds,
+    /// applies each filter in the provided array, and completes by returning the modified image to the composition request.
+    func handleVideoComposition(request: AVAsynchronousCIImageFilteringRequest, filters: [CIFilter]) {
+        // Start with the source image, ensuring it's clamped to avoid any coordinate issues
+        var currentImage = request.sourceImage.clampedToExtent()
+        
+        // Apply each filter in the array to the image
+        for filter in filters {
+            filter.setValue(currentImage, forKey: kCIInputImageKey)
+            if let outputImage = filter.outputImage {
+                currentImage = outputImage.clampedToExtent()
+            }
+        }
+        // Finish the composition request by outputting the final image
+        request.finish(with: currentImage, context: nil)
+    }
+    
+    /// Applies the current set of filters to the video using an AVVideoComposition.
+    /// This method combines the existing filters and brightness/contrast adjustments, creates a new video composition,
+    /// and assigns it to the current AVPlayerItem. The video is paused during this process to ensure smooth application.
+    /// This method is not supported on Vision OS.
+    func applyVideoComposition() {
+        guard let player = player else { return }
+        let allFilters = combineFilters(filters, brightness, contrast)
+        
+        #if !os(visionOS)
+        // Optionally, check if the player is currently playing
+        let wasPlaying = player.rate != 0
+        
+        // Pause the player if it was playing
+        if wasPlaying {
+            player.pause()
+        }
+               
+        player.items().forEach{ item in
+            
+            let videoComposition = AVVideoComposition(asset: item.asset, applyingCIFiltersWithHandler: { [weak self] request in
+                self?.handleVideoComposition(request: request, filters: allFilters)
+            })
+
+            item.videoComposition = videoComposition
+        }
+        
+        if wasPlaying{
+            player.play()
+        }
+        
+        #endif
+    }
+    
     /// Cleans up the player and its associated resources.
     ///
     /// This function performs several cleanup tasks to ensure that the player is properly
@@ -205,36 +256,36 @@ internal extension LoopingPlayerProtocol {
         #endif
     }
     
+    /// Clears all items from the player's queue.
     func clearPlayerQueue() {
         guard let items = player?.items() else { return }
         for item in items {
-            // Additional cleanup or processing here
             player?.remove(item)
         }
     }
     
+    /// Sets the playback command for the video player.
+    /// - Parameter value: The `PlaybackCommand` to set. This can be one of the following:
+    ///   - `play`: Command to play the video.
+    ///   - `pause`: Command to pause the video.
+    ///   - `seek(to:)`: Command to seek to a specific time in the video.
+    ///   - `begin`: Command to position the video at the beginning.
+    ///   - `end`: Command to position the video at the end.
+    ///   - `mute`: Command to mute the video.
+    ///   - `unmute`: Command to unmute the video.
+    ///   - `volume`: Command to adjust the volume of the video playback.
+    ///   - `subtitles`: Command to set subtitles to a specified language or turn them off.
+    ///   - `playbackSpeed`: Command to adjust the playback speed of the video.
+    ///   - `loop`: Command to enable looping of the video playback.
+    ///   - `unloop`: Command to disable looping of the video playback.
+    ///   - `brightness`: Command to adjust the brightness of the video playback.
+    ///   - `contrast`: Command to adjust the contrast of the video playback.
+    ///   - `filter`: Command to apply a specific Core Image filter to the video.
+    ///   - `removeAllFilters`: Command to remove all applied filters from the video playback.
+    ///   - `audioTrack`: Command to select a specific audio track based on language code.
+    ///   - `vector`: Sets a vector graphic operation on the video player.
+    ///   - `removeAllVectors`: Clears all vector graphics from the video player.
     func setCommand(_ value: PlaybackCommand) {
-        /// Sets the playback command for the video player.
-        /// - Parameter value: The `PlaybackCommand` to set. This can be one of the following:
-        ///   - `play`: Command to play the video.
-        ///   - `pause`: Command to pause the video.
-        ///   - `seek(to:)`: Command to seek to a specific time in the video.
-        ///   - `begin`: Command to position the video at the beginning.
-        ///   - `end`: Command to position the video at the end.
-        ///   - `mute`: Command to mute the video.
-        ///   - `unmute`: Command to unmute the video.
-        ///   - `volume`: Command to adjust the volume of the video playback.
-        ///   - `subtitles`: Command to set subtitles to a specified language or turn them off.
-        ///   - `playbackSpeed`: Command to adjust the playback speed of the video.
-        ///   - `loop`: Command to enable looping of the video playback.
-        ///   - `unloop`: Command to disable looping of the video playback.
-        ///   - `brightness`: Command to adjust the brightness of the video playback.
-        ///   - `contrast`: Command to adjust the contrast of the video playback.
-        ///   - `filter`: Command to apply a specific Core Image filter to the video.
-        ///   - `removeAllFilters`: Command to remove all applied filters from the video playback.
-        ///   - `audioTrack`: Command to select a specific audio track based on language code.
-        ///   - `vector`: Sets a vector graphic operation on the video player.
-        ///   - `removeAllVectors`: Clears all vector graphics from the video player.
         switch value {
         case .play:
             play()

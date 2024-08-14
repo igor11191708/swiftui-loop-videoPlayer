@@ -89,6 +89,8 @@ public protocol AbstractPlayer: AnyObject {
 
     /// Sets the playback command for the video player.
     func setCommand(_ value: PlaybackCommand)
+    
+    func applyVideoComposition()
 }
 
 extension AbstractPlayer{
@@ -286,38 +288,6 @@ extension AbstractPlayer{
         filters.append(value)
     }
 
-    /// Applies the current set of filters to the video using an AVVideoComposition.
-    /// This method combines the existing filters and brightness/contrast adjustments, creates a new video composition,
-    /// and assigns it to the current AVPlayerItem. The video is paused during this process to ensure smooth application.
-    /// This method is not supported on Vision OS.
-    func applyVideoComposition() {
-        guard let player = player else { return }
-        let allFilters = combineFilters(filters, brightness, contrast)
-        
-        #if !os(visionOS)
-        // Optionally, check if the player is currently playing
-        let wasPlaying = player.rate != 0
-        
-        // Pause the player if it was playing
-        if wasPlaying {
-            player.pause()
-        }
-               
-        player.items().forEach{ item in
-            
-            let videoComposition = AVVideoComposition(asset: item.asset, applyingCIFiltersWithHandler: { request in
-                handleVideoComposition(request: request, filters: allFilters)
-            })
-
-            item.videoComposition = videoComposition
-        }
-        
-        if wasPlaying{
-            player.play()
-        }
-        
-        #endif
-    }
 
     /// Removes all applied CIFilters from the video playback.
     ///
