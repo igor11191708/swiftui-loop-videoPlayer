@@ -64,6 +64,12 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | `audioTrack(String)`        | Command to select a specific audio track based on language code. The `languageCode` parameter specifies the desired audio track's language (e.g., "en" for English). |
 | `subtitles(String?)`        | Command to set subtitles to a specified language or turn them off. Pass a language code (e.g., "en" for English) to set subtitles, or `nil` to turn them off. |
 
+## Player Events
+| Event                              | Description                                                                                                                                       |
+|------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `idle`                             | Represents a state where the player is idle, meaning it is not currently performing any action.                                                    |
+| `seek(Bool, currentTime: Double)`  | Represents a seek action within the player. The first parameter (`Bool`) indicates whether the seek was successful, and the second parameter (`currentTime`) provides the time (in seconds) to which the player is seeking. |
+
 
 ### Additional Notes on Adding and Removing Vector Graphics
 
@@ -128,9 +134,12 @@ or in a declarative way
                 }
             }
         } 
-        .onTimeChange { newTime in
+        .onPlayerTimeChange { newTime in
             // Current video playback time
-       }  
+        }  
+        .onPlayerEventChange { event in
+            // Player event
+        }
 ``` 
           
  ```swift            
