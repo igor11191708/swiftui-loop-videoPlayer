@@ -26,7 +26,7 @@ internal struct OnTimeChangeModifier: ViewModifier {
 }
 
 public extension View{
-    func onTimeChange(perform action: @escaping (Double) -> Void) -> some View {
+    func onPlayerTimeChange(perform action: @escaping (Double) -> Void) -> some View {
         self.modifier(OnTimeChangeModifier(onTimeChange: action))
     }
 }
