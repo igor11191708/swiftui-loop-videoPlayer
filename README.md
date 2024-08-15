@@ -20,7 +20,7 @@ Please note that using videos from URLs requires ensuring that you have the righ
 |---------------------------------------|-------------------------------|------------------------------------------------------------------------|
 | `settings`                            | `VideoSettings`                    | A struct containing configuration settings for the video player.       |
 | `command`                             | `Binding<PlaybackCommand>`    | A binding to control playback actions (play, pause, or seek).          |
-| `init(fileName:ext:gravity:timePublishing:eColor:eFontSize:command:)` | Constructor       | Initializes the player with specific video parameters and playback command binding. |
+| `init(fileName:ext:gravity:timePublishing: ` <br> ` eColor:eFontSize:command:)` | Constructor       | Initializes the player with specific video parameters and playback command binding. |
 | `init(settings: () -> VideoSettings, command:)` | Constructor | Initializes the player with a declarative settings block and playback command binding. |
 
 ## Commands
