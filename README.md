@@ -68,7 +68,7 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | Event                              | Description                                                                                                                                       |
 |------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | `idle`                             | Represents a state where the player is idle, meaning it is not currently performing any action.                                                    |
-| `seek(Bool, currentTime: Double)`  | Represents a seek action within the player. The first parameter (`Bool`) indicates whether the seek was successful, and the second parameter (`currentTime`) provides the time (in seconds) to which the player is seeking. |
+| `seek(Bool, currentTime: Double)`  | Represents an end seek action within the player. The first parameter (`Bool`) indicates whether the seek was successful, and the second parameter (`currentTime`) provides the time (in seconds) to which the player is seeking. |
 
 
 ### Additional Notes on Adding and Removing Vector Graphics
