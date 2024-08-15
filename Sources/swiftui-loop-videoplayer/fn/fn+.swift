@@ -82,3 +82,27 @@ internal func combineFilters(_ filters: [CIFilter],_ brightness:  Float,_ contra
     return allFilters
 }
 
+/// Processes an asynchronous video composition request by applying a series of CIFilters.
+/// This function ensures each frame processed conforms to specified filter effects.
+///
+/// - Parameters:
+///   - request: An AVAsynchronousCIImageFilteringRequest object representing the current video frame to be processed.
+///   - filters: An array of CIFilters to be applied sequentially to the video frame.
+///
+/// The function starts by clamping the source image to ensure coordinates remain within the image bounds,
+/// applies each filter in the provided array, and completes by returning the modified image to the composition request.
+internal func handleVideoComposition(request: AVAsynchronousCIImageFilteringRequest, filters: [CIFilter]) {
+    // Start with the source image, ensuring it's clamped to avoid any coordinate issues
+    var currentImage = request.sourceImage.clampedToExtent()
+    
+    // Apply each filter in the array to the image
+    for filter in filters {
+        filter.setValue(currentImage, forKey: kCIInputImageKey)
+        if let outputImage = filter.outputImage {
+            currentImage = outputImage.clampedToExtent()
+        }
+    }
+    // Finish the composition request by outputting the final image
+    request.finish(with: currentImage, context: nil)
+}
+

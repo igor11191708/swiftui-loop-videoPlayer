@@ -84,15 +84,9 @@ internal extension LoopingPlayerProtocol {
         
         // Replace the current item
         let newItem = AVPlayerItem(asset: asset)
-        player.replaceCurrentItem(with: newItem)
+        player.insert(newItem, after: nil)
         loop()
-        applyVideoComposition()
-        
-        player.seek(to: .zero, completionHandler: { [weak self] _ in
-            if wasPlaying {
-                self?.play()
-            }
-        })
+        play()
     }
     
     /// Sets up the player components with the specified media asset, display properties, and optional time publishing interval.
@@ -188,63 +182,6 @@ internal extension LoopingPlayerProtocol {
     func handlePlayerError(_ player: AVPlayer) {
         guard let error = player.error else { return }
         delegate?.didReceiveError(.remoteVideoError(error))
-    }
-    
-    /// Processes an asynchronous video composition request by applying a series of CIFilters.
-    /// This function ensures each frame processed conforms to specified filter effects.
-    ///
-    /// - Parameters:
-    ///   - request: An AVAsynchronousCIImageFilteringRequest object representing the current video frame to be processed.
-    ///   - filters: An array of CIFilters to be applied sequentially to the video frame.
-    ///
-    /// The function starts by clamping the source image to ensure coordinates remain within the image bounds,
-    /// applies each filter in the provided array, and completes by returning the modified image to the composition request.
-    static func handleVideoComposition(request: AVAsynchronousCIImageFilteringRequest, filters: [CIFilter]) {
-        // Start with the source image, ensuring it's clamped to avoid any coordinate issues
-        var currentImage = request.sourceImage.clampedToExtent()
-        
-        // Apply each filter in the array to the image
-        for filter in filters {
-            filter.setValue(currentImage, forKey: kCIInputImageKey)
-            if let outputImage = filter.outputImage {
-                currentImage = outputImage.clampedToExtent()
-            }
-        }
-        // Finish the composition request by outputting the final image
-        request.finish(with: currentImage, context: nil)
-    }
-    
-    /// Applies the current set of filters to the video using an AVVideoComposition.
-    /// This method combines the existing filters and brightness/contrast adjustments, creates a new video composition,
-    /// and assigns it to the current AVPlayerItem. The video is paused during this process to ensure smooth application.
-    /// This method is not supported on Vision OS.
-    func applyVideoComposition() {
-        guard let player = player else { return }
-        let allFilters = combineFilters(filters, brightness, contrast)
-        
-        #if !os(visionOS)
-        // Optionally, check if the player is currently playing
-        let wasPlaying = player.rate != 0
-        
-        // Pause the player if it was playing
-        if wasPlaying {
-            player.pause()
-        }
-               
-        player.items().forEach{ item in
-            
-            let videoComposition = AVVideoComposition(asset: item.asset, applyingCIFiltersWithHandler: { request in
-                Self.handleVideoComposition(request: request, filters: allFilters)
-            })
-
-            item.videoComposition = videoComposition
-        }
-        
-        if wasPlaying{
-            player.play()
-        }
-        
-        #endif
     }
     
     /// Clears all items from the player's queue.
