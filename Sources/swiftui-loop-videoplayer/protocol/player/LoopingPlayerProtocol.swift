@@ -146,7 +146,6 @@ internal extension LoopingPlayerProtocol {
         if let timePublishing{
             timeObserverToken = player.addPeriodicTimeObserver(forInterval: timePublishing, queue: .main) { [weak self] time in
                 self?.delegate?.didPassedTime(seconds: time.seconds)
-                print(time.seconds)
             }
         }
         
