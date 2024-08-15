@@ -20,7 +20,7 @@ Please note that using videos from URLs requires ensuring that you have the righ
 |---------------------------------------|-------------------------------|------------------------------------------------------------------------|
 | `settings`                            | `VideoSettings`                    | A struct containing configuration settings for the video player.       |
 | `command`                             | `Binding<PlaybackCommand>`    | A binding to control playback actions (play, pause, or seek).          |
-| `init(fileName:ext:gravity:` <br> `eColor:eFontSize:command:)` | Constructor       | Initializes the player with specific video parameters and playback command binding. |
+| `init(fileName:ext:gravity:timePublishing:eColor:eFontSize:command:)` | Constructor       | Initializes the player with specific video parameters and playback command binding. |
 | `init(settings: () -> VideoSettings, command:)` | Constructor | Initializes the player with a declarative settings block and playback command binding. |
 
 ## Commands
@@ -90,6 +90,7 @@ Integrating vector graphics into SwiftUI views, particularly during lifecycle ev
 | **SourceName** | The URL or local filename of the video. If a valid URL (http or https) is provided, the video will be streamed from the URL. If not a URL, the system will check if a video with the given name exists in the local bundle. The local name provided can either include an extension or be without one. The system first checks if the local name contains an extension. If the local name includes an extension, it extracts this extension and uses it as the default. If the local name does not contain an extension, the system assigns a default extension of .mp4 The default file extension can be set up via Ext param. | - |
 | **Ext** | File extension for the video, used when loading from local resources. This is optional when a URL is provided and the URL ends with the video file extension. | "mp4" |
 | **Gravity** | How the video content should be resized to fit the player's bounds. | .resizeAspect |
+| **TimePublishing** | Specifies the interval at which the player publishes the current playback time. If the parameter is passed during initialization, the player will publish the time according to the input settings. You can pass just `TimePublishing` without any value to use the default interval of 1 second, or you can pass a specific `CMTime` value to set a custom interval. | 1 second (CMTime with 1 second and preferred timescale of 600) |
 | **EColor** | Error message text color. | .red |
 | **EFontSize** | Size of the error text. | 17.0 |
 
@@ -120,12 +121,16 @@ or in a declarative way
                 SourceName("swipe")
                 Ext("mp8") // Set default extension here If not provided then mp4 is default
                 Gravity(.resizeAspectFill)
+                TimePublishing()
                 ErrorGroup{
                     EColor(.accentColor)
                     EFontSize(27)
                 }
             }
-        }   
+        } 
+        .onTimeChange { newTime in
+            // Current video playback time
+       }  
 ``` 
           
  ```swift            
