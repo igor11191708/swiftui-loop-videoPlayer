@@ -35,6 +35,9 @@ public protocol AbstractPlayer: AnyObject {
     /// The queue player that plays the video items.
     var player: AVQueuePlayer? { get set }
     
+    /// A Boolean value indicating whether the player is currently seeking to a new time.
+    var isSeeking : Bool { get set }
+    
     // Playback control methods
 
     /// Initiates or resumes playback of the video.
@@ -142,19 +145,26 @@ extension AbstractPlayer{
             return
         }
         
-        let endTime = CMTimeGetSeconds(duration)
+        isSeeking = true
         
-        if time < 0 {
+        let endTime = CMTimeGetSeconds(duration)
+        let seekTime : CMTime
+        
+        if time <= 0 {
             // If the time is negative, seek to the start of the video
-            player.seek(to: .zero)
-        } else if time > endTime {
+            seekTime = .zero
+        } else if time >= endTime {
             // If the time exceeds the video duration, seek to the end of the video
             let endCMTime = CMTime(seconds: endTime, preferredTimescale: duration.timescale)
-            player.seek(to: endCMTime)
+            seekTime = endCMTime
         } else {
             // Otherwise, seek to the specified time
             let seekCMTime = CMTime(seconds: time, preferredTimescale: duration.timescale)
-            player.seek(to: seekCMTime)
+            seekTime = seekCMTime
+        }
+        
+        player.seek(to: seekTime){ [weak self] value in
+            self?.isSeeking = false
         }
     }
     
