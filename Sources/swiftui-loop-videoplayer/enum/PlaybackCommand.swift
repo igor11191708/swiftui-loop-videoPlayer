@@ -1,5 +1,14 @@
+//
+//  PlaybackCommand.swift
+//
+//
+//  Created by Igor Shelopaev on 05.08.24.
+//
+
 import AVFoundation
+#if canImport(CoreImage)
 import CoreImage
+#endif
 
 /// An enumeration of possible playback commands.
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)

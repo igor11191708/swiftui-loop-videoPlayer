@@ -40,20 +40,26 @@ class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {
     /// The queue player that plays the video items.
     internal var player: AVQueuePlayer?
     
+    /// Declare a variable to hold the time observer token outside the if statement
+    internal var timeObserverToken: Any?
+    
     /// Observer for errors from the AVQueuePlayer.
     internal var errorObserver: NSKeyValueObservation?
     
     /// The delegate to be notified about errors encountered by the player.
-    weak var delegate: PlayerErrorDelegate?
+    weak var delegate: PlayerDelegateProtocol?
 
-    /// Initializes a new looping video player view with the specified asset and gravity.
+    /// Initializes a new instance of the view
     ///
     /// - Parameters:
-    ///   - asset: The AVURLAsset to be played.
-    ///   - gravity: The AVLayerVideoGravity to be applied to the video layer.
-    required init(asset: AVURLAsset, gravity: AVLayerVideoGravity) {
+    ///   - asset: The AVURLAsset to be used in the player.
+    ///   - gravity: Specifies how the video content should be displayed within the layer bounds.
+    ///   - timePublishing: Optional CMTime that determines the interval at which the video current time should be published. Pass nil to disable time publishing.
+    required init(asset: AVURLAsset, gravity: AVLayerVideoGravity, timePublishing: CMTime?) {
         super.init(frame: .zero)
-        setupPlayerComponents(asset: asset, gravity: gravity)
+        setupPlayerComponents(
+            asset: asset, gravity: gravity, timePublishing: timePublishing
+        )
     }
 
     required init?(coder: NSCoder) {
@@ -71,7 +77,7 @@ class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {
     /// This method invalidates the status and error observers to prevent memory leaks,
     /// pauses the player, and clears out player-related references to assist in clean deinitialization.
     deinit {
-        cleanUp(player: &player, playerLooper: &playerLooper, errorObserver: &errorObserver)
+        cleanUp(player: &player, playerLooper: &playerLooper, errorObserver: &errorObserver, timeObserverToken: &timeObserverToken)
     }
 }
 #endif

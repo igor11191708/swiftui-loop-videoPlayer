@@ -7,6 +7,7 @@
 
 import AVFoundation
 import SwiftUI
+import Combine
 
 /// Protocol that defines the common functionalities and properties
 /// for looping video players on different platforms.
@@ -42,7 +43,7 @@ public protocol LoopPlayerViewProtocol {
     ///   - command: A binding to a `PlaybackCommand` that controls playback actions.
     ///
     /// This initializer sets up the necessary configuration and command bindings for playback functionality.
-    init(settings: Binding<VideoSettings>, command: Binding<PlaybackCommand>)
+    init(settings: Binding<VideoSettings>, command: Binding<PlaybackCommand>, timePublisher : PassthroughSubject<Double, Never>)
     
 }
 
@@ -83,7 +84,7 @@ public extension LoopPlayerViewProtocol{
         asset: AVURLAsset?) -> PlayerView? {
         
         if let asset{
-            let player = PlayerView(asset: asset, gravity: settings.gravity)
+            let player = PlayerView(asset: asset, gravity: settings.gravity, timePublishing: settings.timePublishing)
             container.addSubview(player)
             activateFullScreenConstraints(for: player, in: container)
             return player

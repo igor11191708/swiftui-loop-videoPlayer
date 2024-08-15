@@ -7,7 +7,9 @@
 
 import Foundation
 import AVFoundation
+#if canImport(CoreImage)
 import CoreImage
+#endif
 
 /// Retrieves an `AVURLAsset` based on specified video settings.
 /// - Parameter settings: The `VideoSettings` object containing details like name and extension of the video.

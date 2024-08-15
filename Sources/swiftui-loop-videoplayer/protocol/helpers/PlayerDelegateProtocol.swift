@@ -1,5 +1,5 @@
 //
-//  PlayerErrorDelegate.swift
+//  PlayerDelegateProtocol.swift
 //
 //
 //  Created by Igor Shelopaev on 05.08.24.
@@ -11,7 +11,7 @@ import Foundation
 ///
 /// Conforming to this protocol allows a class to respond to error events that occur within a media player context.
 @available(iOS 14, macOS 11, tvOS 14, *)
-public protocol PlayerErrorDelegate: AnyObject {
+public protocol PlayerDelegateProtocol: AnyObject {
     /// Called when an error is encountered within the media player.
     ///
     /// This method provides a way for delegate objects to respond to error conditions, allowing them to handle or
@@ -20,4 +20,6 @@ public protocol PlayerErrorDelegate: AnyObject {
     /// - Parameter error: The specific `VPErrors` instance describing what went wrong.
     @MainActor
     func didReceiveError(_ error: VPErrors)
+    
+    func didPassedTime(seconds : Double)
 }

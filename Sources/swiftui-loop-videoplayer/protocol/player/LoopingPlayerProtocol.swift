@@ -30,18 +30,23 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     var playerLayer : AVPlayerLayer { get }
 
     /// The delegate to be notified about errors encountered by the player.
-    var delegate: PlayerErrorDelegate? { get set }
+    var delegate: PlayerDelegateProtocol? { get set }
 
     /// An optional NSKeyValueObservation to monitor errors encountered by the video player.
     /// This observer should be configured to detect and handle errors from the AVQueuePlayer,
     /// ensuring that all playback errors are managed and reported appropriately.
     var errorObserver: NSKeyValueObservation? { get set }
+    
+    /// Declare a variable to hold the time observer token outside the if statement
+    var timeObserverToken: Any? { get set }
 
-    /// Initializes a video player with a specified media asset and layer gravity.
+    /// Initializes a new instance of the view
+    ///
     /// - Parameters:
-    ///   - asset: The `AVURLAsset` representing the media content to be played. This asset encapsulates the properties of the media file.
-    ///   - gravity: The `AVLayerVideoGravity` that determines how the video content is displayed within the bounds of the player layer. Common values are `.resizeAspect`, `.resizeAspectFill`, and `.resize` to control the scaling and filling behavior of the video content.
-    init(asset: AVURLAsset, gravity: AVLayerVideoGravity)
+    ///   - asset: The AVURLAsset to be used in the player.
+    ///   - gravity: Specifies how the video content should be displayed within the layer bounds.
+    ///   - timePublishing: Optional CMTime that determines the interval at which the video current time should be published. Pass nil to disable time publishing.
+    init(asset: AVURLAsset, gravity: AVLayerVideoGravity, timePublishing: CMTime?)
     
     /// Sets up the necessary observers on the AVPlayerItem and AVQueuePlayer to monitor changes and errors.
     ///
@@ -90,23 +95,24 @@ internal extension LoopingPlayerProtocol {
         })
     }
     
-    /// Sets up the player components using the provided asset and video gravity.
+    /// Sets up the player components with the specified media asset, display properties, and optional time publishing interval.
     ///
     /// - Parameters:
-    ///   - asset: The AVURLAsset to be played.
-    ///   - gravity: The AVLayerVideoGravity to be applied to the video layer.
-    func setupPlayerComponents(asset: AVURLAsset, gravity: AVLayerVideoGravity) {
-        // Create an AVPlayerItem with the provided asset
+    ///   - asset: The AVURLAsset representing the video content.
+    ///   - gravity: Determines how the video content is scaled or fit within the player view.
+    ///   - timePublishing: Optional interval for publishing the current playback time; nil disables this feature.
+    func setupPlayerComponents(
+        asset: AVURLAsset,
+        gravity: AVLayerVideoGravity,
+        timePublishing:  CMTime?
+    ) {
         let item = AVPlayerItem(asset: asset)
         
-        // Initialize an AVQueuePlayer with the player item
         let player = AVQueuePlayer(items: [item])
         self.player = player
         
-        // Configure the player with the specified gravity
-        configurePlayer(player, gravity: gravity)
+        configurePlayer(player, gravity: gravity, timePublishing: timePublishing)
         
-        // Set up observers to monitor status and errors
         setupObservers(for: item, player: player)
     }
     
@@ -115,7 +121,12 @@ internal extension LoopingPlayerProtocol {
     /// - Parameters:
     ///   - player: The AVQueuePlayer to be configured.
     ///   - gravity: The AVLayerVideoGravity determining how the video content should be scaled or fit within the player layer.
-    func configurePlayer(_ player: AVQueuePlayer, gravity: AVLayerVideoGravity) {
+    ///   - timePublishing: Optional interval for publishing the current playback time; nil disables this feature.
+    func configurePlayer(
+        _ player: AVQueuePlayer,
+        gravity: AVLayerVideoGravity,
+        timePublishing:  CMTime?
+    ) {
         player.isMuted = true
         playerLayer.player = player
         playerLayer.videoGravity = gravity
@@ -133,9 +144,18 @@ internal extension LoopingPlayerProtocol {
         #endif
         compositeLayer.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
         loop()
+        
         if !filters.isEmpty{ // have an idea for the feature
             applyVideoComposition()
         }
+        
+        if let timePublishing{
+            timeObserverToken = player.addPeriodicTimeObserver(forInterval: timePublishing, queue: .main) { [weak self] time in
+                self?.delegate?.didPassedTime(seconds: time.seconds)
+                print(time.seconds)
+            }
+        }
+        
         player.play()
     }
     

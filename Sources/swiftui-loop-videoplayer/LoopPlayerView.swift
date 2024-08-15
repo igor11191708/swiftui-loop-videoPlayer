@@ -6,19 +6,26 @@
 //
 
 import SwiftUI
+import Combine
 #if canImport(AVKit)
 import AVKit
 #endif
 
 /// Player view for running a video in loop
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
-public struct LoopPlayerView: View {
+public struct LoopPlayerView: View {    
     
     /// Set of settings for video the player
     @Binding public var settings: VideoSettings
     
     /// Binding to a playback command that controls playback actions
     @Binding public var command: PlaybackCommand
+    
+    /// The current playback time, represented as a Double.
+    @State private var currentTime: Double = 0.0
+    
+    /// A publisher that emits the current time as a Double value.
+    @State var timePublisher = PassthroughSubject<Double, Never>()
     
     private var videoId : String{
         [settings.name, settings.ext].joined(separator: ".")
@@ -28,33 +35,42 @@ public struct LoopPlayerView: View {
     
     /// Player initializer
     /// - Parameters:
-    ///   - fileName: Name of the video to play
-    ///   - ext: Video extension
-    ///   - gravity: A structure that defines how a layer displays a player’s visual content within the layer’s bounds
-    ///   - eColor: Color of the error message text if the file is not found
-    ///   - eFontSize: Size of the error text
-    ///   - command: A binding to control playback actions
+    ///   - fileName: The name of the video file.
+    ///   - ext: The file extension, with a default value of "mp4".
+    ///   - gravity: The video gravity setting, with a default value of `.resizeAspect`.
+    ///   - timePublishing: An optional `CMTime` value for time publishing, with a default value of 1 second.
+    ///   - eColor: The color to be used, with a default value of `.accentColor`.
+    ///   - eFontSize: The font size to be used, with a default value of 17.0.
+    ///   - command: A binding to the playback command, with a default value of `.play`.
     public init(
         fileName: String,
         ext: String = "mp4",
         gravity: AVLayerVideoGravity = .resizeAspect,
+        timePublishing : CMTime? = CMTime(seconds: 1, preferredTimescale: 600),
         eColor: Color = .accentColor,
         eFontSize: CGFloat = 17.0,
         command : Binding<PlaybackCommand> = .constant(.play)
     ) {
         self._command = command
+
+        func description(@SettingsBuilder content: () -> [Setting]) -> [Setting] {
+          return content()
+        }
         
-        _settings = .constant(
-            VideoSettings {
-                SourceName(fileName)
-                Ext(ext)
-                Gravity(gravity)
-                ErrorGroup {
-                    EColor(eColor)
-                    EFontSize(eFontSize)
-                }
+        let settings: VideoSettings = VideoSettings {
+            SourceName(fileName)
+            Ext(ext)
+            Gravity(gravity)
+            if let timePublishing{
+                timePublishing
+           }
+            ErrorGroup {
+                EColor(eColor)
+                EFontSize(eFontSize)
             }
-        )
+        }
+        
+        _settings = .constant(settings)
     }
     
     /// Player initializer in a declarative way
@@ -85,7 +101,11 @@ public struct LoopPlayerView: View {
     // MARK: - API
        
    public var body: some View {
-       LoopPlayerMultiPlatform(settings: $settings, command: $command)
+       LoopPlayerMultiPlatform(settings: $settings, command: $command, timePublisher: timePublisher)
            .frame(maxWidth: .infinity, maxHeight: .infinity)
+           .onReceive(timePublisher, perform: { time in
+               currentTime = time
+           })
+           .preference(key: CurrentTimePreferenceKey.self, value: currentTime)
    }
 }

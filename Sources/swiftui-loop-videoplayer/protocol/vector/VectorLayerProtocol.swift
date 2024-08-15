@@ -10,7 +10,9 @@ import UIKit
 #elseif canImport(AppKit)
 import AppKit
 #endif
+#if canImport(QuartzCore)
 import QuartzCore
+#endif
 
 /// A protocol that defines methods and properties for managing vector layers within a composite layer.
 ///

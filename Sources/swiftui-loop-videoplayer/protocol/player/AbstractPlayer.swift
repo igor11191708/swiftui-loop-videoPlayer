@@ -6,7 +6,9 @@
 //
 
 import AVFoundation
+#if canImport(CoreImage)
 import CoreImage
+#endif
 
 @available(iOS 14, macOS 11, tvOS 14, *)
 @MainActor @preconcurrency
@@ -339,7 +341,7 @@ extension AbstractPlayer{
 ///   - player: A reference to the AVQueuePlayer to be cleaned up. Modified directly to deallocate resources.
 ///   - playerLooper: A reference to the AVPlayerLooper associated with the player. It's disabled and set to nil.
 ///   - errorObserver: A reference to an NSKeyValueObservation monitoring the player, which is invalidated and set to nil.
-internal func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayerLooper?, errorObserver: inout NSKeyValueObservation?) {
+internal func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayerLooper?, errorObserver: inout NSKeyValueObservation?, timeObserverToken: inout Any?) {
     errorObserver?.invalidate()
     errorObserver = nil
 
@@ -351,6 +353,11 @@ internal func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayer
     guard let items = player?.items() else { return }
     for item in items {
         player?.remove(item)
+    }
+    
+    if let observerToken = timeObserverToken {
+        player?.removeTimeObserver(observerToken)
+        timeObserverToken = nil
     }
     
     player = nil

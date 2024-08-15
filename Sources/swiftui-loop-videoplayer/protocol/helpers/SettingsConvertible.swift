@@ -15,3 +15,4 @@ public protocol SettingsConvertible {
     /// - Returns: Array of settings
     func asSettings() -> [Setting]
 }
+

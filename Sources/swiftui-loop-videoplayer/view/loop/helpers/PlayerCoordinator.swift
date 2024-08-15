@@ -1,14 +1,17 @@
 //
-//  PlayerErrorCoordinator.swift
+//  PlayerCoordinator.swift
 //
 //
 //  Created by Igor  on 06.08.24.
 //
 
 import SwiftUI
+import Combine
 
 @MainActor
-internal class PlayerCoordinator: NSObject, PlayerErrorDelegate {
+internal class PlayerCoordinator: NSObject, PlayerDelegateProtocol {
+    
+    let timePublisher: PassthroughSubject<Double, Never>
     
     /// Stores the last command applied to the player.
     private var lastCommand: PlaybackCommand?
@@ -18,8 +21,9 @@ internal class PlayerCoordinator: NSObject, PlayerErrorDelegate {
    
     /// Initializes a new instance of `PlayerCoordinator`.
     /// - Parameter error: A binding to an optional `VPErrors` instance to manage error reporting.
-    init(_ error: Binding<VPErrors?>) {
+    init(_ error: Binding<VPErrors?>, timePublisher: PassthroughSubject<Double, Never>) {
         self._error = error
+        self.timePublisher = timePublisher
     }
     
     /// Deinitializes the coordinator and prints a debug message if in DEBUG mode.
@@ -47,5 +51,9 @@ internal class PlayerCoordinator: NSObject, PlayerErrorDelegate {
     /// - Returns: The `PlaybackCommand` that was last applied to the player.
     var getLastCommand : PlaybackCommand? {
         return lastCommand
+    }
+    
+    func didPassedTime(seconds : Double) {
+        timePublisher.send(seconds)
     }
 }

@@ -5,8 +5,12 @@
 //  Created by Igor  on 13.08.24.
 //
 
-import QuartzCore
 import CoreGraphics
+
+#if canImport(QuartzCore)
+import QuartzCore
+#endif
+
 
 /// A protocol defining a builder for creating shape layers with a unique identifier.
 ///
