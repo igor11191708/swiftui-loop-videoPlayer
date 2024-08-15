@@ -11,9 +11,11 @@ import Combine
 import AVKit
 #endif
 
+public protocol ILoopPlayerView: View {}
+
 /// Player view for running a video in loop
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
-public struct LoopPlayerView: View {    
+public struct LoopPlayerView: ILoopPlayerView{
     
     /// Set of settings for video the player
     @Binding public var settings: VideoSettings
@@ -24,8 +26,14 @@ public struct LoopPlayerView: View {
     /// The current playback time, represented as a Double.
     @State private var currentTime: Double = 0.0
     
-    /// A publisher that emits the current time as a Double value.
-    @State var timePublisher = PassthroughSubject<Double, Never>()
+    /// The current state of the player event,
+    @State private var playerEvent: PlayerEvent = .idle
+
+    /// A publisher that emits the current playback time as a `Double`. It is initialized privately within the view.
+    @State private var timePublisher = PassthroughSubject<Double, Never>()
+
+    /// A publisher that emits player events as `PlayerEvent` values. It is initialized privately within the view.
+    @State private var eventPublisher = PassthroughSubject<PlayerEvent, Never>()
     
     private var videoId : String{
         [settings.name, settings.ext].joined(separator: ".")
@@ -101,11 +109,20 @@ public struct LoopPlayerView: View {
     // MARK: - API
        
    public var body: some View {
-       LoopPlayerMultiPlatform(settings: $settings, command: $command, timePublisher: timePublisher)
+       LoopPlayerMultiPlatform(
+        settings: $settings,
+        command: $command,
+        timePublisher: timePublisher,
+        eventPublisher: eventPublisher
+       )
            .frame(maxWidth: .infinity, maxHeight: .infinity)
            .onReceive(timePublisher, perform: { time in
                currentTime = time
            })
+           .onReceive(eventPublisher, perform: { event in
+               playerEvent = event
+           })
            .preference(key: CurrentTimePreferenceKey.self, value: currentTime)
+           .preference(key: PlayerEventPreferenceKey.self, value: playerEvent)
    }
 }

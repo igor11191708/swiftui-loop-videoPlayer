@@ -36,15 +36,18 @@ public protocol LoopPlayerViewProtocol {
     /// Settings for configuring the video player.
     var settings: VideoSettings { get set }
     
-    /// Initializes a new instance with the provided settings and playback command.
-    ///
+    /// Initializes a new instance of `LoopPlayerView`.
     /// - Parameters:
-    ///   - settings: A binding to a `VideoSettings` containing configuration details.
-    ///   - command: A binding to a `PlaybackCommand` that controls playback actions.
-    ///
-    /// This initializer sets up the necessary configuration and command bindings for playback functionality.
-    init(settings: Binding<VideoSettings>, command: Binding<PlaybackCommand>, timePublisher : PassthroughSubject<Double, Never>)
-    
+    ///   - settings: A binding to the video settings used by the player.
+    ///   - command: A binding to the playback command that controls playback actions.
+    ///   - timePublisher: A publisher that emits the current playback time as a `Double`.
+    ///   - eventPublisher: A publisher that emits player events as `PlayerEvent` values.
+    init(
+        settings: Binding<VideoSettings>,
+        command: Binding<PlaybackCommand>,
+        timePublisher: PassthroughSubject<Double, Never>,
+        eventPublisher: PassthroughSubject<PlayerEvent, Never>
+    )
 }
 
 @available(iOS 14, macOS 11, tvOS 14, *)

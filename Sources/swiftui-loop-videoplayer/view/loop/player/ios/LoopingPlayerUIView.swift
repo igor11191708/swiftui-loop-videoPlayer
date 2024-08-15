@@ -42,9 +42,6 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     /// Declare a variable to hold the time observer token outside the if statement
     internal var timeObserverToken: Any?
     
-    /// A Boolean value indicating whether the player is currently seeking to a new time.
-    internal var isSeeking: Bool = false
-    
     /// Observer for errors from the AVQueuePlayer.
     internal var errorObserver: NSKeyValueObservation?
     

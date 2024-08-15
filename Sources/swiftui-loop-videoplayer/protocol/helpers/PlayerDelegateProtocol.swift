@@ -21,5 +21,15 @@ public protocol PlayerDelegateProtocol: AnyObject {
     @MainActor
     func didReceiveError(_ error: VPErrors)
     
-    func didPassedTime(seconds : Double)
+    /// A method that handles the passage of time in the player.
+    /// - Parameter seconds: The amount of time, in seconds, that has passed.
+    @MainActor
+    func didPassedTime(seconds: Double)
+
+    /// A method that handles seeking in the player.
+    /// - Parameters:
+    ///   - value: A Boolean indicating whether the seek was successful.
+    ///   - currentTime: The current time of the player after seeking, in seconds.
+    @MainActor
+    func didSeek(value: Bool, currentTime: Double)
 }

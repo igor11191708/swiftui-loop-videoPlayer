@@ -10,6 +10,8 @@ import Combine
 
 @MainActor
 internal class PlayerCoordinator: NSObject, PlayerDelegateProtocol {
+        
+    let eventPublisher: PassthroughSubject<PlayerEvent, Never>
     
     let timePublisher: PassthroughSubject<Double, Never>
     
@@ -19,11 +21,15 @@ internal class PlayerCoordinator: NSObject, PlayerDelegateProtocol {
     /// A binding to an optional `VPErrors` instance, used to report errors back to the parent view.
     @Binding private var error: VPErrors?
    
-    /// Initializes a new instance of `PlayerCoordinator`.
-    /// - Parameter error: A binding to an optional `VPErrors` instance to manage error reporting.
-    init(_ error: Binding<VPErrors?>, timePublisher: PassthroughSubject<Double, Never>) {
+
+    init(
+        _ error: Binding<VPErrors?>,
+         timePublisher: PassthroughSubject<Double, Never>,
+        eventPublisher: PassthroughSubject<PlayerEvent, Never>
+    ) {
         self._error = error
         self.timePublisher = timePublisher
+        self.eventPublisher = eventPublisher
     }
     
     /// Deinitializes the coordinator and prints a debug message if in DEBUG mode.
@@ -53,7 +59,17 @@ internal class PlayerCoordinator: NSObject, PlayerDelegateProtocol {
         return lastCommand
     }
     
+    /// A method that handles the passage of time in the player.
+    /// - Parameter seconds: The amount of time, in seconds, that has passed.
     func didPassedTime(seconds : Double) {
         timePublisher.send(seconds)
+    }
+    
+    /// A method that handles seeking in the player.
+    /// - Parameters:
+    ///   - value: A Boolean indicating whether the seek was successful.
+    ///   - currentTime: The current time of the player after seeking, in seconds.
+    func didSeek(value: Bool, currentTime : Double) {
+        eventPublisher.send(.seek(value, currentTime: currentTime))
     }
 }

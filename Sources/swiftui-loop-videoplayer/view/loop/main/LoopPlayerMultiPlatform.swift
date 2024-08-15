@@ -23,9 +23,7 @@ import AppKit
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
 @MainActor
 struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
-    
-    let timePublisher: PassthroughSubject<Double, Never>
-    
+        
     #if canImport(UIKit)
     typealias View = UIView
     
@@ -40,6 +38,12 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
     typealias PlayerView = LoopingPlayerNSView
     #endif
     
+    /// A publisher that emits the current playback time as a `Double`.
+    private let timePublisher: PassthroughSubject<Double, Never>
+
+    /// A publisher that emits player events as `PlayerEvent` values.
+    private let eventPublisher: PassthroughSubject<PlayerEvent, Never>
+    
     /// Command for the player view
     @Binding public var command : PlaybackCommand
     
@@ -53,15 +57,20 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
         assetFor(settings)
     }
 
-    /// Initializes a new instance with the provided settings and playback command.
-    ///
-    /// This initializer sets up the necessary configuration and command bindings for playback functionality.
-    ///
+    /// Initializes a new instance of `LoopPlayerView`.
     /// - Parameters:
-    ///   - settings: A binding to an instance of `VideoSettings` containing configuration details.
-    ///   - command: A binding to a `PlaybackCommand` that controls playback actions.
-    init(settings: Binding<VideoSettings>, command: Binding<PlaybackCommand>, timePublisher : PassthroughSubject<Double, Never>) {
+    ///   - settings: A binding to the video settings used by the player.
+    ///   - command: A binding to the playback command that controls playback actions.
+    ///   - timePublisher: A publisher that emits the current playback time as a `Double`.
+    ///   - eventPublisher: A publisher that emits player events as `PlayerEvent` values.
+    init(
+        settings: Binding<VideoSettings>, 
+        command: Binding<PlaybackCommand>,
+        timePublisher : PassthroughSubject<Double, Never>,
+        eventPublisher : PassthroughSubject<PlayerEvent, Never>
+    ) {
         self.timePublisher = timePublisher
+        self.eventPublisher = eventPublisher
         self._settings = settings
         self._command = command
         let settings = settings.wrappedValue
@@ -73,7 +82,7 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
     /// Creates a coordinator that handles error-related updates and interactions between the SwiftUI view and its underlying model.
     /// - Returns: An instance of PlayerErrorCoordinator that can be used to manage error states and communicate between the view and model.
     func makeCoordinator() -> PlayerCoordinator {
-        PlayerCoordinator($error, timePublisher: timePublisher)
+        PlayerCoordinator($error, timePublisher: timePublisher, eventPublisher: eventPublisher)
     }
 }
 

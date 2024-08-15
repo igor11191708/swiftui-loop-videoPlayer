@@ -29,9 +29,6 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     
     var playerLayer : AVPlayerLayer { get }
 
-    /// The delegate to be notified about errors encountered by the player.
-    var delegate: PlayerDelegateProtocol? { get set }
-
     /// An optional NSKeyValueObservation to monitor errors encountered by the video player.
     /// This observer should be configured to detect and handle errors from the AVQueuePlayer,
     /// ensuring that all playback errors are managed and reported appropriately.
@@ -147,9 +144,7 @@ internal extension LoopingPlayerProtocol {
             timeObserverToken = player.addPeriodicTimeObserver(forInterval: timePublishing, queue: .main) { [weak self] time in
                 guard let self = self else{ return }
                 
-                if !self.isSeeking{
-                    self.delegate?.didPassedTime(seconds: time.seconds)
-                }
+                self.delegate?.didPassedTime(seconds: time.seconds)
             }
         }
         

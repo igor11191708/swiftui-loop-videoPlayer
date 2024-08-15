@@ -25,8 +25,9 @@ internal struct OnTimeChangeModifier: ViewModifier {
     }
 }
 
-public extension LoopPlayerView {
+public extension View{
     func onTimeChange(perform action: @escaping (Double) -> Void) -> some View {
         self.modifier(OnTimeChangeModifier(onTimeChange: action))
     }
 }
+

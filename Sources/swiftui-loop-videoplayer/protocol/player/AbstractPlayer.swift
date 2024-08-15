@@ -14,6 +14,9 @@ import CoreImage
 @MainActor @preconcurrency
 public protocol AbstractPlayer: AnyObject {
     
+    /// The delegate to be notified about errors encountered by the player.
+    var delegate: PlayerDelegateProtocol? { get set }
+    
     /// Retrieves the current item being played.
     var currentItem : AVPlayerItem? { get }
     
@@ -34,9 +37,6 @@ public protocol AbstractPlayer: AnyObject {
     
     /// The queue player that plays the video items.
     var player: AVQueuePlayer? { get set }
-    
-    /// A Boolean value indicating whether the player is currently seeking to a new time.
-    var isSeeking : Bool { get set }
     
     // Playback control methods
 
@@ -145,8 +145,6 @@ extension AbstractPlayer{
             return
         }
         
-        isSeeking = true
-        
         let endTime = CMTimeGetSeconds(duration)
         let seekTime : CMTime
         
@@ -164,7 +162,8 @@ extension AbstractPlayer{
         }
         
         player.seek(to: seekTime){ [weak self] value in
-            self?.isSeeking = false
+            let currentTime = CMTimeGetSeconds(player.currentTime())
+            self?.delegate?.didSeek(value: value, currentTime: currentTime)
         }
     }
     
