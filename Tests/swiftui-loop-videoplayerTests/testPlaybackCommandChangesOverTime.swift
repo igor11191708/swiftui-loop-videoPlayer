@@ -22,7 +22,7 @@ final class testPlaybackCommandChangesOverTime: XCTestCase {
         )
 
         // Create an instance of the view with the initial command
-        let playerView = ExtPlayerView(fileName: "swipe", command: commandBinding)
+        let playerView = ExtVideoPlayer(fileName: "swipe", command: commandBinding)
 
         // Setup expectation for asynchronous test
         let expectation = self.expectation(description: "Command should change to .pause")
