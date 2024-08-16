@@ -11,11 +11,9 @@ import Combine
 import AVKit
 #endif
 
-public protocol ILoopPlayerView: View {}
-
 /// Player view for running a video in loop
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
-public struct LoopPlayerView: ILoopPlayerView{
+public struct LoopPlayerView: View{
     
     /// Set of settings for video the player
     @Binding public var settings: VideoSettings
@@ -109,6 +107,7 @@ public struct LoopPlayerView: ILoopPlayerView{
     // MARK: - API
        
    public var body: some View {
+           
        LoopPlayerMultiPlatform(
         settings: $settings,
         command: $command,

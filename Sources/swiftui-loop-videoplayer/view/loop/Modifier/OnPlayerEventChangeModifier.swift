@@ -25,7 +25,7 @@ internal struct OnPlayerEventChangeModifier: ViewModifier {
     }
 }
 
-public extension View{
+public extension View {
     func onPlayerEventChange(perform action: @escaping (PlayerEvent) -> Void) -> some View {
         self.modifier(OnPlayerEventChangeModifier(onPlayerEventChange: action))
     }
