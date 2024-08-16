@@ -119,7 +119,6 @@ In the core of this package, I use `AVQueuePlayer`. Here are the supported featu
 | Multichannel Audio/Dolby Atmos/Spatial Audio                                                               | `AVQueuePlayer` supports advanced audio formats natively.                                                     |
 | Text subtitle/Image subtitle/Closed Captions                                                               | Subtitle and caption tracks included in the video file are automatically detected and rendered.               |
 | Automatically switch to multi-bitrate streams based on network                                             | Adaptive bitrate streaming is handled automatically by `AVQueuePlayer` when streaming from a source that supports it. |
-| Seamless playback of queue items                                                                           | `AVQueuePlayer` can seamlessly transition between items in the playback queue without user intervention.       |
 | External playback control support                                                                          | Supports playback control through external accessories like headphones and Bluetooth devices.                 |
 | AirPlay support                                                                                            | Natively supports streaming audio and video via AirPlay to compatible devices without additional setup.       |
 
