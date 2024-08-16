@@ -9,7 +9,7 @@ final class testPlayerInitialization: XCTestCase {
     func testInitializationWithCustomParameters() {
         let playbackCommand = PlaybackCommand.pause // Example of a non-default command
         let commandBinding = Binding.constant(playbackCommand)
-        let playerView = LoopPlayerView(
+        let playerView = ExtPlayerView(
             fileName: "swipe",
             ext: "mov",
             gravity: .resizeAspectFill,
@@ -31,7 +31,7 @@ final class testPlayerInitialization: XCTestCase {
 
     // Test initialization with default parameters
     func testInitializationWithDefaultParameters() {
-        let playerView = LoopPlayerView(fileName: "swipe")
+        let playerView = ExtPlayerView(fileName: "swipe")
 
         XCTAssertEqual(playerView.settings.name, "swipe")
         XCTAssertEqual(playerView.settings.ext, "mp4") // Default extension
@@ -44,8 +44,8 @@ final class testPlayerInitialization: XCTestCase {
     }
     
     // Test the initializer that takes a closure returning VideoSettings
-    func testLoopPlayerView_InitializesWithValues() {
-        let playerView = LoopPlayerView{
+    func testExtPlayerView_InitializesWithValues() {
+        let playerView = ExtPlayerView{
             VideoSettings{
                 SourceName("swipe")
                 Ext("mp8") // Set default extension here If not provided then mp4 is default
@@ -67,8 +67,8 @@ final class testPlayerInitialization: XCTestCase {
     }
     
     // Test the initializer that takes a closure returning VideoSettings
-    func testLoopPlayerView_InitializesWithClosureProvidedSettings() {
-        let playerView = LoopPlayerView {
+    func testExtPlayerView_InitializesWithClosureProvidedSettings() {
+        let playerView = ExtPlayerView {
             VideoSettings {
                 SourceName("swipe")
                 Ext("mp8")
@@ -90,7 +90,7 @@ final class testPlayerInitialization: XCTestCase {
     }
 
     // Test the initializer that takes a binding to VideoSettings
-    func testLoopPlayerView_InitializesWithBindingProvidedSettings() {
+    func testExtPlayerView_InitializesWithBindingProvidedSettings() {
         let initialSettings = VideoSettings {
             SourceName("swipe")
             Ext("mkv")
@@ -102,7 +102,7 @@ final class testPlayerInitialization: XCTestCase {
             }
         }
         let settings = Binding.constant(initialSettings)
-        let playerView = LoopPlayerView(settings: settings, command: .constant(.pause))
+        let playerView = ExtPlayerView(settings: settings, command: .constant(.pause))
 
         XCTAssertEqual(settings.wrappedValue.name, "swipe")
             XCTAssertEqual(settings.wrappedValue.ext, "mkv")

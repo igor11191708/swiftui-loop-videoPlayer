@@ -57,7 +57,7 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
         assetFor(settings)
     }
 
-    /// Initializes a new instance of `LoopPlayerView`.
+    /// Initializes a new instance of `ExtPlayerView`.
     /// - Parameters:
     ///   - settings: A binding to the video settings used by the player.
     ///   - command: A binding to the playback command that controls playback actions.
