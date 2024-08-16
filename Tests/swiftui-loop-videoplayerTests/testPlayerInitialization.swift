@@ -9,7 +9,7 @@ final class testPlayerInitialization: XCTestCase {
     func testInitializationWithCustomParameters() {
         let playbackCommand = PlaybackCommand.pause // Example of a non-default command
         let commandBinding = Binding.constant(playbackCommand)
-        let playerView = ExtPlayerView(
+        let playerView = ExtVideoPlayer(
             fileName: "swipe",
             ext: "mov",
             gravity: .resizeAspectFill,
@@ -31,7 +31,7 @@ final class testPlayerInitialization: XCTestCase {
 
     // Test initialization with default parameters
     func testInitializationWithDefaultParameters() {
-        let playerView = ExtPlayerView(fileName: "swipe")
+        let playerView = ExtVideoPlayer(fileName: "swipe")
 
         XCTAssertEqual(playerView.settings.name, "swipe")
         XCTAssertEqual(playerView.settings.ext, "mp4") // Default extension
@@ -45,7 +45,7 @@ final class testPlayerInitialization: XCTestCase {
     
     // Test the initializer that takes a closure returning VideoSettings
     func testExtPlayerView_InitializesWithValues() {
-        let playerView = ExtPlayerView{
+        let playerView = ExtVideoPlayer{
             VideoSettings{
                 SourceName("swipe")
                 Ext("mp8") // Set default extension here If not provided then mp4 is default
@@ -68,7 +68,7 @@ final class testPlayerInitialization: XCTestCase {
     
     // Test the initializer that takes a closure returning VideoSettings
     func testExtPlayerView_InitializesWithClosureProvidedSettings() {
-        let playerView = ExtPlayerView {
+        let playerView = ExtVideoPlayer {
             VideoSettings {
                 SourceName("swipe")
                 Ext("mp8")
@@ -102,7 +102,7 @@ final class testPlayerInitialization: XCTestCase {
             }
         }
         let settings = Binding.constant(initialSettings)
-        let playerView = ExtPlayerView(settings: settings, command: .constant(.pause))
+        let playerView = ExtVideoPlayer(settings: settings, command: .constant(.pause))
 
         XCTAssertEqual(settings.wrappedValue.name, "swipe")
             XCTAssertEqual(settings.wrappedValue.ext, "mkv")

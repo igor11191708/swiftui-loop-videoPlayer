@@ -18,7 +18,7 @@ final class testVideoStreaming: XCTestCase {
             return
         }
         
-        let _ = ExtPlayerView(fileName: filePath)
+        let _ = ExtVideoPlayer(fileName: filePath)
         // Use the filePath as needed for your tests
         print("Video file path: \(filePath)")
 
