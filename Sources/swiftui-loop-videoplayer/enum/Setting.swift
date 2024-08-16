@@ -55,8 +55,6 @@ public enum Setting: Equatable, SettingsConvertible{
             return nil
         }
         
-        print(firstChild)
-        
         return firstChild.value
     }
 }
