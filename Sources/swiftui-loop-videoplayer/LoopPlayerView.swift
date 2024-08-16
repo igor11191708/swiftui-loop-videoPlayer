@@ -33,10 +33,6 @@ public struct LoopPlayerView: View{
     /// A publisher that emits player events as `PlayerEvent` values. It is initialized privately within the view.
     @State private var eventPublisher = PassthroughSubject<PlayerEvent, Never>()
     
-    private var videoId : String{
-        [settings.name, settings.ext].joined(separator: ".")
-    }
-    
     // MARK: - Life cycle
     
     /// Player initializer
