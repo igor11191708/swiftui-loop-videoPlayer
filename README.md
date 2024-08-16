@@ -16,12 +16,24 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ## API Specifications
 
-| Property/Method                       | Type                          | Description                                                            |
-|---------------------------------------|-------------------------------|------------------------------------------------------------------------|
-| `settings`                            | `VideoSettings`                    | A struct containing configuration settings for the video player.       |
-| `command`                             | `Binding<PlaybackCommand>`    | A binding to control playback actions (play, pause, or seek).          |
-| `init(fileName:ext:gravity:timePublishing: ` <br> ` eColor:eFontSize:command:)` | Constructor       | Initializes the player with specific video parameters and playback command binding. |
-| `init(settings: () -> VideoSettings, command:)` | Constructor | Initializes the player with a declarative settings block and playback command binding. |
+| Property/Method                                             | Type                          | Description                                                                                          |
+|-------------------------------------------------------------|-------------------------------|------------------------------------------------------------------------------------------------------|
+| `settings`                                                  | `Binding<VideoSettings>`       | A binding to the video player settings, which configure various aspects of the player's behavior.    |
+| `command`                                                   | `Binding<PlaybackCommand>`     | A binding to control playback actions, such as play, pause, or seek.                                 |
+| `init(fileName:ext:gravity:timePublishing:` <br> `eColor:eFontSize:command:)` | Constructor                    | Initializes the player with specific video parameters, such as file name, extension, gravity, time publishing, color, font size, and a playback command binding. |
+| `init(settings: () -> VideoSettings, command:)`             | Constructor                    | Initializes the player in a declarative way with a settings block and a playback command binding.     |
+| `init(settings: Binding<VideoSettings>, command:)`          | Constructor                    | Initializes the player with bindings to the video settings and a playback command.                   |
+
+## Settings
+
+| Name | Description | Default |
+| --- | --- |  --- |
+| **SourceName** | The URL or local filename of the video. If a valid URL (http or https) is provided, the video will be streamed from the URL. If not a URL, the system will check if a video with the given name exists in the local bundle. The local name provided can either include an extension or be without one. The system first checks if the local name contains an extension. If the local name includes an extension, it extracts this extension and uses it as the default. If the local name does not contain an extension, the system assigns a default extension of .mp4 The default file extension can be set up via Ext param. | - |
+| **Ext** | File extension for the video, used when loading from local resources. This is optional when a URL is provided and the URL ends with the video file extension. | "mp4" |
+| **Gravity** | How the video content should be resized to fit the player's bounds. | .resizeAspect |
+| **TimePublishing** | Specifies the interval at which the player publishes the current playback time. If the parameter is passed during initialization, the player will publish the time according to the input settings. You can pass just `TimePublishing` without any value to use the default interval of 1 second, or you can pass a specific `CMTime` value to set a custom interval. | 1 second (CMTime with 1 second and preferred timescale of 600) |
+| **EColor** | Error message text color. | .red |
+| **EFontSize** | Size of the error text. | 17.0 |
 
 ## Commands
 
@@ -89,16 +101,6 @@ Integrating vector graphics into SwiftUI views, particularly during lifecycle ev
 - **Persistent Settings**: Changes to brightness and contrast do not reset when the filter stack is cleared. They remain at their last set values and must be adjusted or reset separately by the developer as needed.
 - **Independent Management**: Developers should manage brightness and contrast adjustments through their dedicated methods or properties to ensure these settings are accurately reflected in the video output.
 
-### Initializer Parameters Settings
-
-| Name | Description | Default |
-| --- | --- |  --- |
-| **SourceName** | The URL or local filename of the video. If a valid URL (http or https) is provided, the video will be streamed from the URL. If not a URL, the system will check if a video with the given name exists in the local bundle. The local name provided can either include an extension or be without one. The system first checks if the local name contains an extension. If the local name includes an extension, it extracts this extension and uses it as the default. If the local name does not contain an extension, the system assigns a default extension of .mp4 The default file extension can be set up via Ext param. | - |
-| **Ext** | File extension for the video, used when loading from local resources. This is optional when a URL is provided and the URL ends with the video file extension. | "mp4" |
-| **Gravity** | How the video content should be resized to fit the player's bounds. | .resizeAspect |
-| **TimePublishing** | Specifies the interval at which the player publishes the current playback time. If the parameter is passed during initialization, the player will publish the time according to the input settings. You can pass just `TimePublishing` without any value to use the default interval of 1 second, or you can pass a specific `CMTime` value to set a custom interval. | 1 second (CMTime with 1 second and preferred timescale of 600) |
-| **EColor** | Error message text color. | .red |
-| **EFontSize** | Size of the error text. | 17.0 |
 
 
 
