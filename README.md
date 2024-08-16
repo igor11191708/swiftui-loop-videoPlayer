@@ -138,13 +138,13 @@ In the core of this package, I use `AVQueuePlayer`. Here are the supported featu
 ### 1. Create LoopPlayerView
 
 ```swift
-ExtPlayerView(fileName: 'swipe')    
+ExtVideoPlayer(fileName: 'swipe')    
 ```
 
 or in a declarative way
 
  ```swift
-    ExtPlayerView{
+    ExtVideoPlayer{
             VideoSettings{
                 SourceName("swipe")
                 Ext("mp8") // Set default extension here If not provided then mp4 is default
@@ -165,7 +165,7 @@ or in a declarative way
 ``` 
           
  ```swift            
-       ExtPlayerView{
+       ExtVideoPlayer{
             VideoSettings{
                 SourceName("swipe")
                 Gravity(.resizeAspectFill)
@@ -175,7 +175,7 @@ or in a declarative way
 ```  
 
 ```swift
-ExtPlayerView{
+ExtVideoPlayer{
     VideoSettings{
         SourceName('https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8')
         ErrorGroup{
@@ -208,7 +208,7 @@ The AVFoundation framework used in the package supports a wide range of video fo
 The package now supports using remote video URLs, allowing you to stream videos directly from web resources. This is an extension to the existing functionality that primarily focused on local video files. Here's how to specify a remote URL within the settings:
 
 ```swift
-ExtPlayerView{
+ExtVideoPlayer{
     VideoSettings{
         SourceName('https://example.com/video')
         Gravity(.resizeAspectFill)  // Video content fit
@@ -238,7 +238,7 @@ struct VideoView: View {
     @State private var playbackCommand: PlaybackCommand = .play
 
     var body: some View {
-        ExtPlayerView(
+        ExtVideoPlayer(
             {
                 VideoSettings {
                     SourceName("swipe")
