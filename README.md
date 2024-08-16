@@ -108,7 +108,7 @@ Integrating vector graphics into SwiftUI views, particularly during lifecycle ev
 - **Independent Management**: Developers should manage brightness and contrast adjustments through their dedicated methods or properties to ensure these settings are accurately reflected in the video output.
 
 
-## Features out of the box
+## AVQueuePlayer features out of the box
 
 In the core of this package, I use `AVQueuePlayer`. Here are the supported features that are automatically enabled by `AVQueuePlayer` without passing any extra parameters:
 
