@@ -155,7 +155,7 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
         let player = nsView.findFirstSubview(ofType: PlayerView.self)
         if let player {
             if let asset = getAssetIfChanged(for: settings, and: player.currentAsset){
-                player.update(asset: asset)
+                player.update(asset: asset, loop: settings.loop)
             }
             // Check if command changed before applying it
             if context.coordinator.getLastCommand != command {

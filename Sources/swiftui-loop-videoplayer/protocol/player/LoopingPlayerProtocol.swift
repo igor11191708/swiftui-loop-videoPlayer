@@ -65,7 +65,7 @@ internal extension LoopingPlayerProtocol {
     ///
     /// - Parameters:
     ///   - asset: The AVURLAsset to load into the player.
-    func update(asset: AVURLAsset){
+    func update(asset: AVURLAsset, loop : Bool){
         
         guard let player = player else { return }
         
@@ -83,6 +83,9 @@ internal extension LoopingPlayerProtocol {
         // Replace the current item
         let newItem = AVPlayerItem(asset: asset)
         player.insert(newItem, after: nil)
+        if loop{
+            self.loop()
+        }
         play()
     }
     
