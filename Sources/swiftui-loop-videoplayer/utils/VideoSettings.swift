@@ -19,6 +19,8 @@ public struct VideoSettings: Equatable{
     /// Video extension
     public let ext: String
     
+    public let loop: Bool
+    
     /// A CMTime value representing the interval at which the player's current time should be published.
     /// If set, the player will publish periodic time updates based on this interval.
     public let timePublishing: CMTime?
@@ -61,6 +63,8 @@ public struct VideoSettings: Equatable{
         errorFontSize = settings.fetch(by : "errorFontSize", defaulted: 17)
         
         timePublishing = settings.fetch(by : "timePublishing", defaulted: nil)
+        
+        loop = settings.contains(.loop)
     }
 }
 

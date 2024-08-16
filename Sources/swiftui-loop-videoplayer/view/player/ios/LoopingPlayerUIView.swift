@@ -48,16 +48,17 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     /// The delegate to be notified about errors encountered by the player.
     weak var delegate: PlayerDelegateProtocol?
 
-    /// Initializes a new instance of the view
+    /// Initializes a new player view with specified video asset and configurations.
     ///
     /// - Parameters:
-    ///   - asset: The AVURLAsset to be used in the player.
-    ///   - gravity: Specifies how the video content should be displayed within the layer bounds.
-    ///   - timePublishing: Optional CMTime that determines the interval at which the video current time should be published. Pass nil to disable time publishing.
-    required init(asset: AVURLAsset, gravity: AVLayerVideoGravity, timePublishing: CMTime?){
+    ///   - asset: The `AVURLAsset` used for video playback.
+    ///   - gravity: The `AVLayerVideoGravity` defining how the video content is displayed within the layer bounds.
+    ///   - timePublishing: Optional `CMTime` that specifies a particular time for publishing or triggering an event.
+    ///   - loop: A Boolean value that indicates whether the video should loop when playback reaches the end of the content.
+    required init(asset: AVURLAsset, gravity: AVLayerVideoGravity, timePublishing: CMTime?, loop: Bool){
         super.init(frame: .zero)
         setupPlayerComponents(
-            asset: asset, gravity: gravity, timePublishing : timePublishing
+            asset: asset, gravity: gravity, timePublishing : timePublishing, loop: loop
         )
     }
 

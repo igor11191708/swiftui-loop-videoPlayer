@@ -19,6 +19,8 @@ public enum Setting: Equatable, SettingsConvertible{
         [self]
     }
     
+    case loop
+    
     /// File name
     case name(String)
 
@@ -52,6 +54,8 @@ public enum Setting: Equatable, SettingsConvertible{
         guard let firstChild = Mirror(reflecting: self).children.first else {
             return nil
         }
+        
+        print(firstChild)
         
         return firstChild.value
     }

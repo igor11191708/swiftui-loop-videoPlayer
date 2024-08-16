@@ -87,7 +87,7 @@ public extension LoopPlayerViewProtocol{
         asset: AVURLAsset?) -> PlayerView? {
         
         if let asset{
-            let player = PlayerView(asset: asset, gravity: settings.gravity, timePublishing: settings.timePublishing)
+            let player = PlayerView(asset: asset, gravity: settings.gravity, timePublishing: settings.timePublishing, loop:  settings.loop)
             container.addSubview(player)
             activateFullScreenConstraints(for: player, in: container)
             return player

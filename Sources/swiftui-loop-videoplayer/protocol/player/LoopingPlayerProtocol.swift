@@ -37,13 +37,14 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     /// Declare a variable to hold the time observer token outside the if statement
     var timeObserverToken: Any? { get set }
 
-    /// Initializes a new instance of the view
+    /// Initializes a new player view with specified video asset and configurations.
     ///
     /// - Parameters:
-    ///   - asset: The AVURLAsset to be used in the player.
-    ///   - gravity: Specifies how the video content should be displayed within the layer bounds.
-    ///   - timePublishing: Optional CMTime that determines the interval at which the video current time should be published. Pass nil to disable time publishing.
-    init(asset: AVURLAsset, gravity: AVLayerVideoGravity, timePublishing: CMTime?)
+    ///   - asset: The `AVURLAsset` used for video playback.
+    ///   - gravity: The `AVLayerVideoGravity` defining how the video content is displayed within the layer bounds.
+    ///   - timePublishing: Optional `CMTime` that specifies a particular time for publishing or triggering an event.
+    ///   - loop: A Boolean value that indicates whether the video should loop when playback reaches the end of the content.
+    init(asset: AVURLAsset, gravity: AVLayerVideoGravity, timePublishing: CMTime?, loop : Bool)
     
     /// Sets up the necessary observers on the AVPlayerItem and AVQueuePlayer to monitor changes and errors.
     ///
@@ -82,7 +83,6 @@ internal extension LoopingPlayerProtocol {
         // Replace the current item
         let newItem = AVPlayerItem(asset: asset)
         player.insert(newItem, after: nil)
-        loop()
         play()
     }
     
@@ -95,14 +95,15 @@ internal extension LoopingPlayerProtocol {
     func setupPlayerComponents(
         asset: AVURLAsset,
         gravity: AVLayerVideoGravity,
-        timePublishing:  CMTime?
+        timePublishing:  CMTime?,
+        loop: Bool
     ) {
         let item = AVPlayerItem(asset: asset)
         
         let player = AVQueuePlayer(items: [item])
         self.player = player
         
-        configurePlayer(player, gravity: gravity, timePublishing: timePublishing)
+        configurePlayer(player, gravity: gravity, timePublishing: timePublishing, loop: loop)
         
         setupObservers(for: item, player: player)
     }
@@ -116,7 +117,8 @@ internal extension LoopingPlayerProtocol {
     func configurePlayer(
         _ player: AVQueuePlayer,
         gravity: AVLayerVideoGravity,
-        timePublishing:  CMTime?
+        timePublishing:  CMTime?,
+        loop : Bool
     ) {
         player.isMuted = true
         playerLayer.player = player
@@ -134,7 +136,10 @@ internal extension LoopingPlayerProtocol {
         self.wantsLayer = true
         #endif
         compositeLayer.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
-        loop()
+        
+        if loop{
+            self.loop()
+        }
         
         if !filters.isEmpty{ // have an idea for the feature
             applyVideoComposition()
