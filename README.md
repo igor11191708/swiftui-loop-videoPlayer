@@ -14,6 +14,14 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui_video_player.gif) 
 
+## Philosophy of Interactive Player Dynamics
+
+The player's functionality is designed around a dual interaction model:
+
+- **Commands and Settings**: Through these, you instruct the player on what to do and how to do it. Settings define the environment and initial state, while commands offer real-time control.
+  
+- **Event Feedback**: Through event handling, the player communicates back to the application, informing it of internal changes that may need attention.
+
 ## API Specifications
 
 | Property/Method                                             | Type                          | Description                                                                                          |
