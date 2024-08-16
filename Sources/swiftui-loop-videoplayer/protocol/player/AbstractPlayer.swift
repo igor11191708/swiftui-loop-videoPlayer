@@ -142,9 +142,15 @@ extension AbstractPlayer{
     /// - Parameter time: The target time to seek to in the video timeline.
     func seek(to time: Double) {
         guard let player = player, let duration = player.currentItem?.duration else {
+            delegate?.didSeek(value: false, currentTime: time)
             return
         }
         
+        guard duration.value != 0 else{
+            delegate?.didSeek(value: false, currentTime: time)
+            return
+        }
+       
         let endTime = CMTimeGetSeconds(duration)
         let seekTime : CMTime
         
