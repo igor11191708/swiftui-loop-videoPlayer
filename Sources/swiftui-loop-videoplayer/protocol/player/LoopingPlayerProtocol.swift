@@ -51,7 +51,7 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     /// - Parameters:
     ///   - item: The AVPlayerItem to observe for status changes.
     ///   - player: The AVQueuePlayer to observe for errors.
-    func setupObservers(for item: AVPlayerItem, player: AVQueuePlayer)
+    func setupObservers(for player: AVQueuePlayer)
 
     /// Responds to errors reported by the AVQueuePlayer.
     ///
@@ -60,34 +60,6 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
 }
 
 internal extension LoopingPlayerProtocol {
-    
-    /// Updates the player to play a new asset and handles the playback state.
-    ///
-    /// - Parameters:
-    ///   - asset: The AVURLAsset to load into the player.
-    func update(asset: AVURLAsset, loop : Bool){
-        
-        guard let player = player else { return }
-        
-        let wasPlaying = player.rate != 0
-        
-        if wasPlaying {
-            pause()
-        }
-
-        // Cleaning
-        unloop()
-        clearPlayerQueue()
-        removeAllFilters()
-        
-        // Replace the current item
-        let newItem = AVPlayerItem(asset: asset)
-        player.insert(newItem, after: nil)
-        if loop{
-            self.loop()
-        }
-        play()
-    }
     
     /// Sets up the player components with the specified media asset, display properties, and optional time publishing interval.
     ///
@@ -101,14 +73,15 @@ internal extension LoopingPlayerProtocol {
         timePublishing:  CMTime?,
         loop: Bool
     ) {
-        let item = AVPlayerItem(asset: asset)
         
-        let player = AVQueuePlayer(items: [item])
+        let player = AVQueuePlayer(items: [])
         self.player = player
+        
+        update(asset: asset, loop: loop)
         
         configurePlayer(player, gravity: gravity, timePublishing: timePublishing, loop: loop)
         
-        setupObservers(for: item, player: player)
+        setupObservers(for: player)
     }
     
     /// Configures the provided AVQueuePlayer with specific properties for video playback.
@@ -140,14 +113,6 @@ internal extension LoopingPlayerProtocol {
         #endif
         compositeLayer.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
         
-        if loop{
-            self.loop()
-        }
-        
-        if !filters.isEmpty{ // have an idea for the feature
-            applyVideoComposition()
-        }
-        
         if let timePublishing{
             timeObserverToken = player.addPeriodicTimeObserver(forInterval: timePublishing, queue: .main) { [weak self] time in
                 guard let self = self else{ return }
@@ -155,8 +120,6 @@ internal extension LoopingPlayerProtocol {
                 self.delegate?.didPassedTime(seconds: time.seconds)
             }
         }
-        
-        player.play()
     }
     
     /// Sets up observers on the player item and the player to track their status and error states.
@@ -164,7 +127,7 @@ internal extension LoopingPlayerProtocol {
     /// - Parameters:
     ///   - item: The player item to observe.
     ///   - player: The player to observe.
-    func setupObservers(for item: AVPlayerItem, player: AVQueuePlayer) {
+    func setupObservers(for player: AVQueuePlayer) {
         errorObserver = player.observe(\.error, options: [.new]) { [weak self] player, _ in
             self?.handlePlayerError(player)
         }
@@ -190,13 +153,7 @@ internal extension LoopingPlayerProtocol {
         delegate?.didReceiveError(.remoteVideoError(error))
     }
     
-    /// Clears all items from the player's queue.
-    func clearPlayerQueue() {
-        guard let items = player?.items() else { return }
-        for item in items {
-            player?.remove(item)
-        }
-    }
+
     
     /// Sets the playback command for the video player.
     /// - Parameter value: The `PlaybackCommand` to set. This can be one of the following:

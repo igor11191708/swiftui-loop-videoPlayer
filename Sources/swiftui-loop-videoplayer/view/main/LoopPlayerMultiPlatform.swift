@@ -178,7 +178,7 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
 fileprivate func getAssetIfChanged(for settings: VideoSettings, and asset: AVURLAsset?) -> AVURLAsset?{
     let newAsset =  assetFor(settings)
     
-    guard asset != nil else{
+    if asset == nil {
         return newAsset
     }
     

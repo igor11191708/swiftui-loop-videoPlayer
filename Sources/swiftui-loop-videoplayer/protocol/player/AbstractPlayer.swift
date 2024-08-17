@@ -135,6 +135,64 @@ extension AbstractPlayer{
     func pause() {
         player?.pause()
     }
+    
+    /// Clears all items from the player's queue.
+    func clearPlayerQueue() {
+        guard let items = player?.items() else { return }
+        for item in items {
+            player?.remove(item)
+        }
+    }
+    
+    /// Updates the current playback asset, settings, and initializes playback or a specific action when the asset is ready.
+    ///
+    /// This method sets a new asset to be played, optionally loops it, and can automatically start playback.
+    /// If provided, a callback is executed when the asset is ready to play.
+    ///
+    /// - Parameters:
+    ///   - asset: The AVURLAsset to be loaded into the player.
+    ///   - loop: A Boolean value indicating whether the video should loop.
+    ///   - autoPlay: A Boolean value indicating whether playback should start automatically. Default is true.
+    ///   - callback: An optional closure to be called when the asset is ready to play.
+    func update(asset: AVURLAsset, loop: Bool, autoPlay: Bool = true,  callback: (() -> Void)? = nil) {
+
+        guard let player = player else { return }
+
+        let wasPlaying = player.rate != 0
+
+        if wasPlaying {
+            pause()
+        }
+
+        if !player.items().isEmpty {
+            // Cleaning
+            unloop()
+            clearPlayerQueue()
+            removeAllFilters()
+        }
+
+        let newItem = AVPlayerItem(asset: asset)
+        player.insert(newItem, after: nil)
+
+        if loop {
+            self.loop()
+        }
+
+        if let callback{
+            var token: NSKeyValueObservation?
+            token = newItem.observe(\.status, options: [.new, .old]) { item, change in
+                if item.status == .readyToPlay {
+                    callback()
+                    token?.invalidate() // Invalidate token to stop observing
+                    token = nil
+                }
+            }
+        }
+      
+        if autoPlay{
+            player.play()
+        }
+    }
 
     /// Seeks the video to a specific time.
     /// This method moves the playback position to the specified time with precise accuracy.
@@ -142,6 +200,18 @@ extension AbstractPlayer{
     /// - Parameter time: The target time to seek to in the video timeline.
     func seek(to time: Double) {
         guard let player = player, let duration = player.currentItem?.duration else {
+            delegate?.didSeek(value: false, currentTime: time)
+            return
+        }
+        
+        guard player.currentItem?.status == .readyToPlay else{
+            if let asset = currentAsset{
+                update(asset: asset , loop: false, autoPlay: false){[weak self] in
+                    self?.seek(to: time)
+                }
+                return
+            }
+            
             delegate?.didSeek(value: false, currentTime: time)
             return
         }
@@ -414,3 +484,4 @@ internal func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayer
     print("Cleaned up.")
     #endif
 }
+
