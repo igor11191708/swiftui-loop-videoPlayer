@@ -2,7 +2,7 @@
 //  PlayerView.swift
 //
 //
-//  Created by Igor on 10.02.2023.
+//  Created by Igor Shelopaev on 10.02.2023.
 //
 
 import SwiftUI

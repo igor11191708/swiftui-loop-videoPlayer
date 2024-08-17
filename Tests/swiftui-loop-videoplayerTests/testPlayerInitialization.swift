@@ -1,3 +1,10 @@
+//
+//  testPlaybackCommandChangesOverTime.swift
+//
+//
+//  Created by Igor Shelopaev on 16.08.24.
+//
+
 import XCTest
 import SwiftUI
 @testable import swiftui_loop_videoplayer

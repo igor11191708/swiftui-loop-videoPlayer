@@ -2,7 +2,7 @@
 //  Loop.swift
 //
 //
-//  Created by Igor  on 16.08.24.
+//  Created by Igor Shelopaev on 16.08.24.
 //
 
 import Foundation
