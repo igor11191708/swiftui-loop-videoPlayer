@@ -191,7 +191,6 @@ extension AbstractPlayer{
                  callback()
                  self?.statusObserver?.invalidate()
                  self?.statusObserver = nil
-                print("statusObserver")
             }
         }
       
@@ -206,7 +205,6 @@ extension AbstractPlayer{
     /// - Parameter time: The target time to seek to in the video timeline.
     func seek(to time: Double) {
         guard let player = player, let duration = player.currentItem?.duration else {
-            print(player?.currentItem, "player.currentItem")
             delegate?.didSeek(value: false, currentTime: time)
             return
         }
@@ -477,6 +475,9 @@ internal func cleanUp(
     errorObserver?.invalidate()
     errorObserver = nil
 
+    statusObserver?.invalidate()
+    statusObserver = nil
+    
     player?.pause()
     
     playerLooper?.disableLooping()
