@@ -38,6 +38,9 @@ public protocol AbstractPlayer: AnyObject {
     /// The queue player that plays the video items.
     var player: AVQueuePlayer? { get set }
     
+    /// Observes the status property of the new player item.
+    var statusObserver: NSKeyValueObservation? { get set }
+    
     // Playback control methods
 
     /// Initiates or resumes playback of the video.
@@ -178,14 +181,17 @@ extension AbstractPlayer{
             self.loop()
         }
 
+        if let statusObserver{
+            statusObserver.invalidate()
+        }
+        
         if let callback{
-            var token: NSKeyValueObservation?
-            token = newItem.observe(\.status, options: [.new, .old]) { item, change in
-                if item.status == .readyToPlay {
-                    callback()
-                    token?.invalidate() // Invalidate token to stop observing
-                    token = nil
-                }
+            statusObserver = newItem.observe(\.status, options: [.new, .old]) { [weak self] item, change in
+                guard item.status == .readyToPlay else { return }
+                 callback()
+                 self?.statusObserver?.invalidate()
+                 self?.statusObserver = nil
+                print("statusObserver")
             }
         }
       
@@ -200,6 +206,7 @@ extension AbstractPlayer{
     /// - Parameter time: The target time to seek to in the video timeline.
     func seek(to time: Double) {
         guard let player = player, let duration = player.currentItem?.duration else {
+            print(player?.currentItem, "player.currentItem")
             delegate?.didSeek(value: false, currentTime: time)
             return
         }
@@ -459,7 +466,14 @@ extension AbstractPlayer{
 ///   - player: A reference to the AVQueuePlayer to be cleaned up. Modified directly to deallocate resources.
 ///   - playerLooper: A reference to the AVPlayerLooper associated with the player. It's disabled and set to nil.
 ///   - errorObserver: A reference to an NSKeyValueObservation monitoring the player, which is invalidated and set to nil.
-internal func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayerLooper?, errorObserver: inout NSKeyValueObservation?, timeObserverToken: inout Any?) {
+internal func cleanUp(
+    player: inout AVQueuePlayer?,
+    playerLooper: inout AVPlayerLooper?,
+    errorObserver: inout NSKeyValueObservation?,
+    statusObserver: inout NSKeyValueObservation?,
+    timeObserver: inout Any?
+) {
+    
     errorObserver?.invalidate()
     errorObserver = nil
 
@@ -473,9 +487,9 @@ internal func cleanUp(player: inout AVQueuePlayer?, playerLooper: inout AVPlayer
         player?.remove(item)
     }
     
-    if let observerToken = timeObserverToken {
+    if let observerToken = timeObserver {
         player?.removeTimeObserver(observerToken)
-        timeObserverToken = nil
+        timeObserver = nil
     }
     
     player = nil

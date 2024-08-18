@@ -35,7 +35,7 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     var errorObserver: NSKeyValueObservation? { get set }
     
     /// Declare a variable to hold the time observer token outside the if statement
-    var timeObserverToken: Any? { get set }
+    var timeObserver: Any? { get set }
 
     /// Initializes a new player view with specified video asset and configurations.
     ///
@@ -114,7 +114,7 @@ internal extension LoopingPlayerProtocol {
         compositeLayer.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
         
         if let timePublishing{
-            timeObserverToken = player.addPeriodicTimeObserver(forInterval: timePublishing, queue: .main) { [weak self] time in
+            timeObserver = player.addPeriodicTimeObserver(forInterval: timePublishing, queue: .main) { [weak self] time in
                 guard let self = self else{ return }
                 
                 self.delegate?.didPassedTime(seconds: time.seconds)

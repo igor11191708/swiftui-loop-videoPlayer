@@ -40,10 +40,13 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     internal var player: AVQueuePlayer?
     
     /// Declare a variable to hold the time observer token outside the if statement
-    internal var timeObserverToken: Any?
+    internal var timeObserver: Any?
     
     /// Observer for errors from the AVQueuePlayer.
     internal var errorObserver: NSKeyValueObservation?
+    
+    /// Observes the status property of the new player item.
+    internal var statusObserver: NSKeyValueObservation?
     
     /// The delegate to be notified about errors encountered by the player.
     weak var delegate: PlayerDelegateProtocol?
@@ -77,7 +80,7 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     /// This method invalidates the status and error observers to prevent memory leaks,
     /// pauses the player, and clears out player-related references to assist in clean deinitialization.
     deinit {
-        cleanUp(player: &player, playerLooper: &playerLooper, errorObserver: &errorObserver, timeObserverToken: &timeObserverToken)
+        cleanUp(player: &player, playerLooper: &playerLooper, errorObserver: &errorObserver, statusObserver: &statusObserver, timeObserver: &timeObserver)
     }
 }
 #endif
