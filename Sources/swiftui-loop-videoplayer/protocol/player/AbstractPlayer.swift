@@ -98,7 +98,11 @@ public protocol AbstractPlayer: AnyObject {
     /// Sets the playback command for the video player.
     func setCommand(_ value: PlaybackCommand)
     
+    /// Applies the current set of filters to the video using an AVVideoComposition.
     func applyVideoComposition()
+    
+    /// Updates the current playback asset, settings, and initializes playback or a specific action when the asset is ready.
+    func update(asset: AVURLAsset, loop: Bool, autoPlay: Bool,  callback: (() -> Void)?)
 }
 
 extension AbstractPlayer{
@@ -137,66 +141,6 @@ extension AbstractPlayer{
     /// This method pauses the video if it is currently playing, allowing it to be resumed later from the same position.
     func pause() {
         player?.pause()
-    }
-    
-    /// Clears all items from the player's queue.
-    func clearPlayerQueue() {
-        guard let items = player?.items() else { return }
-        for item in items {
-            player?.remove(item)
-        }
-    }
-    
-    /// Updates the current playback asset, settings, and initializes playback or a specific action when the asset is ready.
-    ///
-    /// This method sets a new asset to be played, optionally loops it, and can automatically start playback.
-    /// If provided, a callback is executed when the asset is ready to play.
-    ///
-    /// - Parameters:
-    ///   - asset: The AVURLAsset to be loaded into the player.
-    ///   - loop: A Boolean value indicating whether the video should loop.
-    ///   - autoPlay: A Boolean value indicating whether playback should start automatically. Default is true.
-    ///   - callback: An optional closure to be called when the asset is ready to play.
-    func update(asset: AVURLAsset, loop: Bool, autoPlay: Bool = true,  callback: (() -> Void)? = nil) {
-
-        guard let player = player else { return }
-
-        let wasPlaying = player.rate != 0
-
-        if wasPlaying {
-            pause()
-        }
-
-        if !player.items().isEmpty {
-            // Cleaning
-            unloop()
-            clearPlayerQueue()
-            removeAllFilters()
-        }
-
-        let newItem = AVPlayerItem(asset: asset)
-        player.insert(newItem, after: nil)
-
-        if loop {
-            self.loop()
-        }
-
-        if let statusObserver{
-            statusObserver.invalidate()
-        }
-        
-        if let callback{
-            statusObserver = newItem.observe(\.status, options: [.new, .old]) { [weak self] item, change in
-                guard item.status == .readyToPlay else { return }
-                 callback()
-                 self?.statusObserver?.invalidate()
-                 self?.statusObserver = nil
-            }
-        }
-      
-        if autoPlay{
-            player.play()
-        }
     }
 
     /// Seeks the video to a specific time.
