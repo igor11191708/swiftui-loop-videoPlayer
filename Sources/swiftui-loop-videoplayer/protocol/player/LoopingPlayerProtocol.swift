@@ -140,7 +140,7 @@ internal extension LoopingPlayerProtocol {
     ///   - loop: A Boolean value indicating whether the video should loop.
     ///   - autoPlay: A Boolean value indicating whether playback should start automatically. Default is true.
     ///   - callback: An optional closure to be called when the asset is ready to play.
-    func update(asset: AVURLAsset, loop: Bool, autoPlay: Bool = true,  callback: (() -> Void)? = nil) {
+    func update(asset: AVURLAsset, loop: Bool, autoPlay: Bool = true,  callback: ((AVPlayerItem.Status) -> Void)? = nil) {
 
         guard let player = player else { return }
 
@@ -164,14 +164,17 @@ internal extension LoopingPlayerProtocol {
             self.loop()
         }
 
-        if let statusObserver{
-            statusObserver.invalidate()
-        }
+        statusObserver?.invalidate()
+        
         
         if let callback{
             statusObserver = newItem.observe(\.status, options: [.new, .old]) { [weak self] item, change in
-                guard item.status == .readyToPlay else { return }
-                 callback()
+                //.unknown: This state is essentially the default, indicating that the player item is new or has not yet attempted to load its assets.
+                guard item.status == .readyToPlay || item.status == .failed else {
+                    return
+                }
+                
+                 callback(item.status)
                  self?.statusObserver?.invalidate()
                  self?.statusObserver = nil
             }
