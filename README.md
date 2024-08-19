@@ -20,7 +20,7 @@ The player's functionality is designed around a dual interaction model:
 
 - **Commands and Settings**: Through these, you instruct the player on what to do and how to do it. Settings define the environment and initial state, while commands offer real-time control.
   
-- **Event Feedback**: Through event handling, the player communicates back to the application, informing it of internal changes that may need attention.
+- **Event Feedback**: Through event handling, the player communicates back to the application, informing it of internal changes that may need attention. Due to the nature of media players, especially in environments with dynamic content or user interactions, the flow of events can become flooded. To manage this effectively and prevent the application from being overwhelmed by the volume of incoming events, the system collects these events every second and returns them as a batch. 
 
 ## API Specifications
 
@@ -98,12 +98,13 @@ The player's functionality is designed around a dual interaction model:
 
 | Event                              | Description                                                                                                                                       |
 |------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| `idle`                             | Represents a state where the player is idle, meaning it is not currently performing any action.                                                    |
 | `seek(Bool, currentTime: Double)`  | Represents an end seek action within the player. The first parameter (`Bool`) indicates whether the seek was successful, and the second parameter (`currentTime`) provides the time (in seconds) to which the player is seeking. |
 | `paused`                           | Indicates that the player's playback is currently paused. This state occurs when the player has been manually paused by the user or programmatically through a method like `pause()`. The player is not playing any content while in this state. |
 | `waitingToPlayAtSpecifiedRate`     | Indicates that the player is currently waiting to play at the specified rate. This state generally occurs when the player is buffering or waiting for sufficient data to continue playback. It can also occur if the playback rate is temporarily reduced to zero due to external factors, such as network conditions or system resource limitations. |
 | `playing`                          | Indicates that the player is actively playing content. This state occurs when the player is currently playing video or audio content at the specified playback rate. This is the active state where media is being rendered to the user. |
-
+| `currentItemChanged`    | Triggered when the player's `currentItem` is updated to a new `AVPlayerItem`. This event indicates a change in the media item currently being played. |
+| `currentItemRemoved`    | Occurs when the player's `currentItem` is set to `nil`, indicating that the current media item has been removed from the player.                      |
+| `volumeChanged`         | Happens when the player's volume level is adjusted. This event provides the new volume level, which ranges from 0.0 (muted) to 1.0 (maximum volume).  |
 
 ### Additional Notes on Adding and Removing Vector Graphics
 
@@ -163,8 +164,8 @@ or in a declarative way
         .onPlayerTimeChange { newTime in
             // Current video playback time
         }  
-        .onPlayerEventChange { event in
-            // Player event
+        .onPlayerEventChange { events in
+            // Player events
         }
 ``` 
           

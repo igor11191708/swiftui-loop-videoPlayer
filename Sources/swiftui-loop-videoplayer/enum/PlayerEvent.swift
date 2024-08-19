@@ -12,9 +12,6 @@ import AVFoundation
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
 public enum PlayerEvent: Equatable {
     
-    /// Represents a state where the player is idle.
-    case idle
-
     /// Represents an end seek action within the player.
     /// - Parameters:
     ///   - Bool: Indicates whether the seek was successful.
@@ -63,8 +60,6 @@ public enum PlayerEvent: Equatable {
 extension PlayerEvent: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .idle:
-            return "Idle"
         case .seek(let success, _):
             return success ? "SeekSuccess" : "SeekFail"
         case .paused:
