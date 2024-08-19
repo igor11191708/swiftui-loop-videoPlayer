@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AVFoundation
 
 /// An enumeration representing various events that can occur within a media player.
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
@@ -38,4 +39,46 @@ public enum PlayerEvent: Equatable {
     /// This state occurs when the player is currently playing video or audio content at the
     /// specified playback rate. This is the active state where media is being rendered to the user.
     case playing
+    
+    /// Indicates that the player has switched to a new item.
+    ///
+    /// This event is triggered when the player's `currentItem` changes to a new `AVPlayerItem`.
+    /// - Parameter newItem: The new `AVPlayerItem` that the player has switched to.
+    case currentItemChanged(newItem: AVPlayerItem?)
+    
+    /// Indicates that the player has removed the current item.
+    ///
+    /// This event is triggered when the player's `currentItem` is set to `nil`, meaning that there
+    /// is no media item currently loaded in the player.
+    case currentItemRemoved
+    
+    /// Indicates that the player's volume has changed.
+    ///
+    /// This event is triggered when the player's `volume` property is adjusted.
+    /// - Parameter newVolume: The new volume level, ranging from 0.0 (muted) to 1.0 (full volume).
+    case volumeChanged(newVolume: Float)
+    
+}
+
+extension PlayerEvent: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .idle:
+            return "Idle"
+        case .seek(let success, _):
+            return success ? "SeekSuccess" : "SeekFail"
+        case .paused:
+            return "Paused"
+        case .waitingToPlayAtSpecifiedRate:
+            return "Waiting"
+        case .playing:
+            return "Playing"
+        case .currentItemChanged(_):
+            return "ItemChanged"
+        case .currentItemRemoved:
+            return "ItemRemoved"
+        case .volumeChanged(_):
+            return "VolumeChanged"
+        }
+    }
 }

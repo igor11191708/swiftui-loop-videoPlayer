@@ -37,6 +37,15 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     /// An optional observer for monitoring changes to the player's `timeControlStatus` property.
     var timeControlObserver: NSKeyValueObservation? { get set }
     
+    /// An optional observer for monitoring changes to the player's `currentItem` property.
+    var currentItemObserver: NSKeyValueObservation? { get set }
+
+    /// An optional observer for monitoring changes to the player's `volume` property.
+    ///
+    /// This property holds an instance of `NSKeyValueObservation`, which observes the `volume`
+    /// of an `AVPlayer`.
+    var volumeObserver: NSKeyValueObservation? { get set }
+    
     /// Declare a variable to hold the time observer token outside the if statement
     var timeObserver: Any? { get set }
 
@@ -224,6 +233,21 @@ internal extension LoopingPlayerProtocol {
                 self?.delegate?.didStartPlaying()
             @unknown default:
                 break
+            }
+        }
+        
+        currentItemObserver = player.observe(\.currentItem, options: [.new, .old]) { [weak self]  player, change in
+            // Detecting when the current item is changed
+            if let newItem = change.newValue as? AVPlayerItem {
+                self?.delegate?.currentItemDidChange(to: newItem)
+            } else if change.newValue == nil {
+                self?.delegate?.currentItemWasRemoved()
+            }
+        }
+        
+        volumeObserver = player.observe(\.volume, options: [.new, .old]) { [weak self]  player, change in
+            if let newVolume = change.newValue as? Float {
+                self?.delegate?.volumeDidChange(to: newVolume)
             }
         }
     }

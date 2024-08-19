@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import AVFoundation
 
 @MainActor
 internal class PlayerCoordinator: NSObject, PlayerDelegateProtocol {
@@ -95,5 +96,31 @@ internal class PlayerCoordinator: NSObject, PlayerDelegateProtocol {
     @MainActor
     func didStartPlaying(){
         eventPublisher.send(.playing)
+    }
+    
+    /// Called when the current media item in the player changes.
+    ///
+    /// This method is triggered when the player's `currentItem` is updated to a new `AVPlayerItem`.
+    /// - Parameter newItem: The new `AVPlayerItem` that the player has switched to, if any.
+    @MainActor
+    func currentItemDidChange(to newItem: AVPlayerItem?){
+        eventPublisher.send(.currentItemChanged(newItem: newItem))
+    }
+
+    /// Called when the current media item is removed from the player.
+    ///
+    /// This method is triggered when the player's `currentItem` is set to `nil`, indicating that there is no longer an active media item.
+    @MainActor
+    func currentItemWasRemoved(){
+        eventPublisher.send(.currentItemRemoved)
+    }
+
+    /// Called when the volume level of the player changes.
+    ///
+    /// This method is triggered when the player's `volume` property changes.
+    /// - Parameter newVolume: The new volume level, expressed as a float between 0.0 (muted) and 1.0 (maximum volume).
+    @MainActor
+    func volumeDidChange(to newVolume: Float){
+        eventPublisher.send(.volumeChanged(newVolume: newVolume))
     }
 }

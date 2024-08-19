@@ -48,6 +48,15 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     /// An optional observer for monitoring changes to the player's `timeControlStatus` property.
     internal var timeControlObserver: NSKeyValueObservation?
     
+    /// An optional observer for monitoring changes to the player's `currentItem` property.
+    internal var currentItemObserver: NSKeyValueObservation?
+    
+    /// An optional observer for monitoring changes to the player's `volume` property.
+    ///
+    /// This property holds an instance of `NSKeyValueObservation`, which observes the `volume`
+    /// of an `AVPlayer`.
+    internal var volumeObserver: NSKeyValueObservation?
+    
     /// Observes the status property of the new player item.
     internal var statusObserver: NSKeyValueObservation?
     
@@ -83,8 +92,15 @@ class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {
     /// This method invalidates the status and error observers to prevent memory leaks,
     /// pauses the player, and clears out player-related references to assist in clean deinitialization.
     deinit {
-        cleanUp(player: &player, playerLooper: &playerLooper, errorObserver: &errorObserver,
-                timeControlObserver : &timeControlObserver, statusObserver: &statusObserver, timeObserver: &timeObserver)
+        cleanUp(
+            player: &player,
+            playerLooper: &playerLooper,
+            errorObserver: &errorObserver,
+            timeControlObserver : &timeControlObserver,
+            currentItemObserver: &currentItemObserver,
+            volumeObserver: &volumeObserver,
+            statusObserver: &statusObserver,
+            timeObserver: &timeObserver)
     }
 }
 #endif

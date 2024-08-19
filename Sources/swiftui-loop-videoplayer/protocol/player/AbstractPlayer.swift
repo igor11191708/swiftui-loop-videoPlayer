@@ -417,6 +417,8 @@ internal func cleanUp(
     playerLooper: inout AVPlayerLooper?,
     errorObserver: inout NSKeyValueObservation?,
     timeControlObserver: inout NSKeyValueObservation?,
+    currentItemObserver: inout NSKeyValueObservation?,
+    volumeObserver: inout NSKeyValueObservation?,
     statusObserver: inout NSKeyValueObservation?,
     timeObserver: inout Any?
 ) {
@@ -426,6 +428,12 @@ internal func cleanUp(
     
     timeControlObserver?.invalidate()
     timeControlObserver = nil
+    
+    currentItemObserver?.invalidate()
+    currentItemObserver = nil
+    
+    volumeObserver?.invalidate()      
+    volumeObserver = nil
     
     statusObserver?.invalidate()
     statusObserver = nil

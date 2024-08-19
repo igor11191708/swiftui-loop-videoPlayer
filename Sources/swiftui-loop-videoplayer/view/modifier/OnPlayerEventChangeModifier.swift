@@ -8,14 +8,14 @@
 import SwiftUI
 
 internal struct PlayerEventPreferenceKey: PreferenceKey {
-    public static var defaultValue: PlayerEvent = .idle
-    public static func reduce(value: inout PlayerEvent, nextValue: () -> PlayerEvent) {
+    public static var defaultValue: [PlayerEvent] = []
+    public static func reduce(value: inout [PlayerEvent], nextValue: () -> [PlayerEvent]) {
         value = nextValue()
     }
 }
 
 internal struct OnPlayerEventChangeModifier: ViewModifier {
-    var onPlayerEventChange: (PlayerEvent) -> Void
+    var onPlayerEventChange: ([PlayerEvent]) -> Void
 
     func body(content: Content) -> some View {
         content
@@ -26,7 +26,7 @@ internal struct OnPlayerEventChangeModifier: ViewModifier {
 }
 
 public extension View {
-    func onPlayerEventChange(perform action: @escaping (PlayerEvent) -> Void) -> some View {
+    func onPlayerEventChange(perform action: @escaping ([PlayerEvent]) -> Void) -> some View {
         self.modifier(OnPlayerEventChangeModifier(onPlayerEventChange: action))
     }
 }

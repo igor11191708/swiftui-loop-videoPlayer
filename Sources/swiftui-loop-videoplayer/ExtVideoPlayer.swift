@@ -25,7 +25,7 @@ public struct ExtVideoPlayer: View{
     @State private var currentTime: Double = 0.0
     
     /// The current state of the player event,
-    @State private var playerEvent: PlayerEvent = .idle
+    @State private var playerEvent: [PlayerEvent] = [.idle]
 
     /// A publisher that emits the current playback time as a `Double`. It is initialized privately within the view.
     @State private var timePublisher = PassthroughSubject<Double, Never>()
@@ -114,7 +114,7 @@ public struct ExtVideoPlayer: View{
            .onReceive(timePublisher, perform: { time in
                currentTime = time
            })
-           .onReceive(eventPublisher, perform: { event in
+           .onReceive(eventPublisher.collect(.byTime(DispatchQueue.main, .seconds(2))), perform: { event in
                playerEvent = event
            })
            .preference(key: CurrentTimePreferenceKey.self, value: currentTime)
