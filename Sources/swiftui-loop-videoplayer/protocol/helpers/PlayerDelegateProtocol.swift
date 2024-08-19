@@ -32,4 +32,22 @@ public protocol PlayerDelegateProtocol: AnyObject {
     ///   - currentTime: The current time of the player after seeking, in seconds.
     @MainActor
     func didSeek(value: Bool, currentTime: Double)
+    
+    /// Called when the player has paused playback.
+    ///
+    /// This method is triggered when the player's `timeControlStatus` changes to `.paused`.
+    @MainActor
+    func didPausePlayback()
+    
+    /// Called when the player is waiting to play at the specified rate.
+    ///
+    /// This method is triggered when the player's `timeControlStatus` changes to `.waitingToPlayAtSpecifiedRate`.
+    @MainActor
+    func isWaitingToPlay()
+    
+    /// Called when the player starts or resumes playing.
+    ///
+    /// This method is triggered when the player's `timeControlStatus` changes to `.playing`.
+    @MainActor
+    func didStartPlaying()
 }

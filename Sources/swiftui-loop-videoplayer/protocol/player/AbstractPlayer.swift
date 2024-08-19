@@ -153,9 +153,9 @@ extension AbstractPlayer{
             return
         }
         
-        guard player.currentItem?.status == .readyToPlay else{
-            if let asset = currentAsset{
-                update(asset: asset , loop: false, autoPlay: false){ [weak self] status in
+        guard currentItem?.status == .readyToPlay else{
+            if let currentAsset{
+                update(asset: currentAsset , loop: false, autoPlay: false){ [weak self] status in
                     if status == .readyToPlay{
                         self?.seek(to: time)
                     }else {
@@ -416,13 +416,17 @@ internal func cleanUp(
     player: inout AVQueuePlayer?,
     playerLooper: inout AVPlayerLooper?,
     errorObserver: inout NSKeyValueObservation?,
+    timeControlObserver: inout NSKeyValueObservation?,
     statusObserver: inout NSKeyValueObservation?,
     timeObserver: inout Any?
 ) {
     
     errorObserver?.invalidate()
     errorObserver = nil
-
+    
+    timeControlObserver?.invalidate()
+    timeControlObserver = nil
+    
     statusObserver?.invalidate()
     statusObserver = nil
     

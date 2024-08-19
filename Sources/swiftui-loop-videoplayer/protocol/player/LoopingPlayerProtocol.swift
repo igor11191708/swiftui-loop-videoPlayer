@@ -34,6 +34,9 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     /// ensuring that all playback errors are managed and reported appropriately.
     var errorObserver: NSKeyValueObservation? { get set }
     
+    /// An optional observer for monitoring changes to the player's `timeControlStatus` property.
+    var timeControlObserver: NSKeyValueObservation? { get set }
+    
     /// Declare a variable to hold the time observer token outside the if statement
     var timeObserver: Any? { get set }
 
@@ -206,6 +209,22 @@ internal extension LoopingPlayerProtocol {
     func setupObservers(for player: AVQueuePlayer) {
         errorObserver = player.observe(\.error, options: [.new]) { [weak self] player, _ in
             self?.handlePlayerError(player)
+        }
+        
+        timeControlObserver = player.observe(\.timeControlStatus, options: [.new, .old]) { [weak self] player, change in
+            switch player.timeControlStatus {
+            case .paused:
+                // This could mean playback has stopped, but it's not specific to end of playback
+                self?.delegate?.didPausePlayback()
+            case .waitingToPlayAtSpecifiedRate:
+                // Player is waiting to play (e.g., buffering)
+                self?.delegate?.isWaitingToPlay()
+            case .playing:
+                // Player is currently playing
+                self?.delegate?.didStartPlaying()
+            @unknown default:
+                break
+            }
         }
     }
     

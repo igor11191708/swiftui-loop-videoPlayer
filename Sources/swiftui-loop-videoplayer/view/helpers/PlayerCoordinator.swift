@@ -10,7 +10,7 @@ import Combine
 
 @MainActor
 internal class PlayerCoordinator: NSObject, PlayerDelegateProtocol {
-        
+           
     let eventPublisher: PassthroughSubject<PlayerEvent, Never>
     
     let timePublisher: PassthroughSubject<Double, Never>
@@ -71,5 +71,29 @@ internal class PlayerCoordinator: NSObject, PlayerDelegateProtocol {
     ///   - currentTime: The current time of the player after seeking, in seconds.
     func didSeek(value: Bool, currentTime : Double) {
         eventPublisher.send(.seek(value, currentTime: currentTime))
+    }
+    
+    /// Called when the player has paused playback.
+    ///
+    /// This method is triggered when the player's `timeControlStatus` changes to `.paused`.
+    @MainActor
+    func didPausePlayback(){
+        eventPublisher.send(.paused)
+    }
+    
+    /// Called when the player is waiting to play at the specified rate.
+    ///
+    /// This method is triggered when the player's `timeControlStatus` changes to `.waitingToPlayAtSpecifiedRate`.
+    @MainActor
+    func isWaitingToPlay(){
+        eventPublisher.send(.waitingToPlayAtSpecifiedRate)
+    }
+    
+    /// Called when the player starts or resumes playing.
+    ///
+    /// This method is triggered when the player's `timeControlStatus` changes to `.playing`.
+    @MainActor
+    func didStartPlaying(){
+        eventPublisher.send(.playing)
     }
 }
