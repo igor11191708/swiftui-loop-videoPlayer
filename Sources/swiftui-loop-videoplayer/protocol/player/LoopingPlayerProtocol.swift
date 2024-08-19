@@ -164,24 +164,37 @@ internal extension LoopingPlayerProtocol {
             self.loop()
         }
 
+        // Set up state item status observer
+        setupStateItemStatusObserver(newItem: newItem, callback: callback)
+      
+        if autoPlay{
+            player.play()
+        }
+    }
+    
+    /// Sets up an observer for the status of the provided `AVPlayerItem`.
+    ///
+    /// This method observes changes in the status of `newItem` and triggers the provided callback
+    /// whenever the status changes to `.readyToPlay` or `.failed`. Once the callback is invoked,
+    /// the observer is invalidated, ensuring that the callback is called only once.
+    ///
+    /// - Parameters:
+    ///   - newItem: The `AVPlayerItem` whose status is to be observed.
+    ///   - callback: A closure that is called when the item's status changes to `.readyToPlay` or `.failed`.
+    func setupStateItemStatusObserver(newItem: AVPlayerItem, callback: ((AVPlayerItem.Status) -> Void)?) {
         statusObserver?.invalidate()
         
-        
-        if let callback{
-            statusObserver = newItem.observe(\.status, options: [.new, .old]) { [weak self] item, change in
-                //.unknown: This state is essentially the default, indicating that the player item is new or has not yet attempted to load its assets.
+        if let callback = callback {
+            //.unknown: This state is essentially the default, indicating that the player item is new or has not yet attempted to load its assets.
+            statusObserver = newItem.observe(\.status, options: [.new, .old]) { [weak self] item, _ in
                 guard item.status == .readyToPlay || item.status == .failed else {
                     return
                 }
                 
-                 callback(item.status)
-                 self?.statusObserver?.invalidate()
-                 self?.statusObserver = nil
+                callback(item.status)
+                self?.statusObserver?.invalidate()
+                self?.statusObserver = nil
             }
-        }
-      
-        if autoPlay{
-            player.play()
         }
     }
     
