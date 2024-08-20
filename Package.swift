@@ -25,8 +25,8 @@ let package = Package(
         .testTarget(
             name: "swiftui-loop-videoplayerTests",
             dependencies: ["swiftui-loop-videoplayer"],
-        resources: [
-                    .process("Resources/swipe.mp4") // Include your video file as a resource
-                ])
+            resources: [
+                        .process("Resources/swipe.mp4")
+                    ])
     ]
 )
