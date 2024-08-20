@@ -29,6 +29,9 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     
     var playerLayer : AVPlayerLayer { get }
 
+    /// Observes the status property of the new player item.
+    var statusObserver: NSKeyValueObservation? { get set }
+    
     /// An optional NSKeyValueObservation to monitor errors encountered by the video player.
     /// This observer should be configured to detect and handle errors from the AVQueuePlayer,
     /// ensuring that all playback errors are managed and reported appropriately.

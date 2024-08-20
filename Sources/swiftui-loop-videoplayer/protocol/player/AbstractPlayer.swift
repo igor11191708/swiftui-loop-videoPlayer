@@ -38,9 +38,6 @@ public protocol AbstractPlayer: AnyObject {
     /// The queue player that plays the video items.
     var player: AVQueuePlayer? { get set }
     
-    /// Observes the status property of the new player item.
-    var statusObserver: NSKeyValueObservation? { get set }
-    
     // Playback control methods
 
     /// Initiates or resumes playback of the video.
