@@ -16,7 +16,7 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ## Philosophy of Interactive Player Dynamics
 
-The player's functionality is designed around a dual interaction model:
+The player's functionality is designed around a dual &#8646; interaction model:
 
 &#10230; **Commands and Settings**: Through these, you instruct the player on what to do and how to do it. Settings define the environment and initial state, while commands offer real-time control.
   
