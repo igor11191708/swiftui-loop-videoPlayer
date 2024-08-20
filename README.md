@@ -18,9 +18,9 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 The player's functionality is designed around a dual &#8646; interaction model:
 
-&#10230; **Commands and Settings**: Through these, you instruct the player on what to do and how to do it. Settings define the environment and initial state, while commands offer real-time control.
+&#10230; **Commands and Settings**: Through these, you instruct the player on what to do and how to do it. Settings define the environment and initial state, while commands offer real-time control. As for now, you can conveniently pass command by command; perhaps later I’ll add support for batch commands
   
-&#10232; **Event Feedback**: Through event handling, the player communicates back to the application, informing it of internal changes that may need attention. Due to the nature of media players, especially in environments with dynamic content or user interactions, the flow of events can become flooded. To manage this effectively and prevent the application from being overwhelmed by the volume of incoming events, the system collects these events every second and returns them as a batch. 
+&#10232; **Event Feedback**: Through event handling, the player communicates back to the application, informing it of internal changes that may need attention. Due to the nature of media players, especially in environments with dynamic content or user interactions, the flow of events can become flooded. To manage this effectively and prevent the application from being overwhelmed by the volume of incoming events, the **system collects these events every second and returns them as a batch**
 
 ## API Specifications
 
