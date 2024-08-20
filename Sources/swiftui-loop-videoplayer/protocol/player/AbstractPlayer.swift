@@ -405,13 +405,18 @@ extension AbstractPlayer{
 }
 
 /// Cleans up resources associated with an AVQueuePlayer and its related components.
-/// This function stops the player, invalidates and clears the observer, and removes all items from the player queue.
-/// It also disables any looping mechanisms before setting the player and its components to nil, ensuring proper deinitialization.
+/// This function stops the player, invalidates and clears all observers, and removes all items from the player's queue.
+/// It also disables any looping mechanisms, sets all involved components to nil, and ensures proper deinitialization to prevent memory leaks.
 ///
 /// - Parameters:
-///   - player: A reference to the AVQueuePlayer to be cleaned up. Modified directly to deallocate resources.
-///   - playerLooper: A reference to the AVPlayerLooper associated with the player. It's disabled and set to nil.
-///   - errorObserver: A reference to an NSKeyValueObservation monitoring the player, which is invalidated and set to nil.
+///   - player: An inout reference to the AVQueuePlayer that is being cleaned up. The player is paused, and its resources are freed.
+///   - playerLooper: An inout reference to the AVPlayerLooper associated with the player. It's disabled to stop any ongoing loops and set to nil.
+///   - errorObserver: An inout reference to an NSKeyValueObservation that monitors for errors. It is invalidated and set to nil to stop observing.
+///   - timeControlObserver: An inout reference to an NSKeyValueObservation that monitors the player's time control status. It is invalidated and set to nil.
+///   - currentItemObserver: An inout reference to an NSKeyValueObservation that tracks changes to the player's current item. It is invalidated and set to nil.
+///   - volumeObserver: An inout reference to an NSKeyValueObservation that monitors volume changes. It is invalidated and set to nil.
+///   - statusObserver: An inout reference to an NSKeyValueObservation that observes the player's status. It is invalidated and set to nil.
+///   - timeObserver: An inout reference to a generic observer (e.g., a time observer token) that needs to be removed to prevent memory leaks. It is cleared and set to nil.
 internal func cleanUp(
     player: inout AVQueuePlayer?,
     playerLooper: inout AVPlayerLooper?,
