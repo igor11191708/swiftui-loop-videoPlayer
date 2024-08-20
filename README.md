@@ -194,7 +194,7 @@ You can group error settings in group **ErrorGroup** or just pass all settings a
 
 
 ### Supported Video Types and Formats
-The AVFoundation framework used in the package supports a wide range of video formats and codecs, including both file-based media and streaming protocols. Below is a list of supported video types, codecs, and streaming protocols organized into a grid according to Apple’s documentation. Sorry, didn’t check all codecs and files. Hope they are all work well.
+The AVFoundation framework used in the package supports a wide range of video formats and codecs, including both file-based media and streaming protocols. Below is a list of supported video types, codecs, and streaming protocols organized into a grid according to Apple’s documentation. Sorry, didn’t check all codecs and files.
 
 | Supported File Types     | Supported Codecs | Supported Streaming Protocols      |
 |--------------------------|------------------|-------------------------------------|
