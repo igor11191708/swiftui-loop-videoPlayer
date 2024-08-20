@@ -28,14 +28,14 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     #endif
     
     var playerLayer : AVPlayerLayer { get }
-
-    /// Observes the status property of the new player item.
-    var statusObserver: NSKeyValueObservation? { get set }
     
     /// An optional NSKeyValueObservation to monitor errors encountered by the video player.
     /// This observer should be configured to detect and handle errors from the AVQueuePlayer,
     /// ensuring that all playback errors are managed and reported appropriately.
     var errorObserver: NSKeyValueObservation? { get set }
+    
+    /// Observes the status property of the new player item.
+    var statusObserver: NSKeyValueObservation? { get set }
     
     /// An optional observer for monitoring changes to the player's `timeControlStatus` property.
     var timeControlObserver: NSKeyValueObservation? { get set }
@@ -44,9 +44,6 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     var currentItemObserver: NSKeyValueObservation? { get set }
 
     /// An optional observer for monitoring changes to the player's `volume` property.
-    ///
-    /// This property holds an instance of `NSKeyValueObservation`, which observes the `volume`
-    /// of an `AVPlayer`.
     var volumeObserver: NSKeyValueObservation? { get set }
     
     /// Declare a variable to hold the time observer token outside the if statement
