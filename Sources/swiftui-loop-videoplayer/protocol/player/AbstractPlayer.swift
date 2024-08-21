@@ -398,7 +398,6 @@ extension AbstractPlayer{
         }
         #endif
     }
-
 }
 
 /// Cleans up resources associated with an AVQueuePlayer and its related components.
