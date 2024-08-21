@@ -246,7 +246,7 @@ internal extension LoopingPlayerProtocol {
         }
         
         volumeObserver = player.observe(\.volume, options: [.new, .old]) { [weak self]  player, change in
-            if let newVolume = change.newValue as? Float {
+            if let newVolume = change.newValue{
                 self?.delegate?.volumeDidChange(to: newVolume)
             }
         }
