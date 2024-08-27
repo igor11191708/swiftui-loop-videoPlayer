@@ -12,9 +12,6 @@ final class testVideoStreaming: XCTestCase {
 
     
     func testLocalVideoStreaming() {
-        
-        let expectation = XCTestExpectation(description: "Playing event should be fired")
-           
 
            // Setup player with video
            guard let filePath = Bundle.module.path(forResource: "swipe", ofType: "mp4") else {
