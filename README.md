@@ -22,7 +22,7 @@ The player's functionality is designed around a dual &#8646; interaction model:
   
 - **Event Feedback**: Through event handling, the player communicates back to the application, informing it of internal changes that may need attention. Due to the nature of media players, especially in environments with dynamic content or user interactions, the flow of events can become flooded. To manage this effectively and prevent the application from being overwhelmed by the volume of incoming events, the **system collects these events every second and returns them as a batch**
 
-## API Specifications
+## API
 
 | Property/Method                                             | Type                          | Description                                                                                          |
 |-------------------------------------------------------------|-------------------------------|------------------------------------------------------------------------------------------------------|
@@ -44,7 +44,7 @@ The player's functionality is designed around a dual &#8646; interaction model:
 | **EColor** | Error message text color. | .red |
 | **EFontSize** | Size of the error text. | 17.0 |
 
-### Additional Notes on Settings
+*Additional Notes on Settings*
 
 - **Time Publishing:**  If the parameter is passed during initialization, the player will publish the time according to the input settings. You can pass just `TimePublishing` without any value to use the default interval of 1 second, or you can pass a specific `CMTime` value to set a custom interval. | 1 second (CMTime with 1 second and preferred timescale of 600) If no `TimePublishing` is provided, the player will not emit time events, which can improve performance when timing information is not needed.
 
