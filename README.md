@@ -6,10 +6,6 @@
 ## Why if we have Apple’s VideoPlayer ?!
 Apple’s VideoPlayer offers a quick setup for video playback in SwiftUI but for example it doesn’t allow you to hide or customize the default video controls UI, limiting its use for custom scenarios. In contrast, this solution provides full control over playback, including the ability to disable or hide UI elements, making it suitable for background videos, tooltips, and video hints. Additionally, it supports advanced features like seamless looping and real-time filter application, adding vector graphics upon the video stream etc. This package uses a declarative approach to declare parameters for the video component based on building blocks. This implementation might give some insights into how SwiftUI works under the hood. You can also pass parameters in the common way.
 
-## Disclaimer on Video Sources like YouTube
-Please note that using videos from URLs requires ensuring that you have the right to use and stream these videos. Videos hosted on platforms like YouTube cannot be used directly due to restrictions in their terms of service. Always ensure the video URL is compliant with copyright laws and platform policies.
-
-
 ## [SwiftUI video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui_video_player.gif) 
@@ -21,6 +17,13 @@ The player's functionality is designed around a dual &#8646; interaction model:
 - **Commands and Settings**: Through these, you instruct the player on what to do and how to do it. Settings define the environment and initial state, while commands offer real-time control. As for now, you can conveniently pass command by command; perhaps later I’ll add support for batch commands
   
 - **Event Feedback**: Through event handling, the player communicates back to the application, informing it of internal changes that may need attention. Due to the nature of media players, especially in environments with dynamic content or user interactions, the flow of events can become flooded. To manage this effectively and prevent the application from being overwhelmed by the volume of incoming events, the **system collects these events every second and returns them as a batch**
+
+## Testing
+
+The package includes unit tests that cover key functionality. While not exhaustive, these tests help ensure the core components work as expected. UI tests are in progress and are being developed in the example application.
+
+## Disclaimer on Video Sources like YouTube
+Please note that using videos from URLs requires ensuring that you have the right to use and stream these videos. Videos hosted on platforms like YouTube cannot be used directly due to restrictions in their terms of service. Always ensure the video URL is compliant with copyright laws and platform policies.
 
 ## API
 
