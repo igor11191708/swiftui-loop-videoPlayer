@@ -104,10 +104,7 @@ extension LoopPlayerMultiPlatform: UIViewRepresentable{
        }
         
         makeErrorView(container, error: error)
-        if let e = error {
-            eventPublisher.send(.error(e))
-        }
-        
+
         return container
     }
     
@@ -127,6 +124,11 @@ extension LoopPlayerMultiPlatform: UIViewRepresentable{
                 player.setCommand(command)
                 context.coordinator.setLastCommand(command) // Update the last command in the coordinator
             }
+        }
+        
+        if let e = error {
+            eventPublisher
+                .send(.error(e))
         }
         
         updateView(uiView, error: error)
@@ -149,11 +151,8 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
         }
          
         makeErrorView(container, error: error)
-        if let e = error {
-            eventPublisher.send(.error(e))
-        }
          
-         return container
+        return container
     }
     
     /// Updates the specified NSView during the view's lifecycle in response to state changes.
@@ -172,6 +171,11 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
                 context.coordinator.setLastCommand(command) // Update the last command in the coordinator
             }
             
+        }
+        
+        if let e = error {
+            eventPublisher
+                .send(.error(e))
         }
         
         updateView(nsView, error: error)
