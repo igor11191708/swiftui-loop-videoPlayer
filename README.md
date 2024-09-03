@@ -107,7 +107,9 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | `playing`                          | Indicates that the player is actively playing content. This state occurs when the player is currently playing video or audio content at the specified playback rate. This is the active state where media is being rendered to the user. |
 | `currentItemChanged`    | Triggered when the player's `currentItem` is updated to a new `AVPlayerItem`. This event indicates a change in the media item currently being played. |
 | `currentItemRemoved`    | Occurs when the player's `currentItem` is set to `nil`, indicating that the current media item has been removed from the player.                      |
+| `error(VPErrors)`                  | Represents an occurrence of an error within the player. The event provides a `VPErrors` enum value indicating the specific type of error encountered. |
 | `volumeChanged`         | Happens when the player's volume level is adjusted. This event provides the new volume level, which ranges from 0.0 (muted) to 1.0 (maximum volume).  |
+
 
 ### Additional Notes on Adding and Removing Vector Graphics
 
