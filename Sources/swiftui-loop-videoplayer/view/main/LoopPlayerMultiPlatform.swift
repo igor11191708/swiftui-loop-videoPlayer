@@ -75,7 +75,11 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
         self._command = command
         let settings = settings.wrappedValue
         let asset =  assetFor(settings)
-        self._error = State(initialValue: detectError(settings: settings, asset: asset))
+        let e = detectError(settings: settings, asset: asset)
+        if let e {
+            self._error = State(initialValue: e)
+            self.eventPublisher.send(.error(e))
+        }
     }
 
     
