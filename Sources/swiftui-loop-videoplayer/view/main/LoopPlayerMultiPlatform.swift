@@ -78,7 +78,6 @@ struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
         let e = detectError(settings: settings, asset: asset)
         if let e {
             self._error = State(initialValue: e)
-            self.eventPublisher.send(.error(e))
         }
     }
 
@@ -105,6 +104,9 @@ extension LoopPlayerMultiPlatform: UIViewRepresentable{
        }
         
         makeErrorView(container, error: error)
+        if let e = error {
+            eventPublisher.send(.error(e))
+        }
         
         return container
     }
@@ -146,7 +148,10 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
             player.delegate = context.coordinator
         }
          
-         makeErrorView(container, error: error)
+        makeErrorView(container, error: error)
+        if let e = error {
+            eventPublisher.send(.error(e))
+        }
          
          return container
     }
