@@ -9,7 +9,7 @@ import Foundation
 
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
 /// An enumeration of possible errors that can occur in the video player.
-public enum VPErrors: Error, CustomStringConvertible, Sendable {
+public enum VPErrors: Error, CustomStringConvertible, Sendable{
     
     /// Error case for when there is an error with remote video playback.
     /// - Parameter error: The error that occurred during remote video playback.
@@ -38,6 +38,22 @@ public enum VPErrors: Error, CustomStringConvertible, Sendable {
             /// - Parameter error: The error that occurred during remote video playback.
             case .remoteVideoError(let error):
                 return "Playback error: \(String(describing: error?.localizedDescription))"
+        }
+    }
+}
+
+@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
+extension VPErrors: Equatable {
+    public static func ==(lhs: VPErrors, rhs: VPErrors) -> Bool {
+        switch (lhs, rhs) {
+        case (.remoteVideoError(let a), .remoteVideoError(let b)):
+            return a?.localizedDescription == b?.localizedDescription
+        case (.sourceNotFound(let a), .sourceNotFound(let b)):
+            return a == b
+        case (.settingsNotUnique, .settingsNotUnique):
+            return true
+        default:
+            return false
         }
     }
 }

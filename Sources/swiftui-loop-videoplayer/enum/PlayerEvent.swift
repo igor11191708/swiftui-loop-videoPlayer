@@ -55,6 +55,10 @@ public enum PlayerEvent: Equatable {
     /// - Parameter newVolume: The new volume level, ranging from 0.0 (muted) to 1.0 (full volume).
     case volumeChanged(newVolume: Float)
     
+    /// Represents a case where a specific VPErrors type error is encountered.
+    ///
+    /// - Parameter VPErrors: The error from the VPErrors enum associated with this case.
+    case error(VPErrors)
 }
 
 extension PlayerEvent: CustomStringConvertible {
@@ -74,6 +78,8 @@ extension PlayerEvent: CustomStringConvertible {
             return "ItemRemoved"
         case .volumeChanged(_):
             return "VolumeChanged"
+        case .error(let e):
+            return "\(e.description)"
         }
     }
 }

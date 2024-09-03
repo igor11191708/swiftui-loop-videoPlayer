@@ -21,7 +21,6 @@ internal class PlayerCoordinator: NSObject, PlayerDelegateProtocol {
     
     /// A binding to an optional `VPErrors` instance, used to report errors back to the parent view.
     @Binding private var error: VPErrors?
-   
 
     init(
         _ error: Binding<VPErrors?>,
@@ -45,6 +44,7 @@ internal class PlayerCoordinator: NSObject, PlayerDelegateProtocol {
     /// - Parameter error: The error received.
     func didReceiveError(_ error: VPErrors) {
         self.error = error
+        eventPublisher.send(.error(error))
     }
     
     /// Sets the last command applied to the player.
