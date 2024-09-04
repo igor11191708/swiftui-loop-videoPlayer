@@ -19,6 +19,7 @@ public enum Setting: Equatable, SettingsConvertible{
         [self]
     }
     
+    /// Loop video
     case loop
     
     /// File name
@@ -42,6 +43,9 @@ public enum Setting: Equatable, SettingsConvertible{
     
     /// Color of the error text
     case errorColor(Color)
+    
+    /// Do not show inner error showcase component
+    case errorWidgetOff
     
     /// Case name
     var caseName: String {

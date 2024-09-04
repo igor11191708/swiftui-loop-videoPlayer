@@ -46,6 +46,7 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | **Loop** | Whether the video should automatically restart when it reaches the end. If not explicitly passed, the video will not loop. | - |
 | **EColor** | Error message text color. | .red |
 | **EFontSize** | Size of the error text. | 17.0 |
+| **ErrorWidgetOff** | Do not show inner error showcase component. In case you'd like to implement your own error Alert widget' | false |
 
 *Additional Notes on Settings*
 

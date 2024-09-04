@@ -150,6 +150,7 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
             player.delegate = context.coordinator
         }
          
+
         makeErrorView(container, error: error)
          
         return container

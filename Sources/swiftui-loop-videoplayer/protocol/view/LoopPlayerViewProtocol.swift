@@ -69,6 +69,10 @@ public extension LoopPlayerViewProtocol{
     ///   - error: The optional error which, if present, triggers the creation and addition of an error-specific view.
     @MainActor
     func makeErrorView(_ view: View, error: VPErrors?) {
+        
+        /// Check if error widget is off in settings
+        guard settings.errorWidgetOff == false else{ return }
+        
         if let error = error {
             let errorView = errorTpl(error, settings.errorColor, settings.errorFontSize)
             view.addSubview(errorView)

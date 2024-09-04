@@ -19,6 +19,7 @@ public struct VideoSettings: Equatable{
     /// Video extension
     public let ext: String
     
+    /// Loop video
     public let loop: Bool
     
     /// A CMTime value representing the interval at which the player's current time should be published.
@@ -33,6 +34,9 @@ public struct VideoSettings: Equatable{
         
     /// Size of the error text Default : 17.0
     public let errorFontSize : CGFloat
+    
+    /// Do not show inner error showcase component
+    public let errorWidgetOff: Bool
         
     /// Are the params unique
     public var areUnique : Bool {
@@ -65,6 +69,8 @@ public struct VideoSettings: Equatable{
         timePublishing = settings.fetch(by : "timePublishing", defaulted: nil)
         
         loop = settings.contains(.loop)
+        
+        errorWidgetOff = settings.contains(.errorWidgetOff)
     }
 }
 
