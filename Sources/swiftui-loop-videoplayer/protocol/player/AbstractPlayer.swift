@@ -174,7 +174,7 @@ extension AbstractPlayer{
         let endTime = CMTimeGetSeconds(duration)
         let seekTime : CMTime
         
-        if time <= 0 {
+        if time < 0 {
             // If the time is negative, seek to the start of the video
             seekTime = .zero
         } else if time >= endTime {
@@ -186,10 +186,10 @@ extension AbstractPlayer{
             let seekCMTime = CMTime(seconds: time, preferredTimescale: duration.timescale)
             seekTime = seekCMTime
         }
-        
+
         player.seek(to: seekTime){ [weak self] value in
             let currentTime = CMTimeGetSeconds(player.currentTime())
-            self?.delegate?.didSeek(value: value, currentTime: currentTime)
+            self?.delegate?.didSeek(value: value, currentTime: seekTime.seconds)
         }
     }
     
