@@ -37,8 +37,6 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ## Settings
 
-## Settings
-
 | Name | Description | Default |
 | --- | --- |  --- |
 | **SourceName** | The URL or local filename of the video. | - |
@@ -47,6 +45,7 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | **TimePublishing** | Specifies the interval at which the player publishes the current playback time. | - |
 | **Loop** | Whether the video should automatically restart when it reaches the end. If not explicitly passed, the video will not loop. | false |
 | **Mute** | Indicates if the video should play without sound. | false |
+| **NotAutoPlay** | Indicates if the video should not play after initialization. Notice that if you use `command` as a control flow for the player the start command should be `.idle` | false |
 | **EColor** | Error message text color. | .red |
 | **EFontSize** | Size of the error text. | 17.0 |
 | **ErrorWidgetOff** | Do not show inner error showcase component. In case you'd like to implement your own error Alert widget. | - |
