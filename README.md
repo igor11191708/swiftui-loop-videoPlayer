@@ -61,6 +61,18 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 ## Commands
 
+### Handling Sequential Similar Commands
+
+When using the video player controls in your SwiftUI application, it's important to understand how command processing works. Specifically, issuing two identical commands consecutively will result in the second command being ignored. This is due to the underlying implementation in SwiftUI that prevents redundant command execution to optimize performance and user experience.
+
+### Common Scenario
+
+For example, if you attempt to pause the video player twice in a row, the second pause command will have no effect because the player is already in a paused state. Similarly, sending two consecutive play commands will not re-trigger playback if the video is already playing.
+
+### Handling Similar Commands
+
+In cases where you need to re-issue a command that might appear redundant but is necessary under specific conditions, you must insert an `idle` command between the two similar commands. The `idle` command resets the command state of the player, allowing subsequent commands to be processed as new actions.
+
 ### Playback Commands
 
 | Command                     | Description                                                                                                                                          |
