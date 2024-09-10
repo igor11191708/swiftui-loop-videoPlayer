@@ -196,7 +196,8 @@ extension AbstractPlayer{
         }
 
         player.seek(to: seekTime){ [weak self] value in
-            self?.delegate?.didSeek(value: value, currentTime: seekTime.seconds)
+            let currentTime = CMTimeGetSeconds(player.currentTime())
+            self?.delegate?.didSeek(value: value, currentTime: currentTime)
         }
     }
     
