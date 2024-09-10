@@ -18,6 +18,7 @@ import UIKit
 @MainActor @preconcurrency
 class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {   
     
+    /// This property holds an instance of `VideoSettings`
     internal var currentSettings : VideoSettings?
     
     /// `filters` is an array that stores CIFilter objects used to apply different image processing effects

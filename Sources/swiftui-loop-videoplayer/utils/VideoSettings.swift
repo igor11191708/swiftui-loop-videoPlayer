@@ -103,8 +103,26 @@ public struct VideoSettings: Equatable{
 public extension VideoSettings {
    
     /// Returns a new instance of VideoSettings with loop set to false and notAutoPlay set to true, keeping other settings unchanged.
-    var GetWithNotLoopNotAutoplay: VideoSettings {
-        VideoSettings(name: self.name, ext: self.ext, loop: false, mute: self.mute, notAutoPlay: true, timePublishing: self.timePublishing, gravity: self.gravity, errorColor: self.errorColor, errorFontSize: self.errorFontSize, errorWidgetOff: self.errorWidgetOff, unique: self.unique)
+    var GetSettingsWithNotAutoPlay : VideoSettings {
+        VideoSettings(name: self.name, ext: self.ext, loop: self.loop, mute: self.mute, notAutoPlay: true, timePublishing: self.timePublishing, gravity: self.gravity, errorColor: self.errorColor, errorFontSize: self.errorFontSize, errorWidgetOff: self.errorWidgetOff, unique: self.unique)
+    }
+    
+    /// Checks if the asset has changed based on the provided settings and current asset.
+    /// - Parameters:
+    ///   - asset: The current asset being played.
+    /// - Returns: A new `AVURLAsset` if the asset has changed, or `nil` if the asset remains the same.
+    func getAssetIfDifferent(than asset: AVURLAsset?) -> AVURLAsset?{
+        let newAsset =  assetFor(self)
+        
+        if asset == nil {
+            return newAsset
+        }
+        
+        if let newUrl = newAsset?.url, let oldUrl = asset?.url, newUrl != oldUrl{
+            return newAsset
+        }
+
+        return nil
     }
 }
 

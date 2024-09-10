@@ -115,7 +115,7 @@ extension LoopPlayerMultiPlatform: UIViewRepresentable{
     @MainActor func updateUIView(_ uiView: UIView, context: Context) {
         let player = uiView.findFirstSubview(ofType: PlayerView.self)
         if let player {
-            if let asset = getAssetIfChanged(for: settings, and: player.currentAsset) {
+            if let asset = settings.getAssetIfDifferent(than: player.currentAsset) {
                 player.update(asset: asset, settings: settings)
             }
             
@@ -163,7 +163,7 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
     @MainActor func updateNSView(_ nsView: NSView, context: Context) {
         let player = nsView.findFirstSubview(ofType: PlayerView.self)
         if let player {
-            if let asset = getAssetIfChanged(for: settings, and: player.currentAsset){
+            if let asset = settings.getAssetIfDifferent(than: player.currentAsset){
                 player.update(asset: asset, settings: settings)
             }
             // Check if command changed before applying it
@@ -183,22 +183,3 @@ extension LoopPlayerMultiPlatform: NSViewRepresentable{
     }
 }
 #endif
-
-/// Checks if the asset has changed based on the provided settings and current asset.
-/// - Parameters:
-///   - settings: The current video settings, containing the asset's name and extension.
-///   - asset: The current asset being played.
-/// - Returns: A new `AVURLAsset` if the asset has changed, or `nil` if the asset remains the same.
-fileprivate func getAssetIfChanged(for settings: VideoSettings, and asset: AVURLAsset?) -> AVURLAsset?{
-    let newAsset =  assetFor(settings)
-    
-    if asset == nil {
-        return newAsset
-    }
-    
-    if let newUrl = newAsset?.url, let oldUrl = asset?.url, newUrl != oldUrl{
-        return newAsset
-    }
-
-    return nil
-}

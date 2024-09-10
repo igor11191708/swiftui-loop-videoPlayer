@@ -14,7 +14,11 @@ import CoreImage
 @MainActor @preconcurrency
 public protocol AbstractPlayer: AnyObject {
     
-    var currentSettings : VideoSettings? { get set }
+    /// An optional property that stores the current video settings.
+    ///
+    /// This property holds an instance of `VideoSettings` or nil if no settings have been configured yet.
+    /// It is a computed property with both getter and setter to retrieve and update the video settings respectively.
+    var currentSettings: VideoSettings? { get set }
     
     /// The delegate to be notified about errors encountered by the player.
     var delegate: PlayerDelegateProtocol? { get set }
@@ -153,8 +157,10 @@ extension AbstractPlayer{
         }
         
         guard currentItem?.status == .readyToPlay else{
+            /// The case when the video if finished and we are trying to seek back
             if let currentAsset, let currentSettings{
-                update(asset: currentAsset, settings: currentSettings.GetWithNotLoopNotAutoplay){ [weak self] status in
+                let settings = currentSettings.GetSettingsWithNotAutoPlay
+                update(asset: currentAsset, settings: settings){ [weak self] status in
                     if status == .readyToPlay{
                         self?.seek(to: time)
                     }else {
