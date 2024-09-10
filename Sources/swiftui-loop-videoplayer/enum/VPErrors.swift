@@ -44,6 +44,12 @@ public enum VPErrors: Error, CustomStringConvertible, Sendable{
 
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
 extension VPErrors: Equatable {
+    
+    /// Compares two `VPErrors` instances for equality based on specific error conditions.
+    /// - Parameters:
+    ///   - lhs: The left-hand side `VPErrors` instance to compare.
+    ///   - rhs: The right-hand side `VPErrors` instance to compare.
+    /// - Returns: A Boolean value indicating whether the two `VPErrors` instances are considered equal.
     public static func ==(lhs: VPErrors, rhs: VPErrors) -> Bool {
         switch (lhs, rhs) {
         case (.remoteVideoError(let a), .remoteVideoError(let b)):

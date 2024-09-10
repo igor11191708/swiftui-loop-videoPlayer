@@ -21,13 +21,16 @@ import AppKit
 public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     
     #if canImport(UIKit)
-        var layer : CALayer { get }
+        /// Provides a non-optional `CALayer` for use within UIKit environments.
+        var layer: CALayer { get }
     #elseif canImport(AppKit)
-        var layer : CALayer? { get set }
-        var wantsLayer : Bool { get set }
+        /// Provides an optional `CALayer` which can be set, and a property to indicate if the layer is wanted, for use within AppKit environments.
+        var layer: CALayer? { get set }
+        var wantsLayer: Bool { get set }
     #endif
-    
-    var playerLayer : AVPlayerLayer { get }
+
+    /// Provides a `AVPlayerLayer` specific to the player implementation, applicable across all platforms.
+    var playerLayer: AVPlayerLayer { get }
     
     /// An optional NSKeyValueObservation to monitor errors encountered by the video player.
     /// This observer should be configured to detect and handle errors from the AVQueuePlayer,

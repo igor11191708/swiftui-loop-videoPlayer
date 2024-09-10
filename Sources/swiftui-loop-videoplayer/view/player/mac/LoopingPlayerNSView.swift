@@ -18,7 +18,7 @@ import AppKit
 /// This class handles the initialization and management of a looping video player with customizable video gravity.
 @available(macOS 11.0, *)
 @MainActor @preconcurrency
-class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {   
+internal class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {   
     
     /// This property holds an instance of `VideoSettings`
     internal var currentSettings : VideoSettings?

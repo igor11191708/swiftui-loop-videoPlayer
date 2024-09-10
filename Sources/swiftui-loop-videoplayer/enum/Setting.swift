@@ -15,6 +15,8 @@ import AVKit
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
 public enum Setting: Equatable, SettingsConvertible{
     
+    /// Converts the current setting to an array containing only this setting.
+    /// - Returns: An array of `Setting` containing the single instance of this setting.
     public func asSettings() -> [Setting] {
         [self]
     }

@@ -16,7 +16,7 @@ import UIKit
 
 @available(iOS 14.0, tvOS 14.0, *)
 @MainActor @preconcurrency
-class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {   
+internal class LoopingPlayerUIView: UIView, LoopingPlayerProtocol {   
     
     /// This property holds an instance of `VideoSettings`
     internal var currentSettings : VideoSettings?

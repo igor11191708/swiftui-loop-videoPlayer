@@ -15,22 +15,29 @@ import Combine
 @MainActor @preconcurrency
 public protocol LoopPlayerViewProtocol {
     
-#if canImport(UIKit)
-    associatedtype View : UIView
+    #if canImport(UIKit)
+    /// Typealias for the main view on iOS, using `UIView`.
+    associatedtype View: UIView
     #elseif os(macOS)
-    associatedtype View : NSView
+    /// Typealias for the main view on macOS, using `NSView`.
+    associatedtype View: NSView
     #else
-    associatedtype View : CustomView
+    /// Typealias for a custom view type on platforms other than iOS and macOS.
+    associatedtype View: CustomView
     #endif
-    
+
+    /// Typealias for the view used to display errors.
     associatedtype ErrorView
 
     #if canImport(UIKit)
-        associatedtype PlayerView: LoopingPlayerProtocol, UIView
+    /// Typealias for the player view on iOS, conforming to `LoopingPlayerProtocol` and using `UIView`.
+    associatedtype PlayerView: LoopingPlayerProtocol, UIView
     #elseif os(macOS)
-        associatedtype PlayerView: LoopingPlayerProtocol, NSView
+    /// Typealias for the player view on macOS, conforming to `LoopingPlayerProtocol` and using `NSView`.
+    associatedtype PlayerView: LoopingPlayerProtocol, NSView
     #else
-        associatedtype PlayerView: LoopingPlayerProtocol, CustomView
+    /// Typealias for a custom player view on other platforms, conforming to `LoopingPlayerProtocol`.
+    associatedtype PlayerView: LoopingPlayerProtocol, CustomView
     #endif
     
     /// Settings for configuring the video player.

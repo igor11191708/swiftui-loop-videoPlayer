@@ -7,8 +7,9 @@
 
 import Foundation
 
-@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
+
 /// Protocol for building blocks
+@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
 public protocol SettingsConvertible {
     
     /// Fetch settings

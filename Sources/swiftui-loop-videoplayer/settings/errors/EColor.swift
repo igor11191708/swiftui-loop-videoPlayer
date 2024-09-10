@@ -7,15 +7,17 @@
 
 import SwiftUI
 
+/// Defines a structure for error text colors that can be converted to settings.
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
 public struct EColor: SettingsConvertible{
         
-    /// Error color
-    private let value : Color
+    /// The color value used for errors.
+    private let value: Color
     
-    // MARK: - Life circle
-
-    /// - Parameter value: Error color
+    // MARK: - Life cycle
+    
+    /// Initializes a new instance of `EColor` with a specified color for errors.
+    /// - Parameter value: The error color.
     public init(_ value: Color) { self.value = value }
     
     /// Fetch settings

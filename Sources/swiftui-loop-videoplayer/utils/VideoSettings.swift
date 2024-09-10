@@ -8,6 +8,7 @@
 import SwiftUI
 import AVKit
 
+/// Represents a structure for video settings.
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
 public struct VideoSettings: Equatable{
     
@@ -56,8 +57,19 @@ public struct VideoSettings: Equatable{
 
     // MARK: - Life circle
     
-    // initializer
-    init(name: String, ext: String, loop: Bool, mute: Bool, notAutoPlay: Bool, timePublishing: CMTime?, gravity: AVLayerVideoGravity, errorColor: Color, errorFontSize: CGFloat, errorWidgetOff: Bool, unique: Bool) {
+    /// Initializes a new instance of `VideoSettings` with specified values for various video properties.
+    /// - Parameters:
+    ///   - name: The name of the video.
+    ///   - ext: The video file extension.
+    ///   - loop: A Boolean indicating whether the video should loop.
+    ///   - mute: A Boolean indicating whether the video should be muted.
+    ///   - notAutoPlay: A Boolean indicating whether the video should not auto-play.
+    ///   - timePublishing: A `CMTime` value representing the interval for time publishing updates, or `nil`.
+    ///   - gravity: The `AVLayerVideoGravity` value defining how the video should be displayed in its layer.
+    ///   - errorColor: The color used for error messages.
+    ///   - errorFontSize: The font size for error messages.
+    ///   - errorWidgetOff: A Boolean indicating whether the error widget should be turned off.
+    public init(name: String, ext: String, loop: Bool, mute: Bool, notAutoPlay: Bool, timePublishing: CMTime?, gravity: AVLayerVideoGravity, errorColor: Color, errorFontSize: CGFloat, errorWidgetOff: Bool) {
         self.name = name
         self.ext = ext
         self.loop = loop
@@ -68,10 +80,11 @@ public struct VideoSettings: Equatable{
         self.errorColor = errorColor
         self.errorFontSize = errorFontSize
         self.errorWidgetOff = errorWidgetOff
-        self.unique = unique
+        self.unique = true
     }
         
-    /// - Parameter builder: Block builder
+    /// Initializes `VideoSettings` using a settings builder closure.
+    /// - Parameter builder: A block builder that generates an array of settings.
     public init(@SettingsBuilder builder: () -> [Setting]){
         let settings = builder()
         
@@ -104,7 +117,7 @@ public extension VideoSettings {
    
     /// Returns a new instance of VideoSettings with loop set to false and notAutoPlay set to true, keeping other settings unchanged.
     var GetSettingsWithNotAutoPlay : VideoSettings {
-        VideoSettings(name: self.name, ext: self.ext, loop: self.loop, mute: self.mute, notAutoPlay: true, timePublishing: self.timePublishing, gravity: self.gravity, errorColor: self.errorColor, errorFontSize: self.errorFontSize, errorWidgetOff: self.errorWidgetOff, unique: self.unique)
+        VideoSettings(name: self.name, ext: self.ext, loop: self.loop, mute: self.mute, notAutoPlay: true, timePublishing: self.timePublishing, gravity: self.gravity, errorColor: self.errorColor, errorFontSize: self.errorFontSize, errorWidgetOff: self.errorWidgetOff)
     }
     
     /// Checks if the asset has changed based on the provided settings and current asset.

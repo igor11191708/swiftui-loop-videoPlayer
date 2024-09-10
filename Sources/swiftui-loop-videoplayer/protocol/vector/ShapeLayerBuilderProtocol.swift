@@ -18,6 +18,7 @@ import QuartzCore
 @available(iOS 14, macOS 11, tvOS 14, *)
 public protocol ShapeLayerBuilderProtocol: Identifiable {
     
+    /// Unique identifier
     var id : UUID { get }
     
     /// Builds a CAShapeLayer using specified geometry.

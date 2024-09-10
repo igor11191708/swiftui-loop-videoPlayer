@@ -102,6 +102,7 @@ public struct ExtVideoPlayer: View{
     
     // MARK: - API
        
+   /// The body property defines the view hierarchy for the user interface.
    public var body: some View {
            
        LoopPlayerMultiPlatform(

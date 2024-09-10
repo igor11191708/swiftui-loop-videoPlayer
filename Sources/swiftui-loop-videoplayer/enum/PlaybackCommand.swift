@@ -14,6 +14,7 @@ import CoreImage
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
 public enum PlaybackCommand: Equatable {
     
+    /// The idle command to do nothing
     case idle
     
     /// Command to play the video.

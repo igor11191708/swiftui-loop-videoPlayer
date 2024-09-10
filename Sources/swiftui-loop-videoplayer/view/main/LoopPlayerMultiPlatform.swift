@@ -22,7 +22,7 @@ import AppKit
 
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
 @MainActor
-struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
+internal struct LoopPlayerMultiPlatform: LoopPlayerViewProtocol {
         
     #if canImport(UIKit)
     typealias View = UIView

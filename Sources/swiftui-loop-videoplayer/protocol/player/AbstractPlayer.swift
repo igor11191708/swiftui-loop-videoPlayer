@@ -10,6 +10,8 @@ import AVFoundation
 import CoreImage
 #endif
 
+/// Defines an abstract player protocol to be implemented by player objects, ensuring main-thread safety and compatibility with specific OS versions.
+/// This protocol is designed for use with classes (reference types) only.
 @available(iOS 14, macOS 11, tvOS 14, *)
 @MainActor @preconcurrency
 public protocol AbstractPlayer: AnyObject {
