@@ -157,7 +157,7 @@ extension AbstractPlayer{
         }
         
         guard currentItem?.status == .readyToPlay else{
-            /// The case when the video if finished and we are trying to seek back
+            /// The case when the video is finished and we are trying to seek back
             if let currentAsset, let currentSettings{
                 let settings = currentSettings.GetSettingsWithNotAutoPlay
                 update(asset: currentAsset, settings: settings){ [weak self] status in
