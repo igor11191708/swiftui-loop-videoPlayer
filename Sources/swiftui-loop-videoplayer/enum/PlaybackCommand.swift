@@ -13,6 +13,9 @@ import CoreImage
 /// An enumeration of possible playback commands.
 @available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
 public enum PlaybackCommand: Equatable {
+    
+    case idle
+    
     /// Command to play the video.
     case play
     
@@ -88,7 +91,7 @@ public enum PlaybackCommand: Equatable {
 
     public static func == (lhs: PlaybackCommand, rhs: PlaybackCommand) -> Bool {
         switch (lhs, rhs) {
-        case (.play, .play), (.pause, .pause), (.begin, .begin), (.end, .end),
+        case (.idle, .idle), (.play, .play), (.pause, .pause), (.begin, .begin), (.end, .end),
              (.mute, .mute), (.unmute, .unmute), (.loop, .loop), (.unloop, .unloop),
              (.removeAllFilters, .removeAllFilters), (.removeAllVectors, .removeAllVectors):
             return true

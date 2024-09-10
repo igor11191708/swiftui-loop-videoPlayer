@@ -25,6 +25,9 @@ public struct VideoSettings: Equatable{
     /// Mute video
     public let mute: Bool
     
+    /// Don't auto play video after initialization
+    public let notAutoPlay: Bool
+    
     /// A CMTime value representing the interval at which the player's current time should be published.
     /// If set, the player will publish periodic time updates based on this interval.
     public let timePublishing: CMTime?
@@ -52,6 +55,21 @@ public struct VideoSettings: Equatable{
     private let unique : Bool
 
     // MARK: - Life circle
+    
+    // initializer
+    init(name: String, ext: String, loop: Bool, mute: Bool, notAutoPlay: Bool, timePublishing: CMTime?, gravity: AVLayerVideoGravity, errorColor: Color, errorFontSize: CGFloat, errorWidgetOff: Bool, unique: Bool) {
+        self.name = name
+        self.ext = ext
+        self.loop = loop
+        self.mute = mute
+        self.notAutoPlay = notAutoPlay
+        self.timePublishing = timePublishing
+        self.gravity = gravity
+        self.errorColor = errorColor
+        self.errorFontSize = errorFontSize
+        self.errorWidgetOff = errorWidgetOff
+        self.unique = unique
+    }
         
     /// - Parameter builder: Block builder
     public init(@SettingsBuilder builder: () -> [Setting]){
@@ -75,7 +93,18 @@ public struct VideoSettings: Equatable{
         
         mute = settings.contains(.mute)
         
+        notAutoPlay = settings.contains(.notAutoPlay)
+        
         errorWidgetOff = settings.contains(.errorWidgetOff)
+    }
+}
+
+@available(iOS 14.0, macOS 11.0, tvOS 14.0, *)
+public extension VideoSettings {
+   
+    /// Returns a new instance of VideoSettings with loop set to false and notAutoPlay set to true, keeping other settings unchanged.
+    var GetWithNotLoopNotAutoplay: VideoSettings {
+        VideoSettings(name: self.name, ext: self.ext, loop: false, mute: self.mute, notAutoPlay: true, timePublishing: self.timePublishing, gravity: self.gravity, errorColor: self.errorColor, errorFontSize: self.errorFontSize, errorWidgetOff: self.errorWidgetOff, unique: self.unique)
     }
 }
 

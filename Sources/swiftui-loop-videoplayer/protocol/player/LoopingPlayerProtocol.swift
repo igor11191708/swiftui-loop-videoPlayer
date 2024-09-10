@@ -49,15 +49,13 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     /// Declare a variable to hold the time observer token outside the if statement
     var timeObserver: Any? { get set }
 
-    /// Initializes a new player view with a video asset and specified configurations.
+    /// Initializes a new player view with a video asset and custom settings.
     ///
     /// - Parameters:
-    ///   - asset: The `AVURLAsset` for video playback.
-    ///   - gravity: The `AVLayerVideoGravity` determining the video's display within the layer bounds.
-    ///   - timePublishing: Optional `CMTime` for publishing or triggering an event at a specific time.
-    ///   - loop: A Boolean indicating if the video should loop at the end of playback.
-    ///   - mute: A Boolean indicating if the audio playback should be muted.
-    init(asset: AVURLAsset, gravity: AVLayerVideoGravity, timePublishing: CMTime?, loop : Bool, mute: Bool)
+    ///   - asset: The `AVURLAsset` used for video playback.
+    ///   - settings: The `VideoSettings` struct that includes all necessary configurations like gravity, loop, and mute.
+    ///   - timePublishing: Optional `CMTime` that specifies a particular time for publishing or triggering an event.
+    init(asset: AVURLAsset, settings: VideoSettings, timePublishing: CMTime?)
     
     /// Sets up the necessary observers on the AVPlayerItem and AVQueuePlayer to monitor changes and errors.
     ///
@@ -74,26 +72,24 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
 
 internal extension LoopingPlayerProtocol {
     
-    /// Sets up the player components with the specified media asset, display properties, and optional time publishing interval.
+    /// Initializes a new player view with a video asset and custom settings.
     ///
     /// - Parameters:
-    ///   - asset: The AVURLAsset representing the video content.
-    ///   - gravity: Determines how the video content is scaled or fit within the player view.
-    ///   - timePublishing: Optional interval for publishing the current playback time; nil disables this feature.
+    ///   - asset: The `AVURLAsset` used for video playback.
+    ///   - settings: The `VideoSettings` struct that includes all necessary configurations like gravity, loop, and mute.
+    ///   - timePublishing: Optional `CMTime` that specifies a particular time for publishing or triggering an event.
     func setupPlayerComponents(
         asset: AVURLAsset,
-        gravity: AVLayerVideoGravity,
-        timePublishing:  CMTime?,
-        loop: Bool,
-        mute: Bool
+        settings: VideoSettings,
+        timePublishing:  CMTime?
     ) {
         
         let player = AVQueuePlayer(items: [])
         self.player = player
         
-        update(asset: asset, loop: loop)
+        configurePlayer(player, settings: settings, timePublishing: timePublishing)
         
-        configurePlayer(player, gravity: gravity, timePublishing: timePublishing, loop: loop, mute: mute)
+        update(asset: asset, settings: settings)
         
         setupObservers(for: player)
     }
@@ -102,18 +98,16 @@ internal extension LoopingPlayerProtocol {
     ///
     /// - Parameters:
     ///   - player: The AVQueuePlayer to be configured.
-    ///   - gravity: The AVLayerVideoGravity determining how the video content should be scaled or fit within the player layer.
+    ///   - settings: The `VideoSettings` struct that includes all necessary configurations like gravity, loop, and mute.
     ///   - timePublishing: Optional interval for publishing the current playback time; nil disables this feature.
     func configurePlayer(
         _ player: AVQueuePlayer,
-        gravity: AVLayerVideoGravity,
-        timePublishing:  CMTime?,
-        loop : Bool,
-        mute : Bool
+        settings: VideoSettings,
+        timePublishing:  CMTime?
     ) {
-        player.isMuted = mute
+        player.isMuted = settings.mute
         playerLayer.player = player
-        playerLayer.videoGravity = gravity
+        playerLayer.videoGravity = settings.gravity
         #if canImport(UIKit)
         playerLayer.backgroundColor = UIColor.clear.cgColor
         layer.addSublayer(playerLayer)
@@ -152,18 +146,15 @@ internal extension LoopingPlayerProtocol {
     ///
     /// - Parameters:
     ///   - asset: The AVURLAsset to be loaded into the player.
-    ///   - loop: A Boolean value indicating whether the video should loop.
-    ///   - autoPlay: A Boolean value indicating whether playback should start automatically. Default is true.
+    ///   - settings: The `VideoSettings` struct that includes all necessary configurations like gravity, loop, and mute.
     ///   - callback: An optional closure to be called when the asset is ready to play.
-    func update(asset: AVURLAsset, loop: Bool, autoPlay: Bool = true,  callback: ((AVPlayerItem.Status) -> Void)? = nil) {
+    func update(asset: AVURLAsset,  settings: VideoSettings, callback: ((AVPlayerItem.Status) -> Void)? = nil) {
 
         guard let player = player else { return }
 
-        let wasPlaying = player.rate != 0
-
-        if wasPlaying {
-            pause()
-        }
+        currentSettings = settings
+        
+        player.pause()
 
         if !player.items().isEmpty {
             // Cleaning
@@ -175,15 +166,15 @@ internal extension LoopingPlayerProtocol {
         let newItem = AVPlayerItem(asset: asset)
         player.insert(newItem, after: nil)
 
-        if loop {
-            self.loop()
+        if settings.loop {
+            loop()
         }
 
         // Set up state item status observer
         setupStateItemStatusObserver(newItem: newItem, callback: callback)
       
-        if autoPlay{
-            player.play()
+        if !settings.notAutoPlay{
+            play()
         }
     }
     
@@ -338,6 +329,7 @@ internal extension LoopingPlayerProtocol {
             addVectorLayer(builder: builder, clear: clear)
         case .removeAllVectors:
             removeAllVectors()
+        default : return
         }
     }
 }

@@ -25,6 +25,9 @@ public enum Setting: Equatable, SettingsConvertible{
     /// Mute video
     case mute
     
+    /// Don't auto play video after initialization
+    case notAutoPlay
+    
     /// File name
     case name(String)
 

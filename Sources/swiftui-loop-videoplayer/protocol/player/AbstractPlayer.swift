@@ -14,6 +14,8 @@ import CoreImage
 @MainActor @preconcurrency
 public protocol AbstractPlayer: AnyObject {
     
+    var currentSettings : VideoSettings? { get set }
+    
     /// The delegate to be notified about errors encountered by the player.
     var delegate: PlayerDelegateProtocol? { get set }
     
@@ -99,7 +101,7 @@ public protocol AbstractPlayer: AnyObject {
     func applyVideoComposition()
     
     /// Updates the current playback asset, settings, and initializes playback or a specific action when the asset is ready.
-    func update(asset: AVURLAsset, loop: Bool, autoPlay: Bool,  callback: ((AVPlayerItem.Status) -> Void)?)
+    func update(asset: AVURLAsset, settings: VideoSettings, callback: ((AVPlayerItem.Status) -> Void)?)
 }
 
 extension AbstractPlayer{
@@ -137,7 +139,7 @@ extension AbstractPlayer{
     /// Pauses the video playback.
     /// This method pauses the video if it is currently playing, allowing it to be resumed later from the same position.
     func pause() {
-        player?.pause()
+        player?.pause()        
     }
 
     /// Seeks the video to a specific time.
@@ -151,8 +153,8 @@ extension AbstractPlayer{
         }
         
         guard currentItem?.status == .readyToPlay else{
-            if let currentAsset{
-                update(asset: currentAsset , loop: false, autoPlay: false){ [weak self] status in
+            if let currentAsset, let currentSettings{
+                update(asset: currentAsset, settings: currentSettings.GetWithNotLoopNotAutoplay){ [weak self] status in
                     if status == .readyToPlay{
                         self?.seek(to: time)
                     }else {
@@ -188,7 +190,6 @@ extension AbstractPlayer{
         }
 
         player.seek(to: seekTime){ [weak self] value in
-            let currentTime = CMTimeGetSeconds(player.currentTime())
             self?.delegate?.didSeek(value: value, currentTime: seekTime.seconds)
         }
     }

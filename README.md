@@ -66,6 +66,7 @@ Please note that using videos from URLs requires ensuring that you have the righ
 
 | Command                     | Description                                                                                                                                          |
 |-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `idle`                      | Start without any actions. Any command passed during initialization will be executed. If you'd like to start without any actions based on settings values just setup command to `.idle`                                                                                                                       |
 | `play`                      | Command to play the video.                                                                                                                            |
 | `pause`                     | Command to pause the video.                                                                                                                           |
 | `seek(to: Double)`          | Command to seek to a specific time in the video. The parameter is the target position in seconds. If the time is negative, the playback will move to the start of the video. If the time exceeds the video's duration, the playback will move to the end of the video. If the time is within the video’s duration, the playback will move to the specified time. |

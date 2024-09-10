@@ -20,6 +20,8 @@ import AppKit
 @MainActor @preconcurrency
 class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {   
     
+    internal var currentSettings : VideoSettings?
+    
     /// `filters` is an array that stores CIFilter objects used to apply different image processing effects
     internal var filters: [CIFilter] = []
 
@@ -69,14 +71,12 @@ class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {
     ///
     /// - Parameters:
     ///   - asset: The `AVURLAsset` for video playback.
-    ///   - gravity: The `AVLayerVideoGravity` determining the video's display within the layer bounds.
+    ///   - settings: The `VideoSettings` struct that includes all necessary configurations like gravity, loop, and mute.
     ///   - timePublishing: Optional `CMTime` for publishing or triggering an event at a specific time.
-    ///   - loop: A Boolean indicating if the video should loop at the end of playback.
-    ///   - mute: A Boolean indicating if the audio playback should be muted.
-    required init(asset: AVURLAsset, gravity: AVLayerVideoGravity, timePublishing: CMTime?, loop : Bool, mute: Bool) {
+    required init(asset: AVURLAsset, settings: VideoSettings, timePublishing: CMTime?) {
         super.init(frame: .zero)
         setupPlayerComponents(
-            asset: asset, gravity: gravity, timePublishing: timePublishing, loop: loop, mute: mute
+            asset: asset, settings: settings, timePublishing: timePublishing
         )
     }
 
