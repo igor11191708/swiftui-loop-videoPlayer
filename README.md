@@ -45,7 +45,7 @@ Please note that using videos from URLs requires ensuring that you have the righ
 | **Ext** | File extension for the video, used when loading from local resources. This is optional when a URL is provided and the URL ends with the video file extension. | "mp4" |
 | **Gravity** | How the video content should be resized to fit the player's bounds. | .resizeAspect |
 | **TimePublishing** | Specifies the interval at which the player publishes the current playback time. | - |
-| **Loop** | Whether the video should automatically restart when it reaches the end. If not explicitly passed, the video will not loop. | - |
+| **Loop** | Whether the video should automatically restart when it reaches the end. If not explicitly passed, the video will not loop. | false |
 | **Mute** | Indicates if the video should play without sound. | false |
 | **EColor** | Error message text color. | .red |
 | **EFontSize** | Size of the error text. | 17.0 |
