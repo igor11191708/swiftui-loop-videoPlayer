@@ -22,6 +22,9 @@ public struct VideoSettings: Equatable{
     /// Loop video
     public let loop: Bool
     
+    /// Mute video
+    public let mute: Bool
+    
     /// A CMTime value representing the interval at which the player's current time should be published.
     /// If set, the player will publish periodic time updates based on this interval.
     public let timePublishing: CMTime?
@@ -69,6 +72,8 @@ public struct VideoSettings: Equatable{
         timePublishing = settings.fetch(by : "timePublishing", defaulted: nil)
         
         loop = settings.contains(.loop)
+        
+        mute = settings.contains(.mute)
         
         errorWidgetOff = settings.contains(.errorWidgetOff)
     }

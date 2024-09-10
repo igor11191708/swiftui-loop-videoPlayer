@@ -22,6 +22,9 @@ public enum Setting: Equatable, SettingsConvertible{
     /// Loop video
     case loop
     
+    /// Mute video
+    case mute
+    
     /// File name
     case name(String)
 

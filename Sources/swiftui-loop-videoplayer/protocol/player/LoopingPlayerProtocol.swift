@@ -49,14 +49,15 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     /// Declare a variable to hold the time observer token outside the if statement
     var timeObserver: Any? { get set }
 
-    /// Initializes a new player view with specified video asset and configurations.
+    /// Initializes a new player view with a video asset and specified configurations.
     ///
     /// - Parameters:
-    ///   - asset: The `AVURLAsset` used for video playback.
-    ///   - gravity: The `AVLayerVideoGravity` defining how the video content is displayed within the layer bounds.
-    ///   - timePublishing: Optional `CMTime` that specifies a particular time for publishing or triggering an event.
-    ///   - loop: A Boolean value that indicates whether the video should loop when playback reaches the end of the content.
-    init(asset: AVURLAsset, gravity: AVLayerVideoGravity, timePublishing: CMTime?, loop : Bool)
+    ///   - asset: The `AVURLAsset` for video playback.
+    ///   - gravity: The `AVLayerVideoGravity` determining the video's display within the layer bounds.
+    ///   - timePublishing: Optional `CMTime` for publishing or triggering an event at a specific time.
+    ///   - loop: A Boolean indicating if the video should loop at the end of playback.
+    ///   - mute: A Boolean indicating if the audio playback should be muted.
+    init(asset: AVURLAsset, gravity: AVLayerVideoGravity, timePublishing: CMTime?, loop : Bool, mute: Bool)
     
     /// Sets up the necessary observers on the AVPlayerItem and AVQueuePlayer to monitor changes and errors.
     ///
@@ -83,7 +84,8 @@ internal extension LoopingPlayerProtocol {
         asset: AVURLAsset,
         gravity: AVLayerVideoGravity,
         timePublishing:  CMTime?,
-        loop: Bool
+        loop: Bool,
+        mute: Bool
     ) {
         
         let player = AVQueuePlayer(items: [])
@@ -91,7 +93,7 @@ internal extension LoopingPlayerProtocol {
         
         update(asset: asset, loop: loop)
         
-        configurePlayer(player, gravity: gravity, timePublishing: timePublishing, loop: loop)
+        configurePlayer(player, gravity: gravity, timePublishing: timePublishing, loop: loop, mute: mute)
         
         setupObservers(for: player)
     }
@@ -106,9 +108,10 @@ internal extension LoopingPlayerProtocol {
         _ player: AVQueuePlayer,
         gravity: AVLayerVideoGravity,
         timePublishing:  CMTime?,
-        loop : Bool
+        loop : Bool,
+        mute : Bool
     ) {
-        player.isMuted = true
+        player.isMuted = mute
         playerLayer.player = player
         playerLayer.videoGravity = gravity
         #if canImport(UIKit)

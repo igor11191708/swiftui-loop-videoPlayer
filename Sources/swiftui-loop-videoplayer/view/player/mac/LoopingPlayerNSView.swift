@@ -65,17 +65,18 @@ class LoopingPlayerNSView: NSView, LoopingPlayerProtocol {
     /// The delegate to be notified about errors encountered by the player.
     weak var delegate: PlayerDelegateProtocol?
 
-    /// Initializes a new player view with specified video asset and configurations.
+    /// Initializes a new player view with a video asset and specified configurations.
     ///
     /// - Parameters:
-    ///   - asset: The `AVURLAsset` used for video playback.
-    ///   - gravity: The `AVLayerVideoGravity` defining how the video content is displayed within the layer bounds.
-    ///   - timePublishing: Optional `CMTime` that specifies a particular time for publishing or triggering an event.
-    ///   - loop: A Boolean value that indicates whether the video should loop when playback reaches the end of the content.
-    required init(asset: AVURLAsset, gravity: AVLayerVideoGravity, timePublishing: CMTime?, loop : Bool) {
+    ///   - asset: The `AVURLAsset` for video playback.
+    ///   - gravity: The `AVLayerVideoGravity` determining the video's display within the layer bounds.
+    ///   - timePublishing: Optional `CMTime` for publishing or triggering an event at a specific time.
+    ///   - loop: A Boolean indicating if the video should loop at the end of playback.
+    ///   - mute: A Boolean indicating if the audio playback should be muted.
+    required init(asset: AVURLAsset, gravity: AVLayerVideoGravity, timePublishing: CMTime?, loop : Bool, mute: Bool) {
         super.init(frame: .zero)
         setupPlayerComponents(
-            asset: asset, gravity: gravity, timePublishing: timePublishing, loop: loop
+            asset: asset, gravity: gravity, timePublishing: timePublishing, loop: loop, mute: mute
         )
     }
 
