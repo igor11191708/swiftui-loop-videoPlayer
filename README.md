@@ -8,9 +8,7 @@ Apple’s VideoPlayer offers a quick setup for video playback in SwiftUI but for
 
 ## [SwiftUI video player example](https://github.com/The-Igor/swiftui-loop-videoplayer-example)
 
-## Documentation(API)
-
-[SwiftUI video player documentation](https://swiftpackageindex.com/igor11191708/swiftui-loop-videoplayer/main/documentation/swiftui_loop_videoplayer)
+## [Documentation(API)](https://swiftpackageindex.com/igor11191708/swiftui-loop-videoplayer/main/documentation/swiftui_loop_videoplayer)
 
 
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui_video_player.gif) 
