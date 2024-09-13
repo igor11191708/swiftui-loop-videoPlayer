@@ -37,8 +37,7 @@ public protocol LoopingPlayerProtocol: AbstractPlayer, LayerMakerProtocol{
     /// ensuring that all playback errors are managed and reported appropriately.
     var errorObserver: NSKeyValueObservation? { get set }
     
-    /// Observes the status property of the new player item.
-    var statusObserver: NSKeyValueObservation? { get set }
+
     
     /// An optional observer for monitoring changes to the player's `timeControlStatus` property.
     var timeControlObserver: NSKeyValueObservation? { get set }
@@ -181,35 +180,6 @@ internal extension LoopingPlayerProtocol {
         }
     }
     
-    /// Sets up an observer for the status of the provided `AVPlayerItem`.
-    ///
-    /// This method observes changes in the status of `newItem` and triggers the provided callback
-    /// whenever the status changes to `.readyToPlay` or `.failed`. Once the callback is invoked,
-    /// the observer is invalidated, ensuring that the callback is called only once.
-    ///
-    /// - Parameters:
-    ///   - newItem: The `AVPlayerItem` whose status is to be observed.
-    ///   - callback: A closure that is called when the item's status changes to `.readyToPlay` or `.failed`.
-    func setupStateItemStatusObserver(newItem: AVPlayerItem, callback: ((AVPlayerItem.Status) -> Void)?) {
-        statusObserver?.invalidate()
-        
-        if let callback = callback {
-            //.unknown: This state is essentially the default, indicating that the player item is new or has not yet attempted to load its assets.
-            statusObserver = newItem.observe(\.status, options: [.new, .old]) { [weak self] item, _ in
-                guard item.status == .readyToPlay || item.status == .failed else {
-                    return
-                }
-                
-                callback(item.status)
-                self?.clearStatusObserver()
-            }
-        }
-    }
-    
-    func clearStatusObserver(){
-        statusObserver?.invalidate()
-        statusObserver = nil
-    }
     
     /// Sets up observers on the player item and the player to track their status and error states.
     ///
