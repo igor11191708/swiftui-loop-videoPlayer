@@ -151,8 +151,6 @@ extension AbstractPlayer{
         player?.pause()        
     }
     
-
-    
     /// Sets up an observer for the status of the provided `AVPlayerItem`.
     ///
     /// This method observes changes in the status of `newItem` and triggers the provided callback
@@ -178,6 +176,7 @@ extension AbstractPlayer{
         }
     }
     
+    /// Clear status observer
     func clearStatusObserver(){
         statusObserver?.invalidate()
         statusObserver = nil
@@ -205,14 +204,7 @@ extension AbstractPlayer{
                     }
                 }
                 
-                guard playerLooper == nil else {
-                    setupStateItemStatusObserver(newItem: currentItem, callback: callback)
-                    return
-                }
-                
-                let settings = currentSettings//.GetSettingsWithNotAutoPlay
-                update(asset: currentAsset, settings: settings, callback: callback)
-                return
+                setupStateItemStatusObserver(newItem: currentItem, callback: callback)
             }
             
             delegate?.didSeek(value: false, currentTime: time)
