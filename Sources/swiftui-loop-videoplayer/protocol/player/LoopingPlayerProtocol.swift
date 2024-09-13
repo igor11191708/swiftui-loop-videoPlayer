@@ -201,10 +201,14 @@ internal extension LoopingPlayerProtocol {
                 }
                 
                 callback(item.status)
-                self?.statusObserver?.invalidate()
-                self?.statusObserver = nil
+                self?.clearStatusObserver()
             }
         }
+    }
+    
+    func clearStatusObserver(){
+        statusObserver?.invalidate()
+        statusObserver = nil
     }
     
     /// Sets up observers on the player item and the player to track their status and error states.
@@ -240,6 +244,8 @@ internal extension LoopingPlayerProtocol {
             } else if change.newValue == nil {
                 self?.delegate?.currentItemWasRemoved()
             }
+            
+            self?.clearStatusObserver()
         }
         
         volumeObserver = player.observe(\.volume, options: [.new, .old]) { [weak self]  player, change in
