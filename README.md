@@ -149,35 +149,6 @@ Integrating vector graphics into SwiftUI views, particularly during lifecycle ev
 - **Independent Management**: Developers should manage brightness and contrast adjustments through their dedicated methods or properties to ensure these settings are accurately reflected in the video output.
 
 
-## AVQueuePlayer features out of the box
-
-In the core of this package, I use `AVQueuePlayer`. Here are the supported features that are automatically enabled by `AVQueuePlayer` without passing any extra parameters:
-
-| Feature                                                                                                    | Description                                                                                                                                      |
-|------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Hardware accelerator**                                                                                   | `AVQueuePlayer` uses hardware acceleration by default where available.                                                                            |
-| **4k/HDR/HDR10/HDR10+/Dolby Vision**                                                                       | These high-definition and high-dynamic-range formats are natively supported by `AVQueuePlayer`.                                                   |
-| **Multichannel Audio/Dolby Atmos/Spatial Audio**                                                           | `AVQueuePlayer` supports advanced audio formats natively.                                                                                         |
-| **Text subtitle/Image subtitle/Closed Captions**                                                           | Subtitle and caption tracks included in the video file are automatically detected and rendered.                                                   |
-| **Automatically switch to multi-bitrate streams based on network**                                         | Adaptive bitrate streaming is handled automatically by `AVQueuePlayer` when streaming from a source that supports it.                             |
-| **External playback control support**                                                                      | Supports playback control through external accessories like headphones and Bluetooth devices.                                                     |
-| **AirPlay support**                                                                                        | Natively supports streaming audio and video via AirPlay to compatible devices without additional setup.                                           |
-| **Background Audio Playback**                                                                              | Continues audio playback when the app is in the background, provided the appropriate audio session category is set.                               |
-| **Picture-in-Picture (PiP) Support**                                                                       | Enables Picture-in-Picture mode on compatible devices without additional setup.                                                                   |
-| **HLS (HTTP Live Streaming) Support**                                                                      | Natively supports streaming of HLS content for live and on-demand playback.                                                                       |
-| **FairPlay DRM Support**                                                                                   | Can play FairPlay DRM-protected content when properly configured.                                                                                 |
-| **Now Playing Info Center Integration**                                                                    | Automatically updates the Now Playing Info Center with current playback information for lock screen and control center displays.                  |
-| **Remote Control Event Handling**                                                                          | Supports handling remote control events from external accessories and system controls.                                                            |
-| **Custom Playback Rate**                                                                                   | Allows setting custom playback rates for slow-motion or fast-forward playback without additional configuration.                                   |
-| **Seamless Transition Between Items**                                                                      | Provides smooth transitions between queued media items, ensuring continuous playback without gaps.                                                |
-| **Automatic Audio Session Management**                                                                     | Manages audio sessions to handle interruptions (like phone calls) and route changes appropriately.                                                |
-| **Subtitles and Closed Caption Styling**                                                                   | Supports user preferences for styling subtitles and closed captions, including font size, color, and background.                                   |
-| **Audio Focus and Ducking**                                                                                | Handles audio focus by pausing or lowering volume when necessary, such as when a navigation prompt plays.                                         |
-| **Metadata Handling**                                                                                      | Reads and displays metadata embedded in media files, such as song titles, artists, and artwork.                                                   |
-| **Buffering and Caching**                                                                                  | Efficiently manages buffering of streaming content to reduce playback interruptions.                                                              |
-| **Error Handling and Recovery**                                                                            | Provides built-in mechanisms to handle playback errors and attempt recovery without crashing the application.                                     |
-| **Accessibility Features**                                                                                 | Supports VoiceOver and other accessibility features to make media content accessible to all users.                                                |
-
 ## How to use the package
 ### 1. Create LoopPlayerView
 
@@ -300,3 +271,32 @@ You can introduce video hints about some functionality into the app, for example
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui_video_hint.gif)
 
 ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/tip_video_swiftui.gif)
+
+## AVQueuePlayer features out of the box
+
+In the core of this package, I use `AVQueuePlayer`. Here are the supported features that are automatically enabled by `AVQueuePlayer` without passing any extra parameters:
+
+| Feature                                                                                                    | Description                                                                                                                                      |
+|------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Hardware accelerator**                                                                                   | `AVQueuePlayer` uses hardware acceleration by default where available.                                                                            |
+| **4k/HDR/HDR10/HDR10+/Dolby Vision**                                                                       | These high-definition and high-dynamic-range formats are natively supported by `AVQueuePlayer`.                                                   |
+| **Multichannel Audio/Dolby Atmos/Spatial Audio**                                                           | `AVQueuePlayer` supports advanced audio formats natively.                                                                                         |
+| **Text subtitle/Image subtitle/Closed Captions**                                                           | Subtitle and caption tracks included in the video file are automatically detected and rendered.                                                   |
+| **Automatically switch to multi-bitrate streams based on network**                                         | Adaptive bitrate streaming is handled automatically by `AVQueuePlayer` when streaming from a source that supports it.                             |
+| **External playback control support**                                                                      | Supports playback control through external accessories like headphones and Bluetooth devices.                                                     |
+| **AirPlay support**                                                                                        | Natively supports streaming audio and video via AirPlay to compatible devices without additional setup.                                           |
+| **Background Audio Playback**                                                                              | Continues audio playback when the app is in the background, provided the appropriate audio session category is set.                               |
+| **Picture-in-Picture (PiP) Support**                                                                       | Enables Picture-in-Picture mode on compatible devices without additional setup.                                                                   |
+| **HLS (HTTP Live Streaming) Support**                                                                      | Natively supports streaming of HLS content for live and on-demand playback.                                                                       |
+| **FairPlay DRM Support**                                                                                   | Can play FairPlay DRM-protected content when properly configured.                                                                                 |
+| **Now Playing Info Center Integration**                                                                    | Automatically updates the Now Playing Info Center with current playback information for lock screen and control center displays.                  |
+| **Remote Control Event Handling**                                                                          | Supports handling remote control events from external accessories and system controls.                                                            |
+| **Custom Playback Rate**                                                                                   | Allows setting custom playback rates for slow-motion or fast-forward playback without additional configuration.                                   |
+| **Seamless Transition Between Items**                                                                      | Provides smooth transitions between queued media items, ensuring continuous playback without gaps.                                                |
+| **Automatic Audio Session Management**                                                                     | Manages audio sessions to handle interruptions (like phone calls) and route changes appropriately.                                                |
+| **Subtitles and Closed Caption Styling**                                                                   | Supports user preferences for styling subtitles and closed captions, including font size, color, and background.                                   |
+| **Audio Focus and Ducking**                                                                                | Handles audio focus by pausing or lowering volume when necessary, such as when a navigation prompt plays.                                         |
+| **Metadata Handling**                                                                                      | Reads and displays metadata embedded in media files, such as song titles, artists, and artwork.                                                   |
+| **Buffering and Caching**                                                                                  | Efficiently manages buffering of streaming content to reduce playback interruptions.                                                              |
+| **Error Handling and Recovery**                                                                            | Provides built-in mechanisms to handle playback errors and attempt recovery without crashing the application.                                     |
+| **Accessibility Features**                                                                                 | Supports VoiceOver and other accessibility features to make media content accessible to all users.                                                |
