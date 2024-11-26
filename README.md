@@ -21,6 +21,20 @@ The player's functionality is designed around a dual &#8646; interaction model:
   
 - **Event Feedback**: Through event handling, the player communicates back to the application, informing it of internal changes that may need attention. Due to the nature of media players, especially in environments with dynamic content or user interactions, the flow of events can become flooded. To manage this effectively and prevent the application from being overwhelmed by the volume of incoming events, the **system collects these events every second and returns them as a batch**
 
+### CornerRadius
+You can reach out the effect via mask modifier
+ ```swift
+    ExtVideoPlayer(
+        settings : $settings,
+        command: $playbackCommand
+    )
+    .mask{
+        RoundedRectangle(cornerRadius: 25)
+    }
+ ```
+ 
+ ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/cornerRadius.gif) 
+
 ### By the way
 [Perhaps that might be enough for your needs](https://github.com/igor11191708/swiftui-loop-videoPlayer/issues/7#issuecomment-2341268743)
 
