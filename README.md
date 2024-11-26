@@ -33,7 +33,7 @@ You can reach out the effect via mask modifier
     }
  ```
  
- ![The concept](https://github.com/The-Igor/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/cornerRadius.gif) 
+ ![CornerRadius effect video player swift](https://github.com/igor11191708/swiftui-video-player-example/blob/main/swiftui-loop-videoplayer-example/img/cornerRadius.pngf) 
 
 ### By the way
 [Perhaps that might be enough for your needs](https://github.com/igor11191708/swiftui-loop-videoPlayer/issues/7#issuecomment-2341268743)
