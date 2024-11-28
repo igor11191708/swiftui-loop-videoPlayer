@@ -1,17 +1,17 @@
 # SwiftUI video player iOS 14+, macOS 11+, tvOS 14+
 ### Please star the repository if you believe continuing the development of this package is worthwhile. This will help me understand which package deserves more effort.
 
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Figor11191708%2Fswiftui-loop-videoplayer%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/igor11191708/swiftui-loop-videoplayer)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fswiftuiux%2Fswiftui-loop-videoplayer%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/swiftuiux/swiftui-loop-videoplayer)
 
 ## Why if we have Apple’s VideoPlayer ?!
 Apple’s VideoPlayer offers a quick setup for video playback in SwiftUI but for example it doesn’t allow you to hide or customize the default video controls UI, limiting its use for custom scenarios. In contrast, this solution provides full control over playback, including the ability to disable or hide UI elements, making it suitable for background videos, tooltips, and video hints. Additionally, it supports advanced features like seamless looping and real-time filter application, adding vector graphics upon the video stream etc. This package uses a declarative approach to declare parameters for the video component based on building blocks. This implementation might give some insights into how SwiftUI works under the hood. You can also pass parameters in the common way.
 
-## [SwiftUI app example](https://github.com/igor11191708/swiftui-loop-videoplayer-example)
+## [SwiftUI app example](https://github.com/swiftuiux/swiftui-loop-videoplayer-example)
 
-## [Documentation(API)](https://swiftpackageindex.com/igor11191708/swiftui-loop-videoplayer/main/documentation/swiftui_loop_videoplayer)
+## [Documentation(API)](https://swiftpackageindex.com/swiftuiux/swiftui-loop-videoplayer/main/documentation/swiftui_loop_videoplayer)
 
 
-![The concept](https://github.com/igor11191708/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui_video_player.gif) 
+![The concept](https://github.com/swiftuiux/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui_video_player.gif) 
 
 ## Philosophy of Player Dynamics
 
@@ -33,15 +33,15 @@ You can reach out the effect via mask modifier
     }
  ```
  
- ![CornerRadius effect video player swift](https://github.com/igor11191708/swiftui-video-player-example/blob/main/swiftui-loop-videoplayer-example/img/cornerRadius.png) 
+ ![CornerRadius effect video player swift](https://github.com/swiftuiux/swiftui-video-player-example/blob/main/swiftui-loop-videoplayer-example/img/cornerRadius.png) 
 
 ### By the way
-[Perhaps that might be enough for your needs](https://github.com/igor11191708/swiftui-loop-videoPlayer/issues/7#issuecomment-2341268743)
+[Perhaps that might be enough for your needs](https://github.com/swiftuiux/swiftui-loop-videoPlayer/issues/7#issuecomment-2341268743)
 
 
 ## Testing
 
-The package includes unit tests that cover key functionality. While not exhaustive, these tests help ensure the core components work as expected. UI tests are in progress and are being developed [in the example application](https://github.com/igor11191708/swiftui-loop-videoplayer-example). The run_tests.sh is an example script that automates testing by encapsulating test commands into a single executable file, simplifying the execution process. You can configure the script to run specific testing environment relevant to your projects.
+The package includes unit tests that cover key functionality. While not exhaustive, these tests help ensure the core components work as expected. UI tests are in progress and are being developed [in the example application](https://github.com/swiftuiux/swiftui-loop-videoplayer-example). The run_tests.sh is an example script that automates testing by encapsulating test commands into a single executable file, simplifying the execution process. You can configure the script to run specific testing environment relevant to your projects.
 
 ## Disclaimer on Video Sources like YouTube
 Please note that using videos from URLs requires ensuring that you have the right to use and stream these videos. Videos hosted on platforms like YouTube cannot be used directly due to restrictions in their terms of service. Always ensure the video URL is compliant with copyright laws and platform policies.
@@ -286,9 +286,9 @@ struct VideoView: View {
 ## Practical idea for the package
 You can introduce video hints about some functionality into the app, for example how to add positions to favorites. Put loop video hint into background or open as popup.
 
-![The concept](https://github.com/igor11191708/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui_video_hint.gif)
+![The concept](https://github.com/swiftuiux/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui_video_hint.gif)
 
-![The concept](https://github.com/igor11191708/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/tip_video_swiftui.gif)
+![The concept](https://github.com/swiftuiux/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/tip_video_swiftui.gif)
 
 ## AVQueuePlayer features out of the box
 
