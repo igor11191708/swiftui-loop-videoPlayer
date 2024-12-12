@@ -11,7 +11,7 @@ Apple’s VideoPlayer offers a quick setup for video playback in SwiftUI but for
 ## [Documentation(API)](https://swiftpackageindex.com/swiftuiux/swiftui-loop-videoplayer/main/documentation/swiftui_loop_videoplayer)
 
 
-![The concept](https://github.com/swiftuiux/swiftui-loop-videoplayer-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui_video_player.gif) 
+![The concept](https://github.com/swiftuiux/swiftui-video-player-example/blob/main/swiftui-loop-videoplayer-example/img/swiftui_video_player.gif) 
 
 ## Philosophy of Player Dynamics
 
